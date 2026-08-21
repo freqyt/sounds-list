@@ -252,82 +252,90 @@ function calculateCartTotals() {
       finalTotal: originalTotal,
       discount: 0,
       promoLabel: '',
+      upsellMsg: '',
       hasPromo: false
     };
   }
+
+  let discount = 0;
+  let promoLabel = '';
+  let upsellMsg = '';
 
   // 1. Percentage Off (% Off Storewide)
   if (deal.type === 'percent_off') {
     const pct = Number(deal.percentOff) || 0;
     if (pct > 0) {
-      const discount = Math.round((originalTotal * pct) / 100);
-      const finalTotal = Math.max(0, originalTotal - discount);
-      return {
-        originalTotal,
-        finalTotal,
-        discount,
-        promoLabel: `${pct}% OFF Deal Applied (-$${discount})`,
-        hasPromo: discount > 0
-      };
+      discount = Math.round((originalTotal * pct) / 100);
+      promoLabel = `${pct}% OFF Deal Applied (-$${discount})`;
+      upsellMsg = `🎉 <strong>${pct}% Storewide Discount Active!</strong> You saved $${discount}`;
     }
   }
 
   // 2. Multi-Buy Deal (e.g. Any 3 plugins for $100)
-  if (deal.type === 'bundle_x_for_y') {
+  else if (deal.type === 'bundle_x_for_y') {
     const qty = Number(deal.bundleQty) || 3;
     const bundlePrice = Number(deal.bundlePrice) || 100;
-    // Plugins eligible for multi-buy (single plugins)
     const eligible = state.cart.filter(item => item.type === 'plugin' || item.price <= 40);
     const bundlesCount = Math.floor(eligible.length / qty);
+    const remainder = eligible.length % qty;
+    const needed = qty - remainder;
 
     if (bundlesCount > 0) {
-      // Sort eligible items by price descending so highest value gets bundled
       const sorted = [...eligible].sort((a, b) => b.price - a.price);
       const bundledItems = sorted.slice(0, bundlesCount * qty);
       const bundledOriginalVal = bundledItems.reduce((sum, i) => sum + i.price, 0);
       const bundledPromoVal = bundlesCount * bundlePrice;
-      const discount = Math.max(0, bundledOriginalVal - bundledPromoVal);
-      const finalTotal = Math.max(0, originalTotal - discount);
-      return {
-        originalTotal,
-        finalTotal,
-        discount,
-        promoLabel: `${deal.title || `Any ${qty} for $${bundlePrice}`} (-$${discount})`,
-        hasPromo: discount > 0
-      };
+      discount = Math.max(0, bundledOriginalVal - bundledPromoVal);
+      promoLabel = `${deal.title || `Any ${qty} for $${bundlePrice}`} (-$${discount})`;
+    }
+
+    if (remainder === 0 && eligible.length > 0) {
+      upsellMsg = `🎉 <strong>${qty} for $${bundlePrice} Deal Unlocked!</strong> (You saved $${discount})`;
+    } else if (needed === 1) {
+      const currentCost = eligible.reduce((sum, i) => sum + i.price, 0) - discount;
+      const nextTargetCost = (bundlesCount + 1) * bundlePrice;
+      const diff = Math.max(1, nextTargetCost - currentCost);
+      upsellMsg = `⚡ Add <strong>1 more product</strong> for only <strong>$${diff} more</strong> to get the ${qty} for $${bundlePrice} deal!`;
+    } else if (needed > 1) {
+      upsellMsg = `💡 Add <strong>${needed} more products</strong> to unlock the <strong>${qty} for $${bundlePrice}</strong> bundle deal!`;
     }
   }
 
   // 3. Buy X Get Y Free (BOGO)
-  if (deal.type === 'bogo') {
+  else if (deal.type === 'bogo') {
     const buyQty = Number(deal.bogoBuyQty) || 2;
     const getQty = Number(deal.bogoGetQty) || 1;
     const cycle = buyQty + getQty;
     const eligible = state.cart.filter(item => item.type === 'plugin' || item.price <= 40);
     const freeCount = Math.floor(eligible.length / cycle) * getQty;
+    const remainder = eligible.length % cycle;
 
     if (freeCount > 0) {
-      // Free items are the lowest priced items in the eligible group
       const sorted = [...eligible].sort((a, b) => a.price - b.price);
       const freeItems = sorted.slice(0, freeCount);
-      const discount = freeItems.reduce((sum, i) => sum + i.price, 0);
-      const finalTotal = Math.max(0, originalTotal - discount);
-      return {
-        originalTotal,
-        finalTotal,
-        discount,
-        promoLabel: `Buy ${buyQty} Get ${getQty} Free (-$${discount})`,
-        hasPromo: discount > 0
-      };
+      discount = freeItems.reduce((sum, i) => sum + i.price, 0);
+      promoLabel = `Buy ${buyQty} Get ${getQty} Free (-$${discount})`;
+    }
+
+    if (remainder === buyQty) {
+      upsellMsg = `🎁 Add <strong>${getQty} more product</strong> to get it <strong>100% FREE</strong>!`;
+    } else if (remainder > 0 && remainder < buyQty) {
+      const moreNeeded = buyQty - remainder;
+      upsellMsg = `🎁 Add <strong>${moreNeeded} more</strong> to qualify for a <strong>FREE product</strong>!`;
+    } else if (remainder === 0 && eligible.length > 0) {
+      upsellMsg = `🎉 <strong>Buy ${buyQty} Get ${getQty} Free Deal Applied!</strong> (Saved $${discount})`;
     }
   }
 
+  const finalTotal = Math.max(0, originalTotal - discount);
+
   return {
     originalTotal,
-    finalTotal: originalTotal,
-    discount: 0,
-    promoLabel: '',
-    hasPromo: false
+    finalTotal,
+    discount,
+    promoLabel,
+    upsellMsg,
+    hasPromo: discount > 0
   };
 }
 
@@ -335,6 +343,7 @@ function updateCartUI() {
   const bar = document.getElementById('order-cart-bar');
   const countEl = document.getElementById('cart-count');
   const totalEl = document.getElementById('cart-total');
+  const upsellEl = document.getElementById('cart-upsell-banner');
 
   const totalCount = state.cart.length;
   const totals = calculateCartTotals();
@@ -349,6 +358,15 @@ function updateCartUI() {
       `;
     } else {
       totalEl.textContent = `$${totals.finalTotal}`;
+    }
+  }
+
+  if (upsellEl) {
+    if (totals.upsellMsg && totalCount > 0) {
+      upsellEl.innerHTML = totals.upsellMsg;
+      upsellEl.style.display = 'block';
+    } else {
+      upsellEl.style.display = 'none';
     }
   }
 

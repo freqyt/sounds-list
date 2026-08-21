@@ -1121,6 +1121,29 @@ html, body {
   pointer-events: auto;
 }
 
+.cart-upsell-banner {
+  font-size: 0.76rem;
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  line-height: 1.35;
+  animation: fadeInUpsell 0.25s ease-out;
+}
+
+.cart-upsell-banner strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+@keyframes fadeInUpsell {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .cart-bar-inner {
   display: flex;
   align-items: center;
