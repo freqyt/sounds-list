@@ -34,7 +34,7 @@ const windowsData = {
         {
           "name": "Nexus 5 Complete",
           "price": 80,
-          "includes": "Nexus 5 including the full 20,000+ preset library"
+          "includes": "Including the full 20,000+ preset library"
         },
         {
           "name": "Kontakt 8 Starter Bundle",
@@ -64,7 +64,7 @@ const windowsData = {
         "KORG Bundle",
         {
           "name": "Nexus 5",
-          "note": "Starter Version, see bundles for Complete"
+          "note": "Starter version with 1000+ presets"
         },
         "Omnisphere 3",
         "Roland Cloud",
