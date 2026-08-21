@@ -178,11 +178,12 @@ html, body {
 }
 
 .logo-img {
-  width: 88px;
-  height: 88px;
+  width: 92px;
+  height: 92px;
   border-radius: 22px;
   object-fit: cover;
-  box-shadow: 0 0 35px rgba(59, 130, 246, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 4px 20px rgba(59, 130, 246, 0.18);
 }
 
 .logo-title {
