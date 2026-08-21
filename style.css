@@ -210,7 +210,7 @@ html, body {
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1.85rem 1rem 1.5rem;
+  padding: 2rem 1rem 1.75rem;
   cursor: pointer;
   text-align: center;
   transition: all var(--trans);
@@ -219,7 +219,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.35rem;
 }
 
 .platform-card:hover {
@@ -233,7 +233,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 
 .platform-card-icon svg {
@@ -247,21 +247,14 @@ html, body {
 }
 
 .platform-card-label {
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #fff;
 }
 
 .platform-card-sub {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
-}
-
-.platform-card-cta {
-  margin-top: 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--accent-bright);
 }
 
 /* ═══════════════════════════════════════════════════════════
