@@ -47,7 +47,10 @@ const macData = {
         {
           "name": "Serum Bundle",
           "price": 60,
-          "includes": "Serum 2 + 150 Custom Banks"
+          "includes": "Serum 2 + 150 Custom Banks",
+          "badges": [
+            "NEW"
+          ]
         },
         {
           "name": "Nexus 5 Complete",
@@ -84,9 +87,9 @@ const macData = {
           "name": "Nexus 5 Starter",
           "note": "Starter version with 1000+ presets"
         },
-        "Omnisphere",
+        "Omnisphere 3",
         "Roland Cloud",
-        "Roland Zenology Pro",
+        "Roland ZENOLOGY Pro",
         "Serum 2",
         "Trilian"
       ],
