@@ -559,14 +559,22 @@ function getTier(tierKey) {
   return adm.data[adm.platform].categories[adm.category][tierKey];
 }
 
-function sortTierAlphabetically(tierKey) {
-  if (tierKey === 'bundles') return;
-  const items = getTier(tierKey);
-  if (!items || !items.length) return;
-  items.sort((a, b) => {
-    const nameA = (typeof a === 'string' ? a : (a.name || '')).trim().toLowerCase();
-    const nameB = (typeof b === 'string' ? b : (b.name || '')).trim().toLowerCase();
-    return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
+function sortAllPluginsAlphabetically() {
+  ['windows', 'mac'].forEach(plat => {
+    const data = adm.data[plat];
+    if (data && data.categories) {
+      Object.values(data.categories).forEach(cat => {
+        ['tier40', 'tier30', 'tier20'].forEach(tierKey => {
+          if (cat[tierKey] && cat[tierKey].length) {
+            cat[tierKey].sort((a, b) => {
+              const nameA = (typeof a === 'string' ? a : (a.name || '')).trim().toLowerCase();
+              const nameB = (typeof b === 'string' ? b : (b.name || '')).trim().toLowerCase();
+              return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
+            });
+          }
+        });
+      });
+    }
   });
 }
 
@@ -586,11 +594,6 @@ function updateField(tierKey, idx, field, value) {
   const n = tierKey === 'bundles' ? normalizeBundle(items[idx]) : normalizeItem(items[idx]);
   n[field] = value;
   items[idx] = n;
-
-  if (field === 'name' && tierKey !== 'bundles') {
-    sortTierAlphabetically(tierKey);
-    renderPanel();
-  }
   autoSave();
 }
 
@@ -611,27 +614,28 @@ function toggleBadge(tierKey, idx, badge, checkbox) {
 
 function addItem(tierKey, type) {
   const items = getTier(tierKey);
+  // Add new item to the bottom of the list without sorting immediately
   items.push(
     type === 'bundle'
       ? { name: 'New Bundle', price: 0, includes: '', note: '', badges: [], image: '' }
       : { name: 'New Plugin', badges: [], note: '', image: '' }
   );
 
-  if (tierKey !== 'bundles') {
-    sortTierAlphabetically(tierKey);
-  }
   autoSave();
   renderPanel();
 
-  // Scroll to and focus the newly added row
+  // Scroll to and focus the newly added row at the bottom
   requestAnimationFrame(() => {
     const list  = document.getElementById(`list-${tierKey}`);
     const rows  = list?.querySelectorAll('.admin-item-row, .admin-bundle-row');
     const last  = rows?.[rows.length - 1];
     if (last) {
       last.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      last.querySelector('input[type="text"]')?.focus();
-      last.querySelector('input[type="text"]')?.select();
+      const nameInput = last.querySelector('.input-name');
+      if (nameInput) {
+        nameInput.focus();
+        nameInput.select();
+      }
     }
   });
 }
@@ -649,9 +653,6 @@ function deleteItem(tierKey, idx) {
 let _saveTimer = null;
 
 function autoSave() {
-  const ind = document.getElementById('save-ind');
-  if (ind) ind.textContent = 'Saving draft…';
-
   clearTimeout(_saveTimer);
   _saveTimer = setTimeout(() => {
     savePlatformData(adm.platform, adm.data[adm.platform]);
@@ -671,10 +672,18 @@ async function publishLiveToCloud() {
     return;
   }
 
+  // Sort all plugin tiers alphabetically across all categories before publishing
+  sortAllPluginsAlphabetically();
+  savePlatformData('windows', adm.data.windows);
+  savePlatformData('mac', adm.data.mac);
+  renderPanel();
+
   const btn = document.getElementById('publish-cloud-btn');
   const ind = document.getElementById('save-ind');
-  btn.disabled = true;
-  btn.textContent = '⏳ Publishing to GitHub...';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ Publishing to GitHub...';
+  }
 
   try {
     const success = await commitToGitHub({
