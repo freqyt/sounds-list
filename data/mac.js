@@ -26,7 +26,8 @@ const macData = {
           "includes": "Arturia V Collection, Analog Lab & Pigments",
           "badges": [
             "BEST SELLER"
-          ]
+          ],
+          "tags": "Arturia"
         },
         {
           "name": "Spectrasonics Bundle",
@@ -52,7 +53,8 @@ const macData = {
           "includes": "Serum 2 + 150 Custom Banks",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "Xfer"
         },
         {
           "name": "Nexus 5 Complete",
@@ -63,13 +65,15 @@ const macData = {
         {
           "name": "Kontakt 8 Starter Bundle",
           "price": 75,
-          "includes": "Kontakt + 10 of the best selling banks"
+          "includes": "Kontakt + 10 of the best selling banks",
+          "tags": "Native Instruments,NI"
         },
         {
           "name": "Sonic Extensions Bundle",
           "price": 50,
           "includes": "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
-          "note": "Omnisphere 2.8+ Required"
+          "note": "Omnisphere 2.8+ Required",
+          "tags": "Spectrasonics"
         },
         {
           "name": "u-he Bundle",
@@ -131,7 +135,7 @@ const macData = {
       "tier30": [
         {
           "name": "Absynth 5",
-          "tags": "Native Instruments"
+          "tags": "Native Instruments,NI"
         },
         {
           "name": "Addictive Drums",
@@ -155,34 +159,66 @@ const macData = {
           "name": "ANA2",
           "tags": "Slate Digital"
         },
-        "DUNE 3",
-        "ElectraX",
-        "Heat Up 3",
+        {
+          "name": "DUNE 3",
+          "tags": "Synapse Audio"
+        },
+        {
+          "name": "ElectraX",
+          "tags": "Tone2"
+        },
+        {
+          "name": "Heat Up 3",
+          "tags": "Initial Audio"
+        },
         "Hybrid",
         {
           "name": "Kontakt 8",
-          "note": "No banks included"
+          "note": "No banks included",
+          "tags": "Native Instruments,NI"
         },
-        "Kult",
+        {
+          "name": "Kult",
+          "tags": "Dawesome"
+        },
         {
           "name": "Purity",
           "badges": [
             "NEW",
             "BEST SELLER"
-          ]
+          ],
+          "tags": "Sonic-Cat,Luxonix"
         },
-        "Reaktor 6",
+        {
+          "name": "Reaktor 6",
+          "tags": "Native Instruments,NI"
+        },
         {
           "name": "Rippler",
           "badges": [
             "NEW"
           ]
         },
-        "S.K.Y. Keys",
-        "Scorch",
-        "SubLab XL",
-        "Synthmaster 3",
-        "The Prince",
+        {
+          "name": "S.K.Y. Keys",
+          "tags": "SKY Studios"
+        },
+        {
+          "name": "Scorch",
+          "tags": "Sauceware Audio"
+        },
+        {
+          "name": "SubLab XL",
+          "tags": "Future Audio Workshop"
+        },
+        {
+          "name": "Synthmaster 3",
+          "tags": "KV331 Audio"
+        },
+        {
+          "name": "The Prince",
+          "tags": "Cradle"
+        },
         "u-he ACE",
         "u-he Diva",
         "u-he Hive 2",
@@ -201,34 +237,100 @@ const macData = {
         }
       ],
       "tier20": [
-        "Albino 3",
+        {
+          "name": "Albino 3",
+          "tags": "Rob Papen"
+        },
         "BioTek 2",
-        "Blue II",
-        "Blue3",
-        "Chromaphone 2",
-        "Collective",
-        "Cthulhu",
-        "FM8",
-        "Hammond B3-X",
+        {
+          "name": "Blue II",
+          "tags": "Rob Papen"
+        },
+        {
+          "name": "Blue3",
+          "tags": "Rob Papen"
+        },
+        {
+          "name": "Chromaphone 2",
+          "tags": "Applied Acoustics Systems,AAS"
+        },
+        {
+          "name": "Collective",
+          "tags": "Tracktion"
+        },
+        {
+          "name": "Cthulhu",
+          "tags": "Xfer"
+        },
+        {
+          "name": "FM8",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Hammond B3-X",
+          "tags": "IK Multimedia"
+        },
         "Kryteria",
-        "Lounge Lizard",
-        "LuSH-101",
-        "MassiveX",
-        "Modo Bass",
-        "Obscurium",
-        "OP-X PRO-II",
+        {
+          "name": "Lounge Lizard",
+          "tags": "Applied Acoustics Systems,AAS"
+        },
+        {
+          "name": "LuSH-101",
+          "tags": "D16 Group"
+        },
+        {
+          "name": "MassiveX",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Modo Bass",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "Obscurium",
+          "tags": "Sugar Bytes"
+        },
+        {
+          "name": "OP-X PRO-II",
+          "tags": "SonicProjects"
+        },
         "Padshop 2",
-        "Palindrome",
-        "Predator 2",
-        "Sektor 2",
-        "Soundspot Union",
-        "Spire",
+        {
+          "name": "Palindrome",
+          "tags": "Glitchmachines"
+        },
+        {
+          "name": "Predator 2",
+          "tags": "Rob Papen"
+        },
+        {
+          "name": "Sektor 2",
+          "tags": "Initial Audio"
+        },
+        {
+          "name": "Soundspot Union",
+          "tags": "Soundspot"
+        },
+        {
+          "name": "Spire",
+          "tags": "Reveal Sound"
+        },
         "Surge",
         "Syntorial",
-        "TAL-U-NO-LX",
+        {
+          "name": "TAL-U-NO-LX",
+          "tags": "TAL Software"
+        },
         "TrackGod 2",
-        "TrapSoul",
-        "Ultra Analog VA-2",
+        {
+          "name": "TrapSoul",
+          "tags": "infinit essentials"
+        },
+        {
+          "name": "Ultra Analog VA-2",
+          "tags": "Applied Acoustics Systems,AAS"
+        },
         "Vocal Runs 2"
       ]
     },
