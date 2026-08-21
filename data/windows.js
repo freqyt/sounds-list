@@ -96,18 +96,31 @@ const windowsData = {
           "name": "Keyscape",
           "tags": "Spectrasonics"
         },
-        "KORG Bundle",
+        {
+          "name": "KORG Bundle",
+          "tags": "KORG"
+        },
         {
           "name": "Nexus 5 Starter",
-          "note": "Starter version with 1000+ presets"
+          "note": "Starter version with 1000+ presets",
+          "tags": "reFX"
         },
         {
           "name": "Omnisphere 3",
           "tags": "Spectrasonics"
         },
-        "Roland Cloud",
-        "Roland ZENOLOGY Pro",
-        "Serum 2",
+        {
+          "name": "Roland Cloud",
+          "tags": "Roland"
+        },
+        {
+          "name": "Roland ZENOLOGY Pro",
+          "tags": "Roland"
+        },
+        {
+          "name": "Serum 2",
+          "tags": "Xfer"
+        },
         {
           "name": "Trilian",
           "tags": "Spectrasonics"
