@@ -78,20 +78,38 @@ const windowsData = {
         }
       ],
       "tier40": [
-        "Arturia Analog Lab 5",
-        "Arturia Pigments 3",
-        "Arturia V Collection 11",
-        "Keyscape",
+        {
+          "name": "Arturia Analog Lab 5",
+          "tags": "Arturia"
+        },
+        {
+          "name": "Arturia Pigments 3",
+          "tags": "Arturia"
+        },
+        {
+          "name": "Arturia V Collection 11",
+          "tags": "Arturia"
+        },
+        {
+          "name": "Keyscape",
+          "tags": "Spectrasonics"
+        },
         "KORG Bundle",
         {
           "name": "Nexus 5 Starter",
           "note": "Starter version with 1000+ presets"
         },
-        "Omnisphere 3",
+        {
+          "name": "Omnisphere 3",
+          "tags": "Spectrasonics"
+        },
         "Roland Cloud",
         "Roland ZENOLOGY Pro",
         "Serum 2",
-        "Trilian"
+        {
+          "name": "Trilian",
+          "tags": "Spectrasonics"
+        }
       ],
       "tier30": [
         "Absynth 5",
