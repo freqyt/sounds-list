@@ -886,6 +886,11 @@ const windowsData = {
           "includes": "",
           "note": "Required to run all Kontakt libraries (Must be cracked)",
           "tags": "Native Instruments,Kontakt 8"
+        },
+        {
+          "name": "Kontakt Starter Bundle",
+          "price": 75,
+          "includes": "Kontakt 8 +  Analog Dreams, Cuba, EXHALE, Hybrid Keys, Mallet Flux, Morpheus, Playbox, The Maverick, Una Corda, West Africa"
         }
       ],
       "tier40": [],
