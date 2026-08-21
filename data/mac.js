@@ -8,17 +8,26 @@ const macData = {
         {
           "name": "Arturia Bundle",
           "price": 100,
-          "includes": "Arturia V Collection, Analog Lab & Pigments"
+          "includes": "Arturia V Collection, Analog Lab & Pigments",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "Spectrasonics Bundle",
           "price": 75,
-          "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks"
+          "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "ElectraX Bundle",
           "price": 60,
-          "includes": "ElectraX + 200 Custom Banks"
+          "includes": "ElectraX + 200 Custom Banks",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "Serum Bundle",
