@@ -441,11 +441,11 @@ function buildOrderSummaryText() {
   const totals = calculateCartTotals();
 
   const lines = state.cart.map(item => {
-    const tag = item.type === 'bundle' ? 'Bundle' : item.tier;
-    return `• ${item.name} (${tag}) - $${item.price}`;
+    const bundleTag = item.type === 'bundle' ? ' (Bundle)' : '';
+    return `• ${item.name}${bundleTag} - $${item.price}`;
   });
 
-  let orderText = `🎵 FREQ Sounds List Order (${platName}):\n${lines.join('\n')}\n━━━━━━━━━━━━━━━━━━\n`;
+  let orderText = `FREQ Sounds List Order (${platName}):\n${lines.join('\n')}\n━━━━━━━━━━━━━━━━━━\n`;
   if (totals.hasPromo) {
     orderText += `🏷️ Promo Applied: ${totals.promoLabel}\n💰 Total: $${totals.finalTotal} (Saved $${totals.discount}!)\n`;
   } else {
