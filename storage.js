@@ -189,7 +189,11 @@ async function commitToGitHub(allData) {
   // If encrypted token exists in config, keep config.js in sync too
   if (CATALOGUE_CONFIG.encryptedGitHubToken) {
     const cfgContent = `// Plugin Catalogue — Config\nconst CATALOGUE_CONFIG = ${JSON.stringify(CATALOGUE_CONFIG, null, 2)};\n`;
-    await updateFile('config.js', cfgContent, 'Update configuration & encrypted token');
+    for (const b of ['main', 'master']) {
+      try {
+        await updateFileOnBranch(b, 'config.js', cfgContent, 'Update configuration & encrypted token');
+      } catch(e) {}
+    }
   }
 
   return true;
