@@ -44,27 +44,37 @@ const macData = {
       ],
       "tier40": [
         "Arturia Analog Lab 5",
-        "Arturia V Collection 11",
         "Arturia Pigments 3",
+        "Arturia V Collection 11",
+        "Keyscape",
         "KORG Bundle",
         "Nexus 5 (Starter Version)",
+        "Omnisphere",
         "Roland Cloud",
         "Roland Zenology Pro",
         "Serum 2",
-        "Omnisphere",
-        "Keyscape",
         "Trilian"
       ],
       "tier30": [
         "Addictive Drums",
         "Addictive Keys",
-        "Ample Bass (Many available)",
-        "Ample Guitar (Many available)",
+        {
+          "name": "Ample Bass",
+          "note": " (Many available, ask about it)"
+        },
+        {
+          "name": "Ample Guitar",
+          "note": " (Many available, ask about it)"
+        },
         "ANA2",
         "DUNE 3",
         "ElectraX",
         "Heat Up 3",
-        "Kontakt 8 (No banks included)",
+        "Hybrid",
+        {
+          "name": "Kontakt 8",
+          "note": " (No banks included)"
+        },
         "Kult",
         {
           "name": "Purity",
@@ -73,7 +83,18 @@ const macData = {
             "BEST SELLER"
           ]
         },
-        "Hybrid",
+        "Reaktor 6",
+        {
+          "name": "Rippler",
+          "badges": [
+            "NEW"
+          ]
+        },
+        "S.K.Y. Keys",
+        "Scorch",
+        "SubLab XL",
+        "Synthmaster 3",
+        "The Prince",
         "u-he ACE",
         "u-he Diva",
         "u-he Hive 2",
@@ -84,18 +105,6 @@ const macData = {
             "NEW"
           ]
         },
-        "S.K.Y. Keys",
-        "SubLab XL",
-        "Synthmaster 3",
-        "The Prince",
-        "Reaktor 6",
-        {
-          "name": "Rippler",
-          "badges": [
-            "NEW"
-          ]
-        },
-        "Scorch",
         {
           "name": "Vanguard",
           "badges": [
