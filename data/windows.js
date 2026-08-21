@@ -779,9 +779,7 @@ const windowsData = {
           "name": "Analog Lab Bank Suite (Vol 1 & 2)",
           "price": 70,
           "includes": "Analog Lab Vol 1 (40 Banks) & Vol 2 (45 Banks) — 85+ Banks Total",
-          "badges": [
-            "POPULAR"
-          ],
+          "badges": [],
           "tags": "Analog Lab,Arturia,Preset Banks"
         },
         {
@@ -898,10 +896,7 @@ const windowsData = {
           "name": "Native Instruments Kontakt 8 (VST / Engine)",
           "price": 40,
           "includes": "Full flagship sampler engine & VST plugin � required to run all Kontakt sound libraries",
-          "badges": [
-            "POPULAR",
-            "VST"
-          ],
+          "badges": [],
           "tags": "Native Instruments,Kontakt 8,Sampler,Engine,VST,Plugin"
         }
       ],
