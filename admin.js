@@ -430,15 +430,12 @@ function toggleDealEnabled(checked) {
 
 // ── Main panel ────────────────────────────────────────────
 function renderPanel() {
-  const cat  = adm.data[adm.platform].categories[adm.category];
-  const main = document.getElementById('admin-main');
+  const platData = adm.data[adm.platform];
+  if (!platData || !platData.categories) return;
 
-  // Auto-sort plugin tiers alphabetically (Bundles remain in custom order)
-  ['tier40', 'tier30', 'tier20'].forEach(tierKey => {
-    if (cat[tierKey] && cat[tierKey].length) {
-      sortTierAlphabetically(tierKey);
-    }
-  });
+  const cat = platData.categories[adm.category];
+  const main = document.getElementById('admin-main');
+  if (!cat || !main) return;
 
   main.innerHTML = `
     <div class="panel-header">
@@ -557,6 +554,17 @@ function badgeToggles(activeBadges, idx, tierKey) {
 
 function getTier(tierKey) {
   return adm.data[adm.platform].categories[adm.category][tierKey];
+}
+
+function sortTierAlphabetically(tierKey) {
+  if (tierKey === 'bundles') return;
+  const items = getTier(tierKey);
+  if (!items || !items.length) return;
+  items.sort((a, b) => {
+    const nameA = (typeof a === 'string' ? a : (a.name || '')).trim().toLowerCase();
+    const nameB = (typeof b === 'string' ? b : (b.name || '')).trim().toLowerCase();
+    return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
+  });
 }
 
 function sortAllPluginsAlphabetically() {
