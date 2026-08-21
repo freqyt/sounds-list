@@ -6,6 +6,17 @@
 
 const BADGES = ['NEW', 'HOT', 'SALE', 'BEST SELLER'];
 
+// ── Escape helpers ────────────────────────────────────────
+function esc(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function ea(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/'/g, '&#39;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function eh(s) {
+  return esc(s);
+}
+
 // ── State ────────────────────────────────────────────────
 const adm = {
   platform: 'windows',
