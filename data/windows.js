@@ -55,7 +55,8 @@ const windowsData = {
         {
           "name": "Nexus 5 Complete",
           "price": 80,
-          "includes": "Including the full 20,000+ preset library"
+          "includes": "Including the full 20,000+ preset library",
+          "tags": "reFX"
         },
         {
           "name": "Kontakt 8 Starter Bundle",
@@ -74,7 +75,8 @@ const windowsData = {
           "includes": "ACE, Bazille, Diva, Hive, Repro-1 & 5, Zebra3",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "u-He"
         }
       ],
       "tier40": [
