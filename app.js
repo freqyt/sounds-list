@@ -295,8 +295,9 @@ function renderPluginCard(item, q) {
 function renderBadgesHtml(badges) {
   if (!badges || !badges.length) return '';
   return badges.map(b => {
-    const lower = String(b).toLowerCase();
-    return `<span class="badge badge-${lower}">${esc(b)}</span>`;
+    const raw = String(b).trim();
+    const slug = raw.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    return `<span class="badge badge-${slug}">${esc(raw)}</span>`;
   }).join(' ');
 }
 

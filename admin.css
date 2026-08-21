@@ -436,14 +436,16 @@ body::before {
 .badge-toggle input[type="checkbox"] { display: none; }
 
 /* Inactive */
-.badge-toggle.badge-new  { border-color: rgba(251,146,60,0.3);  color: rgba(251,146,60,0.45); }
-.badge-toggle.badge-hot  { border-color: rgba(239,68,68,0.3);   color: rgba(239,68,68,0.45); }
-.badge-toggle.badge-sale { border-color: rgba(34,197,94,0.3);   color: rgba(34,197,94,0.45); }
+.badge-toggle.badge-new         { border-color: rgba(251,146,60,0.3);  color: rgba(251,146,60,0.45); }
+.badge-toggle.badge-hot         { border-color: rgba(239,68,68,0.3);   color: rgba(239,68,68,0.45); }
+.badge-toggle.badge-sale        { border-color: rgba(34,197,94,0.3);   color: rgba(34,197,94,0.45); }
+.badge-toggle.badge-best-seller { border-color: rgba(245,158,11,0.35); color: rgba(245,158,11,0.6); }
 
 /* Active */
-.badge-toggle.badge-new.on  { background: linear-gradient(135deg, #f59e0b, #ef4444); border-color: transparent; color: #fff; }
-.badge-toggle.badge-hot.on  { background: #ef4444;  border-color: transparent; color: #fff; }
-.badge-toggle.badge-sale.on { background: #22c55e;  border-color: transparent; color: #fff; }
+.badge-toggle.badge-new.on         { background: linear-gradient(135deg, #f59e0b, #ef4444); border-color: transparent; color: #fff; }
+.badge-toggle.badge-hot.on         { background: #ef4444;  border-color: transparent; color: #fff; }
+.badge-toggle.badge-sale.on        { background: #22c55e;  border-color: transparent; color: #fff; }
+.badge-toggle.badge-best-seller.on { background: linear-gradient(135deg, #fbbf24, #d97706); border-color: transparent; color: #000; font-weight: 800; }
 
 /* ── Delete button ── */
 .delete-btn {

@@ -4,7 +4,7 @@
    Use Export to download updated .js data files.
 ═══════════════════════════════════════════════════════════ */
 
-const BADGES = ['NEW', 'HOT', 'SALE'];
+const BADGES = ['NEW', 'HOT', 'SALE', 'BEST SELLER'];
 
 // ── State ────────────────────────────────────────────────
 const adm = {
@@ -202,8 +202,9 @@ function bundleRow(b, idx, tierKey) {
 function badgeToggles(activeBadges, idx, tierKey) {
   return BADGES.map(badge => {
     const isOn = activeBadges.includes(badge);
+    const slug = badge.toLowerCase().replace(/[^a-z0-9]/g, '-');
     return `
-      <label class="badge-toggle badge-${badge.toLowerCase()} ${isOn ? 'on' : ''}"
+      <label class="badge-toggle badge-${slug} ${isOn ? 'on' : ''}"
         title="${badge}">
         <input type="checkbox" ${isOn ? 'checked' : ''}
           onchange="toggleBadge('${tierKey}',${idx},'${badge}',this)" />
