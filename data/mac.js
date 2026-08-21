@@ -1,54 +1,48 @@
 const macData = {
-  platform: "Mac",
-  categories: {
-    instruments: {
-      label: "Instruments",
-      icon: "🎹",
-      bundles: [
+  "platform": "Mac",
+  "categories": {
+    "instruments": {
+      "label": "Instruments",
+      "icon": "🎹",
+      "bundles": [
         {
-          name: "Arturia Bundle",
-          price: 100,
-          includes: "Arturia V Collection, Analog Lab & Pigments"
+          "name": "Arturia Bundle",
+          "price": 100,
+          "includes": "Arturia V Collection, Analog Lab & Pigments"
         },
         {
-          name: "Spectrasonics Bundle",
-          price: 75,
-          includes: "Omnisphere, Keyscape, Trilian + 200 Preset Banks"
+          "name": "Spectrasonics Bundle",
+          "price": 75,
+          "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks"
         },
         {
-          name: "ElectraX Bundle",
-          price: 60,
-          includes: "ElectraX + 200 Banks"
+          "name": "ElectraX Bundle",
+          "price": 60,
+          "includes": "ElectraX + 200 Banks"
         },
         {
-          name: "Serum Bundle",
-          price: 60,
-          includes: "Serum 2 + 150 Banks"
+          "name": "Serum Bundle",
+          "price": 60,
+          "includes": "Serum 2 + 150 Banks"
         },
         {
-          name: "Nexus 5 Complete",
-          price: 80,
-          includes: "Nexus 5 including the full 20,000+ preset library"
+          "name": "Nexus 5 Complete",
+          "price": 80,
+          "includes": "Nexus 5 including the full 20,000+ preset library"
         },
         {
-          name: "Kontakt 8 Starter Bundle",
-          price: 75,
-          includes: "Kontakt + 10 of the best banks"
+          "name": "Kontakt 8 Starter Bundle",
+          "price": 75,
+          "includes": "Kontakt + 10 of the best banks"
         },
         {
-          name: "Sonic Extensions Bundle",
-          price: 50,
-          includes: "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
-          note: "Cracked Omni 2.8 Required"
-        },
-        {
-          name: "u-he Bundle",
-          price: 50,
-          includes: "ACE, Bazille, Diva, Repro-1 & 5, Zebra3",
-          badges: ["NEW"]
+          "name": "Sonic Extensions Bundle",
+          "price": 50,
+          "includes": "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
+          "note": "Cracked Omni 2.8 Required"
         }
       ],
-      tier40: [
+      "tier40": [
         "Arturia Analog Lab 5",
         "Arturia V Collection 11",
         "Arturia Pigments 3",
@@ -61,7 +55,7 @@ const macData = {
         "Keyscape",
         "Trilian"
       ],
-      tier30: [
+      "tier30": [
         "Addictive Drums",
         "Addictive Keys",
         "Ample Bass (Many available)",
@@ -71,24 +65,45 @@ const macData = {
         "ElectraX",
         "Heat Up 3",
         "Kontakt 8 (No banks included)",
-        { name: "Kult", badge: "NEW" },
-        { name: "Purity", badge: "NEW" },
+        "Kult",
+        {
+          "name": "Purity",
+          "badges": [
+            "NEW",
+            "BEST SELLER"
+          ]
+        },
         "Hybrid",
         "u-he ACE",
         "u-he Diva",
         "u-he Hive 2",
         "u-he Repro-1 + 5",
-        { name: "u-he Zebra 3", badge: "NEW" },
+        {
+          "name": "u-he Zebra 3",
+          "badges": [
+            "NEW"
+          ]
+        },
         "S.K.Y. Keys",
         "SubLab XL",
         "Synthmaster 3",
         "The Prince",
         "Reaktor 6",
-        { name: "Rippler", badge: "NEW" },
+        {
+          "name": "Rippler",
+          "badges": [
+            "NEW"
+          ]
+        },
         "Scorch",
-        { name: "Vanguard", badge: "NEW" }
+        {
+          "name": "Vanguard",
+          "badges": [
+            "NEW"
+          ]
+        }
       ],
-      tier20: [
+      "tier20": [
         "Albino 3",
         "BioTek 2",
         "Blue II",
@@ -120,57 +135,69 @@ const macData = {
         "Vocal Runs 2"
       ]
     },
-    fx: {
-      label: "FX & Mixing",
-      icon: "🎛️",
-      bundles: [
+    "fx": {
+      "label": "FX & Mixing",
+      "icon": "🎛️",
+      "bundles": [
         {
-          name: "Starter Bundle",
-          price: 100,
-          includes: "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle"
+          "name": "Starter Bundle",
+          "price": 100,
+          "includes": "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle"
         },
         {
-          name: "Vocal Bundle",
-          price: 70,
-          includes: "Waves 16 Complete, Auto Tune 11 Pro"
+          "name": "Vocal Bundle",
+          "price": 70,
+          "includes": "Waves 16 Complete, Auto Tune 11 Pro"
         },
         {
-          name: "Hihat Sauce",
-          price: 60,
-          includes: "Effectrix 2, Looperator & Shaperbox 3"
+          "name": "Hihat Sauce",
+          "price": 60,
+          "includes": "Effectrix 2, Looperator & Shaperbox 3"
         },
         {
-          name: "Sample Sauce",
-          price: 60,
-          includes: "Portal, Soothe2 & RC-20"
+          "name": "Sample Sauce",
+          "price": 60,
+          "includes": "Portal, Soothe2 & RC-20"
         },
         {
-          name: "Antares Bundle",
-          price: 80,
-          includes: "Mic Mod, Harmony, Auto Tune Artist, AVOX: Warm, Throat, Sybil, Punch, Mutator, Duo, Choir, Aspire & Articulator",
-          note: "Total of 12 Plugins"
+          "name": "Antares Bundle",
+          "price": 80,
+          "includes": "Mic Mod, Harmony, Auto Tune Artist, AVOX: Warm, Throat, Sybil, Punch, Mutator, Duo, Choir, Aspire & Articulator",
+          "note": "Total of 12 Plugins"
         },
         {
-          name: "DADA LIFE Bundle",
-          price: 30,
-          includes: "Endless Smile, Eternal Return, Sausage Fattener, Space In-Your-Face, Wide Awake",
-          badge: "NEW"
+          "name": "DADA LIFE Bundle",
+          "price": 30,
+          "includes": "Endless Smile, Eternal Return, Sausage Fattener, Space In-Your-Face, Wide Awake",
+          "badges": [
+            "NEW"
+          ]
         }
       ],
-      tier40: [
+      "tier40": [
         "Antares Auto-Tune 11 Pro",
         "Arturia FX Collection",
         "FabFilter Bundle",
         "Goodhertz Bundle",
         "Guitar Rig 7",
         "Ozone 12",
-        { name: "Soothe2", badge: "NEW" },
+        {
+          "name": "Soothe2",
+          "badges": [
+            "NEW"
+          ]
+        },
         "Valhalla Bundle",
-        { name: "Vocalign Pro 6", badge: "NEW" },
+        {
+          "name": "Vocalign Pro 6",
+          "badges": [
+            "NEW"
+          ]
+        },
         "Waves 16 Complete",
         "Xvox Pro"
       ],
-      tier30: [
+      "tier30": [
         "AmpliTube 4",
         "Analog Pro",
         "Effectrix 2",
@@ -178,7 +205,13 @@ const macData = {
         "iZotope Nectar",
         "Neoverb",
         "Neutron",
-        { name: "Neural DSP", badge: "NEW", note: "Cory Wong X, John Mayer X, Mantra, Misha Mansoor X, Nolly X, Tim Henson X" },
+        {
+          "name": "Neural DSP",
+          "badges": [
+            "NEW"
+          ],
+          "note": "Cory Wong X, John Mayer X, Mantra, Misha Mansoor X, Nolly X, Tim Henson X"
+        },
         "RX 10",
         "Looperator",
         "Melodyne",
@@ -204,8 +237,11 @@ const macData = {
         "XO",
         "Xvox"
       ],
-      tier20: [
-        { name: "CamelCrusher", note: "Doesn't work on newer Macs" },
+      "tier20": [
+        {
+          "name": "CamelCrusher",
+          "note": "Doesn't work on newer Macs"
+        },
         "CamelSpace",
         "Cassette",
         "Comeback Kid",
@@ -224,30 +260,35 @@ const macData = {
         "Thenathan Underwater"
       ]
     },
-    daws: {
-      label: "DAWs",
-      icon: "💻",
-      bundles: [],
-      tier40: [
+    "daws": {
+      "label": "DAWs",
+      "icon": "💻",
+      "bundles": [],
+      "tier40": [
         "Ableton Live 12",
-        { name: "FL Studio 26", badge: "NEW" },
+        {
+          "name": "FL Studio 26",
+          "badges": [
+            "NEW"
+          ]
+        },
         "Logic Pro X"
       ],
-      tier30: [],
-      tier20: []
+      "tier30": [],
+      "tier20": []
     },
-    software: {
-      label: "Software",
-      icon: "🖥️",
-      bundles: [
+    "software": {
+      "label": "Software",
+      "icon": "🖥️",
+      "bundles": [
         {
-          name: "Editing Bundle",
-          price: 120,
-          includes: "After Effects, Illustrator, Photoshop, Premiere Pro"
+          "name": "Editing Bundle",
+          "price": 120,
+          "includes": "After Effects, Illustrator, Photoshop, Premiere Pro"
         }
       ],
-      tier40: [],
-      tier30: [
+      "tier40": [],
+      "tier30": [
         "After Effects",
         "Audition",
         "InDesign",
@@ -256,7 +297,7 @@ const macData = {
         "Premiere Pro",
         "Final Cut Pro"
       ],
-      tier20: []
+      "tier20": []
     }
   }
 };
