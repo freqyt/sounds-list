@@ -239,17 +239,19 @@ function buildDealPreviewHtml(deal) {
     previewRight = `<div class="spotlight-deal-tag"><span style="font-size:1.1rem; font-weight:800; color:var(--accent);">Buy ${deal.bogoBuyQty || 2} Get ${deal.bogoGetQty || 1} Free</span></div><span class="admin-tag">Auto-applies in cart</span>`;
   }
 
+  const badgeHtml = (deal.badge && deal.badge.trim())
+    ? `<div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;"><span class="badge" style="background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; font-size:0.65rem; padding:0.2rem 0.55rem; border-radius:100px;">${esc(deal.badge.trim())}</span></div>`
+    : '';
+
   return `
-    <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
-      <span class="badge" style="background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; font-size:0.65rem; padding:0.2rem 0.55rem; border-radius:100px;">${esc(deal.badge || '🔥 SPECIAL DEAL')}</span>
-    </div>
+    ${badgeHtml}
     <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
       <div style="display:flex; align-items:center; gap:0.9rem;">
         <div style="font-size:1.8rem;">💎</div>
         <div>
           <h4 style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">${esc(deal.title || 'Special Promotion')}</h4>
           <p style="font-size:0.84rem; color:var(--text-2); margin-bottom:0.2rem;">${esc(deal.description || 'Pick any items to claim special pricing!')}</p>
-          ${deal.customNote ? `<div style="font-size:0.75rem; color:var(--text-muted);">ⓘ ${esc(deal.customNote)}</div>` : ''}
+          ${deal.customNote && deal.customNote.trim() ? `<div style="font-size:0.75rem; color:var(--text-muted);">ⓘ ${esc(deal.customNote.trim())}</div>` : ''}
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:0.75rem; flex-shrink:0;">
@@ -354,8 +356,8 @@ function renderDealsPanel() {
       <div class="deals-form-card">
         <div class="form-grid-2">
           <div class="form-field">
-            <label class="form-label">Badge Tag (Banner Pill)</label>
-            <input type="text" class="form-input" value="${esc(deal.badge || '🔥 SPECIAL DEAL')}" oninput="updateDealField('badge', this.value)" />
+            <label class="form-label">Badge Tag (Banner Pill - leave blank to hide)</label>
+            <input type="text" class="form-input" value="${esc(deal.badge !== undefined && deal.badge !== null ? deal.badge : '')}" placeholder="e.g. 🔥 SPECIAL DEAL (or leave empty to hide)" oninput="updateDealField('badge', this.value)" />
           </div>
           <div class="form-field">
             <label class="form-label">Deal / Promotion Title</label>

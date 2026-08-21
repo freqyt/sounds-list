@@ -616,10 +616,11 @@ function renderSpotlightBanner() {
   const deal = data.deal;
   if (!deal || !deal.enabled) return '';
 
-  const badgeText = deal.badge || '🔥 FEATURED DEAL';
+  const badgeText = deal.badge ? deal.badge.trim() : '';
+  const badgeHtml = badgeText ? `<div class="spotlight-top-tag"><span class="spotlight-badge-pill">${esc(badgeText)}</span></div>` : '';
   const title = deal.title || 'Special Promotion';
   const desc = deal.description || deal.customIncludes || '';
-  const note = deal.customNote || '';
+  const note = deal.customNote ? deal.customNote.trim() : '';
   const type = deal.type || 'bundle_x_for_y';
 
   let rightHtml = '';
@@ -670,9 +671,7 @@ function renderSpotlightBanner() {
   return `
     <div class="spotlight-wrap">
       <div class="spotlight-card spotlight-promo-card">
-        <div class="spotlight-top-tag">
-          <span class="spotlight-badge-pill">${esc(badgeText)}</span>
-        </div>
+        ${badgeHtml}
         <div class="spotlight-body">
           <div class="spotlight-left">
             <div class="spotlight-deal-icon">💎</div>
