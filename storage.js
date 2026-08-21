@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
    storage.js — 100% Free Zero-Visitor-Quota Architecture
    Visitors load static files with 0 API requests.
-   Admin commits directly to GitHub via official GitHub REST API.
+   Admin commits directly to GitHub with encrypted token persistence.
 ═══════════════════════════════════════════════════════════ */
 
 const STORAGE_KEYS = {
@@ -24,30 +24,94 @@ function setPasswordHash(hash) {
   localStorage.setItem(STORAGE_KEYS.passwordHash, hash);
 }
 
-/* ── SHA-256 ───────────────────────────────────────────── */
+/* ── Crypto Helpers (AES-GCM Encryption & SHA-256) ────── */
 
 async function sha256(message) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(message));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+/** Derive a CryptoKey from the admin password */
+async function deriveKey(password) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(password),
+    { name: 'PBKDF2' },
+    false,
+    ['deriveKey']
+  );
+  return crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt: enc.encode('sounds-list-secure-salt-2026'),
+      iterations: 100000,
+      hash: 'SHA-256'
+    },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+/** Encrypt text with AES-256-GCM */
+async function encryptSecret(plainText, password) {
+  const key = await deriveKey(password);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encoded = new TextEncoder().encode(plainText);
+  const cipherBuf = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    key,
+    encoded
+  );
+  // Combine IV + Ciphertext in base64
+  const combined = new Uint8Array(iv.length + cipherBuf.byteLength);
+  combined.set(iv);
+  combined.set(new Uint8Array(cipherBuf), iv.length);
+  return btoa(String.fromCharCode(...combined));
+}
+
+/** Decrypt text with AES-256-GCM */
+async function decryptSecret(cipherBase64, password) {
+  try {
+    const raw = atob(cipherBase64);
+    const combined = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) combined[i] = raw.charCodeAt(i);
+    const iv = combined.slice(0, 12);
+    const data = combined.slice(12);
+    const key = await deriveKey(password);
+    const decryptedBuf = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      data
+    );
+    return new TextDecoder().decode(decryptedBuf);
+  } catch (e) {
+    return null;
+  }
+}
+
 /* ── GitHub Direct Cloud Publishing ───────────────────── */
 
+let _activeToken = '';
+
 function getGitHubConfig() {
-  const token = localStorage.getItem(STORAGE_KEYS.githubToken) || '';
+  const token = _activeToken || localStorage.getItem(STORAGE_KEYS.githubToken) || '';
   const repo = localStorage.getItem(STORAGE_KEYS.githubRepo) || DEFAULT_REPO;
   return { token, repo };
 }
 
 function setGitHubConfig(token, repo) {
-  if (token) localStorage.setItem(STORAGE_KEYS.githubToken, token.trim());
+  if (token) {
+    _activeToken = token.trim();
+    localStorage.setItem(STORAGE_KEYS.githubToken, token.trim());
+  }
   if (repo) localStorage.setItem(STORAGE_KEYS.githubRepo, repo.trim());
 }
 
 /**
- * Commits updated windows.js and mac.js directly to GitHub master branch.
- * Vercel automatically redeploys in seconds.
- * 0 Third-Party API Limits. 100% Free Forever.
+ * Commits updated files directly to GitHub master branch.
  */
 async function commitToGitHub(allData) {
   const { token, repo } = getGitHubConfig();
@@ -60,11 +124,9 @@ async function commitToGitHub(allData) {
     'Content-Type': 'application/json'
   };
 
-  // Helper to commit a single file with fresh SHA and auto-retry
   async function updateFile(path, contentStr, commitMessage) {
     const fileUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
     
-    // Always fetch latest SHA with cache: 'no-store' & cache-busting timestamp
     async function getLatestSha() {
       try {
         const getRes = await fetch(`${fileUrl}?ref=${branch}&_nocache=${Date.now()}`, {
@@ -85,7 +147,6 @@ async function commitToGitHub(allData) {
     let sha = await getLatestSha();
     const base64Content = btoa(unescape(encodeURIComponent(contentStr)));
 
-    // Attempt PUT
     const makePut = (fileSha) => {
       const payload = {
         message: commitMessage,
@@ -102,7 +163,6 @@ async function commitToGitHub(allData) {
 
     let putRes = await makePut(sha);
 
-    // If 409 Conflict (stale SHA), fetch fresh SHA and retry immediately
     if (putRes.status === 409) {
       sha = await getLatestSha();
       putRes = await makePut(sha);
@@ -115,13 +175,17 @@ async function commitToGitHub(allData) {
     return true;
   }
 
-  // Generate serialized JS files
   const winJs = serializePlatformData('windows', allData.windows);
   const macJs = serializePlatformData('mac', allData.mac);
 
-  // Commit both files
   await updateFile('data/windows.js', winJs, 'Update Windows catalogue via Admin Dashboard');
   await updateFile('data/mac.js', macJs, 'Update Mac catalogue via Admin Dashboard');
+
+  // If encrypted token exists in config, keep config.js in sync too
+  if (CATALOGUE_CONFIG.encryptedGitHubToken) {
+    const cfgContent = `// Plugin Catalogue — Config\nconst CATALOGUE_CONFIG = ${JSON.stringify(CATALOGUE_CONFIG, null, 2)};\n`;
+    await updateFile('config.js', cfgContent, 'Update configuration & encrypted token');
+  }
 
   return true;
 }

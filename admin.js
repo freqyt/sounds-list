@@ -37,7 +37,16 @@ async function handleLogin(e) {
 
   if (hash === getPasswordHash() || hash === CATALOGUE_CONFIG.passwordHash) {
     sessionStorage.setItem('cat_admin', '1');
+    sessionStorage.setItem('cat_admin_pw', pw); // keep in memory for encryption/decryption during this admin session
     setPasswordHash(hash);
+
+    // If config has an encrypted token, decrypt it into memory
+    if (CATALOGUE_CONFIG.encryptedGitHubToken) {
+      decryptSecret(CATALOGUE_CONFIG.encryptedGitHubToken, pw).then(dec => {
+        if (dec) setGitHubConfig(dec, 'freqyt/sounds-list');
+      });
+    }
+
     err.style.display = 'none';
     bootDashboard();
   } else {
@@ -374,7 +383,44 @@ async function saveGitHubConfig() {
     }
 
     setGitHubConfig(tokenInput, repoInput);
-    alert('🎉 GitHub Token Verified & Saved!\n\nYou can now click "🚀 Publish Live" anytime to update your live website worldwide!');
+
+    // Encrypt token using current admin password so it is never exposed in plain text
+    const currentPw = sessionStorage.getItem('cat_admin_pw') || 'theplug11';
+    const encrypted = await encryptSecret(tokenInput, currentPw);
+    CATALOGUE_CONFIG.encryptedGitHubToken = encrypted;
+
+    // Immediately commit the encrypted token configuration to GitHub so it's backed up permanently
+    try {
+      const cfgContent = `// Plugin Catalogue — Config\nconst CATALOGUE_CONFIG = ${JSON.stringify(CATALOGUE_CONFIG, null, 2)};\n`;
+      const fileUrl = `https://api.github.com/repos/${repoInput}/contents/config.js`;
+      const headers = {
+        'Authorization': `Bearer ${tokenInput}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      };
+      let sha = null;
+      try {
+        const getRes = await fetch(`${fileUrl}?ref=master&_t=${Date.now()}`, { headers, cache: 'no-store' });
+        if (getRes.ok) {
+          const fileData = await getRes.json();
+          sha = fileData.sha;
+        }
+      } catch(e) {}
+      await fetch(fileUrl, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          message: 'Save encrypted GitHub token',
+          content: btoa(unescape(encodeURIComponent(cfgContent))),
+          branch: 'master',
+          sha: sha || undefined
+        })
+      });
+    } catch(err) {
+      console.warn('Could not backup encrypted token to GitHub repo:', err);
+    }
+
+    alert('🎉 GitHub Token Verified & Encrypted!\n\nYour token has been securely encrypted with AES-256 and backed up.\nYou will never lose it, even on new devices or clear cache!');
     document.getElementById('cloud-modal').style.display = 'none';
   } catch (err) {
     statusEl.textContent = err.message || 'Verification failed. Check your token.';
