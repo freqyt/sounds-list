@@ -823,7 +823,10 @@ const windowsData = {
           "name": "InDesign",
           "tags": "Adobe"
         },
-        "Lightroom",
+        {
+          "name": "Lightroom",
+          "tags": "Adobe"
+        },
         {
           "name": "Photoshop",
           "tags": "Adobe"
@@ -832,7 +835,10 @@ const windowsData = {
           "name": "Premiere Pro",
           "tags": "Adobe"
         },
-        "VEGAS Pro"
+        {
+          "name": "VEGAS Pro",
+          "tags": "MAGIX"
+        }
       ],
       "tier20": []
     }
