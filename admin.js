@@ -216,6 +216,38 @@ function getPlatformDeal() {
   return platData.deal;
 }
 
+function buildDealPreviewHtml(deal) {
+  let previewRight = '';
+  if (deal.type === 'spotlight_custom') {
+    previewRight = `<div class="spotlight-price" style="font-size:1.3rem; font-weight:800; color:var(--accent);">$${deal.customPrice || 75}</div><button class="hbtn hbtn-primary">+ Add Deal</button>`;
+  } else if (deal.type === 'bundle_x_for_y') {
+    previewRight = `<div class="spotlight-deal-tag" style="display:flex; gap:0.35rem; align-items:baseline;"><span style="color:var(--text-2); font-weight:700;">${deal.bundleQty || 3} for</span><span style="font-size:1.3rem; font-weight:800; color:var(--accent);">$${deal.bundlePrice || 100}</span></div><span class="admin-tag">Auto-applies in cart</span>`;
+  } else if (deal.type === 'percent_off') {
+    previewRight = `<div class="spotlight-deal-tag"><span style="font-size:1.3rem; font-weight:800; color:var(--accent);">${deal.percentOff || 20}% OFF</span></div><span class="admin-tag">Auto-applies in cart</span>`;
+  } else if (deal.type === 'bogo') {
+    previewRight = `<div class="spotlight-deal-tag"><span style="font-size:1.1rem; font-weight:800; color:var(--accent);">Buy ${deal.bogoBuyQty || 2} Get ${deal.bogoGetQty || 1} Free</span></div><span class="admin-tag">Auto-applies in cart</span>`;
+  }
+
+  return `
+    <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
+      <span class="badge" style="background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; font-size:0.65rem; padding:0.2rem 0.55rem; border-radius:100px;">${esc(deal.badge || '🔥 SPECIAL DEAL')}</span>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+      <div style="display:flex; align-items:center; gap:0.9rem;">
+        <div style="font-size:1.8rem;">💎</div>
+        <div>
+          <h4 style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">${esc(deal.title || 'Special Promotion')}</h4>
+          <p style="font-size:0.84rem; color:var(--text-2); margin-bottom:0.2rem;">${esc(deal.description || 'Pick any items to claim special pricing!')}</p>
+          ${deal.customNote ? `<div style="font-size:0.75rem; color:var(--text-muted);">ⓘ ${esc(deal.customNote)}</div>` : ''}
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.75rem; flex-shrink:0;">
+        ${previewRight}
+      </div>
+    </div>
+  `;
+}
+
 function renderDealsPanel() {
   const main = document.getElementById('admin-main');
   const deal = getPlatformDeal();
@@ -258,29 +290,11 @@ function renderDealsPanel() {
     `;
   } else if (deal.type === 'spotlight_custom') {
     typeSpecificFields = `
-      <div class="form-grid-2">
-        <div class="form-field">
-          <label class="form-label">Custom Deal Price ($ USD)</label>
-          <input type="number" min="1" max="9999" class="form-input" value="${deal.customPrice || 75}" oninput="updateDealField('customPrice', this.value)" />
-        </div>
-        <div class="form-field">
-          <label class="form-label">Extra Note / Highlights</label>
-          <input type="text" class="form-input" value="${esc(deal.customNote || '')}" placeholder="e.g. Includes 200 expansion banks" oninput="updateDealField('customNote', this.value)" />
-        </div>
+      <div class="form-field">
+        <label class="form-label">Custom Deal Price ($ USD)</label>
+        <input type="number" min="1" max="9999" class="form-input" value="${deal.customPrice || 75}" oninput="updateDealField('customPrice', this.value)" />
       </div>
     `;
-  }
-
-  // Live Preview calculation
-  let previewRight = '';
-  if (deal.type === 'spotlight_custom') {
-    previewRight = `<div class="spotlight-price" style="font-size:1.3rem; font-weight:800; color:var(--accent);">$${deal.customPrice || 75}</div><button class="hbtn hbtn-primary">+ Add Deal</button>`;
-  } else if (deal.type === 'bundle_x_for_y') {
-    previewRight = `<div class="spotlight-deal-tag" style="display:flex; gap:0.35rem; align-items:baseline;"><span style="color:var(--text-2); font-weight:700;">${deal.bundleQty || 3} for</span><span style="font-size:1.3rem; font-weight:800; color:var(--accent);">$${deal.bundlePrice || 100}</span></div><span class="admin-tag">Auto-applies in cart</span>`;
-  } else if (deal.type === 'percent_off') {
-    previewRight = `<div class="spotlight-deal-tag"><span style="font-size:1.3rem; font-weight:800; color:var(--accent);">${deal.percentOff || 20}% OFF</span></div><span class="admin-tag">Auto-applies in cart</span>`;
-  } else if (deal.type === 'bogo') {
-    previewRight = `<div class="spotlight-deal-tag"><span style="font-size:1.1rem; font-weight:800; color:var(--accent);">Buy ${deal.bogoBuyQty || 2} Get ${deal.bogoGetQty || 1} Free</span></div><span class="admin-tag">Auto-applies in cart</span>`;
   }
 
   main.innerHTML = `
@@ -344,27 +358,17 @@ function renderDealsPanel() {
           <input type="text" class="form-input" value="${esc(deal.description || deal.customIncludes || '')}" oninput="updateDealField('description', this.value)" />
         </div>
 
+        <div class="form-field">
+          <label class="form-label">Info Note (e.g. ⓘ Includes all updates & expansion banks - leave blank to hide)</label>
+          <input type="text" class="form-input" value="${esc(deal.customNote || '')}" placeholder="e.g. Includes all updates & expansion banks (or leave blank to remove)" oninput="updateDealField('customNote', this.value)" />
+        </div>
+
         ${typeSpecificFields}
 
         <div class="deals-preview-wrap">
           <label class="form-label" style="margin-bottom:0.75rem; display:block;">Live Storefront Preview</label>
-          <div style="background:linear-gradient(135deg, rgba(15,23,42,0.9), rgba(3,7,18,0.95)); border:1px solid rgba(59,130,246,0.35); border-radius:14px; padding:1.25rem;">
-            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
-              <span class="badge" style="background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; font-size:0.65rem; padding:0.2rem 0.55rem; border-radius:100px;">${esc(deal.badge || '🔥 SPECIAL DEAL')}</span>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
-              <div style="display:flex; align-items:center; gap:0.9rem;">
-                <div style="font-size:1.8rem;">💎</div>
-                <div>
-                  <h4 style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">${esc(deal.title || 'Special Promotion')}</h4>
-                  <p style="font-size:0.84rem; color:var(--text-2); margin-bottom:0.2rem;">${esc(deal.description || 'Pick any items to claim special pricing!')}</p>
-                  ${deal.customNote ? `<div style="font-size:0.75rem; color:var(--text-muted);">ⓘ ${esc(deal.customNote)}</div>` : ''}
-                </div>
-              </div>
-              <div style="display:flex; align-items:center; gap:0.75rem; flex-shrink:0;">
-                ${previewRight}
-              </div>
-            </div>
+          <div id="deal-live-preview" style="background:linear-gradient(135deg, rgba(15,23,42,0.9), rgba(3,7,18,0.95)); border:1px solid rgba(59,130,246,0.35); border-radius:14px; padding:1.25rem;">
+            ${buildDealPreviewHtml(deal)}
           </div>
         </div>
 
@@ -402,6 +406,12 @@ function updateDealField(field, val) {
   const deal = getPlatformDeal();
   deal[field] = val;
   savePlatformData(adm.platform, adm.data[adm.platform]);
+
+  // Update live preview in real time without redrawing inputs:
+  const previewEl = document.getElementById('deal-live-preview');
+  if (previewEl) {
+    previewEl.innerHTML = buildDealPreviewHtml(deal);
+  }
 }
 
 function toggleDealEnabled(checked) {
