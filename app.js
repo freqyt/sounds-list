@@ -169,8 +169,16 @@ function renderTabs() {
 function switchCategory(key) {
   state.activeCategory = key;
   state.subFilter = 'all';
+
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.placeholder = (key === 'kontakt')
+      ? 'Search 1,440+ Kontakt libraries, brands...'
+      : 'Search plugins, bundles, soundbanks, DAWs...';
+  }
+
   if (state.searchQuery) {
-    clearSearch();
+    renderCatalogue();
   } else {
     renderTabs();
     renderSubFilterPills();
@@ -694,12 +702,18 @@ function renderCatalogue() {
     });
   };
 
-  // ── 1. GLOBAL SEARCH MODE (Scans Across ALL Categories) ──
+  // ── 1. SEARCH MODE (Excludes Kontakt unless viewing Kontakt tab) ──
   if (q) {
     let totalVisible = 0;
     let html = '';
+    const isViewingKontakt = (state.activeCategory === 'kontakt');
 
     Object.entries(data.categories).forEach(([catKey, cat]) => {
+      // If currently on Kontakt tab, search ONLY inside Kontakt
+      if (isViewingKontakt && catKey !== 'kontakt') return;
+      // If on any other category, cross-search everything EXCEPT Kontakt
+      if (!isViewingKontakt && catKey === 'kontakt') return;
+
       let catHtml = '';
       let catCount = 0;
 
