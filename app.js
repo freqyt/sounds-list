@@ -413,8 +413,8 @@ function updateCartUI() {
   }
 }
 
-async function copyOrderList() {
-  if (state.cart.length === 0) return;
+function buildOrderSummaryText() {
+  if (state.cart.length === 0) return '';
   const platName = state.platform === 'windows' ? 'Windows' : 'Mac';
   const totals = calculateCartTotals();
 
@@ -425,10 +425,16 @@ async function copyOrderList() {
 
   let orderText = `🎵 FREQ Sounds List Order (${platName}):\n${lines.join('\n')}\n━━━━━━━━━━━━━━━━━━\n`;
   if (totals.hasPromo) {
-    orderText += `🏷️ Promo Applied: ${totals.promoLabel}\n💰 Total: $${totals.finalTotal} (You saved $${totals.discount}!)\n`;
+    orderText += `🏷️ Promo Applied: ${totals.promoLabel}\n💰 Total: $${totals.finalTotal} (Saved $${totals.discount}!)\n`;
   } else {
     orderText += `💰 Total: $${totals.finalTotal}\n`;
   }
+  return orderText;
+}
+
+async function copyOrderList() {
+  if (state.cart.length === 0) return;
+  const orderText = buildOrderSummaryText();
 
   try {
     await navigator.clipboard.writeText(orderText);
@@ -436,7 +442,7 @@ async function copyOrderList() {
     const btn = document.getElementById('cart-copy-btn');
     if (textEl && btn) {
       const prev = textEl.textContent;
-      textEl.textContent = '✓ Copied!';
+      textEl.textContent = '✓ Copied';
       btn.classList.add('copied');
       setTimeout(() => {
         textEl.textContent = prev;
@@ -445,6 +451,32 @@ async function copyOrderList() {
     }
   } catch (e) {
     prompt('Copy your order list:', orderText);
+  }
+}
+
+async function sendOrderViaDM() {
+  if (state.cart.length === 0) return;
+  const orderText = buildOrderSummaryText();
+
+  try {
+    await navigator.clipboard.writeText(orderText);
+  } catch (e) {
+    // fallback
+  }
+
+  // Open Instagram Direct Message
+  window.open('https://ig.me/m/freqyt', '_blank', 'noopener,noreferrer');
+
+  const orderTextEl = document.getElementById('cart-order-text');
+  const orderBtn = document.getElementById('cart-order-btn');
+  if (orderTextEl && orderBtn) {
+    const prev = orderTextEl.textContent;
+    orderTextEl.textContent = '✓ Copied & Opened DM!';
+    orderBtn.classList.add('sent');
+    setTimeout(() => {
+      orderTextEl.textContent = prev;
+      orderBtn.classList.remove('sent');
+    }, 2500);
   }
 }
 
