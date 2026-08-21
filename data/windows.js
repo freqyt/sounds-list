@@ -765,9 +765,129 @@ const windowsData = {
     "banks": {
       "label": "Preset Banks",
       "icon": "",
-      "bundles": [],
-      "tier40": [],
-      "tier30": [],
+      "bundles": [
+        {
+          "name": "Omnisphere Complete Vault (Vol 1, 2 & 3)",
+          "price": 100,
+          "includes": "Omnisphere Vol 1 (200 Banks), Vol 2 (105 Banks) & Vol 3 (132 Banks) — 437+ Banks Total",
+          "badges": [
+            "BEST SELLER"
+          ],
+          "tags": "Omnisphere,Spectrasonics,Preset Banks"
+        },
+        {
+          "name": "Analog Lab Bank Suite (Vol 1 & 2)",
+          "price": 70,
+          "includes": "Analog Lab Vol 1 (40 Banks) & Vol 2 (45 Banks) — 85+ Banks Total",
+          "badges": [
+            "POPULAR"
+          ],
+          "tags": "Analog Lab,Arturia,Preset Banks"
+        },
+        {
+          "name": "ElectraX Bank Vault (Vol 1 & 2)",
+          "price": 70,
+          "includes": "ElectraX Vol 1 (200 Banks) & Vol 2 (175 Banks) — 375+ Banks Total",
+          "badges": [],
+          "tags": "ElectraX,Tone2,Preset Banks"
+        }
+      ],
+      "tier40": [
+        {
+          "name": "Analog Lab - Volume 2 (45 Preset Banks)",
+          "price": 50,
+          "badges": [
+            "NEW"
+          ],
+          "tags": "Analog Lab,Arturia"
+        },
+        {
+          "name": "Cthulhu - Volume 1 (2,000 Preset Banks)",
+          "price": 50,
+          "badges": [],
+          "tags": "Cthulhu,Xfer"
+        },
+        {
+          "name": "ElectraX - Volume 2 (175 Preset Banks)",
+          "price": 50,
+          "badges": [],
+          "tags": "ElectraX,Tone2"
+        },
+        {
+          "name": "Omnisphere - Volume 2 (105 Preset Banks)",
+          "price": 40,
+          "badges": [],
+          "tags": "Omnisphere,Spectrasonics"
+        },
+        {
+          "name": "Omnisphere - Volume 3 (132 Preset Banks)",
+          "price": 50,
+          "badges": [
+            "NEW"
+          ],
+          "tags": "Omnisphere,Spectrasonics"
+        },
+        {
+          "name": "Portal - Volume 2 (16 Preset Banks)",
+          "price": 40,
+          "badges": [
+            "NEW"
+          ],
+          "tags": "Portal,Output"
+        }
+      ],
+      "tier30": [
+        {
+          "name": "Analog Lab - Volume 1 (40 Preset Banks)",
+          "price": 30,
+          "badges": [],
+          "tags": "Analog Lab,Arturia"
+        },
+        {
+          "name": "Effectrix - Volume 1 (16 Preset Banks)",
+          "price": 30,
+          "badges": [],
+          "tags": "Effectrix,Sugar Bytes"
+        },
+        {
+          "name": "ElectraX - Volume 1 (200 Preset Banks)",
+          "price": 30,
+          "badges": [],
+          "tags": "ElectraX,Tone2"
+        },
+        {
+          "name": "Gross Beat - Volume 1 (58 Preset Banks)",
+          "price": 30,
+          "badges": [],
+          "tags": "Gross Beat,Image-Line"
+        },
+        {
+          "name": "Omnisphere - Volume 1 (200 Preset Banks)",
+          "price": 30,
+          "badges": [],
+          "tags": "Omnisphere,Spectrasonics"
+        },
+        {
+          "name": "Portal - Volume 1 (15 Preset Banks)",
+          "price": 30,
+          "badges": [],
+          "tags": "Portal,Output"
+        },
+        {
+          "name": "Serum - Volume 1 (139 Preset Banks)",
+          "price": 30,
+          "badges": [],
+          "tags": "Serum,Xfer"
+        },
+        {
+          "name": "Zenology - Volume 1 (22 Preset Banks)",
+          "price": 30,
+          "badges": [
+            "NEW"
+          ],
+          "tags": "Zenology,Roland"
+        }
+      ],
       "tier20": []
     },
     "kontakt": {

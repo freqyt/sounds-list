@@ -809,7 +809,7 @@ function renderPluginCard(item, q, tier = '$40', catKey = '') {
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, false);
   const noteHtml = n.note ? `<span class="plugin-note-tag">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
-  const numPrice = Number(tier.replace('$', '')) || 40;
+  const numPrice = (n.price !== undefined && n.price !== null && n.price !== '') ? Number(n.price) : (Number(tier.replace('$', '')) || 40);
 
   return `
     <div
