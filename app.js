@@ -360,17 +360,19 @@ function renderPluginCard(item, q) {
   const n = normalizeItem(item);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, false);
-  const noteHtml = n.note ? `<span class="note-indicator" title="${esc(n.note)}">⚠</span>` : '';
+  const noteHtml = n.note ? `<span class="plugin-note-tag">⚠ ${esc(n.note)}</span>` : '';
 
   return `
-    <div class="plugin-card">
+    <div class="plugin-card ${n.note ? 'has-note' : ''}">
       <div class="plugin-card-left">
         ${thumbHtml}
-        <span class="plugin-name">${highlight(n.name, q)}</span>
+        <div class="plugin-info-wrap">
+          <span class="plugin-name">${highlight(n.name, q)}</span>
+          ${noteHtml}
+        </div>
       </div>
       <div class="plugin-badges-wrap">
         ${badgesHtml}
-        ${noteHtml}
       </div>
     </div>
   `;

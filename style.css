@@ -735,6 +735,23 @@ html.has-active-session #catalogue-screen {
   box-shadow: 0 0 10px rgba(251, 191, 36, 0.45);
 }
 
+.plugin-info-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.plugin-note-tag {
+  color: var(--badge-note);
+  font-size: 0.72rem;
+  line-height: 1.25;
+  font-weight: 500;
+  opacity: 0.95;
+  word-break: break-word;
+}
+
 .note-indicator {
   color: var(--badge-note);
   font-size: 0.72rem;
