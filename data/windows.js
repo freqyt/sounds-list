@@ -418,28 +418,33 @@ const windowsData = {
         {
           "name": "Starter Bundle",
           "price": 100,
-          "includes": "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle"
+          "includes": "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle",
+          "tags": "Fabfilter,Waves,Valhalla"
         },
         {
           "name": "Vocal Bundle",
           "price": 70,
-          "includes": "Waves 16 Complete, Auto Tune 11 Pro"
+          "includes": "Waves 16 Complete, Auto Tune 11 Pro",
+          "tags": "Waves,Antares"
         },
         {
           "name": "Hihat Sauce",
           "price": 60,
-          "includes": "Effectrix 2, Looperator & Shaperbox 3"
+          "includes": "Effectrix 2, Looperator & Shaperbox 3",
+          "tags": "Sugar Bytes,Cableguys"
         },
         {
           "name": "Sample Sauce",
           "price": 60,
-          "includes": "Portal, Soothe2 & RC-20"
+          "includes": "Portal, Soothe2 & RC-20",
+          "tags": "Output,oeksound,XLN Audio"
         },
         {
           "name": "Antares Bundle",
           "price": 80,
           "includes": "Auto-Key 2, Auto-Tune EFX+, Auto-Tune Pro X, Auto-Tune Slice, Auto-Tune SoundSoap, Auto-Tune Vocal EQ, Auto-Tune Vocodist, Mic Mod, Vocal Reverb, AVOX: ARTICULATOR, ASPIRE, CHOIR, DUO, MUTATOR, PUNCH, SYBIL, THROAT, WARM",
-          "note": "Total of 18 Plugins"
+          "note": "Total of 18 Plugins",
+          "tags": "Antares"
         },
         {
           "name": "DADA LIFE Bundle",
@@ -447,38 +452,100 @@ const windowsData = {
           "includes": "Endless Smile, Eternal Return, Sausage Fattener, Space In-Your-Face, Wide Awake",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "DADA LIFE"
         }
       ],
       "tier40": [
-        "Antares Auto-Tune Pro X",
-        "Arturia FX Collection",
-        "Fabfilter Bundle",
-        "Goodhertz Bundle",
-        "Guitar Rig 7",
-        "Ozone 12",
-        "Soothe2",
-        "SoundToys Bundle",
-        "Valhalla Bundle",
+        {
+          "name": "Antares Auto-Tune Pro X",
+          "tags": "Antares"
+        },
+        {
+          "name": "Arturia FX Collection",
+          "tags": "Arturia"
+        },
+        {
+          "name": "Fabfilter Bundle",
+          "tags": "Fabfilter"
+        },
+        {
+          "name": "Goodhertz Bundle",
+          "tags": "Goodhertz,Ghz"
+        },
+        {
+          "name": "Guitar Rig 7",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Ozone 12",
+          "tags": "Izotope"
+        },
+        {
+          "name": "Soothe2",
+          "tags": "oeksound"
+        },
+        {
+          "name": "SoundToys Bundle",
+          "tags": "SoundToys"
+        },
+        {
+          "name": "Valhalla Bundle",
+          "tags": "Valhalla"
+        },
         {
           "name": "Vocalign Pro 6",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "Synchro Arts"
         },
-        "Waves 16 Complete",
-        "Xvox Pro"
+        {
+          "name": "Waves 16 Complete",
+          "tags": "Waves"
+        },
+        {
+          "name": "Xvox Pro",
+          "tags": "Nuro Audio"
+        }
       ],
       "tier30": [
-        "AmpliTube 4",
-        "Analog Pro",
-        "Effectrix 2",
-        "Gullfoss",
-        "Looperator",
-        "Melodyne",
-        "Murda Melodies",
-        "Nectar",
-        "Neoverb",
+        {
+          "name": "AmpliTube 4",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "Analog Pro",
+          "tags": "Initial Audio"
+        },
+        {
+          "name": "Effectrix 2",
+          "tags": "Sugar Bytes"
+        },
+        {
+          "name": "Gullfoss",
+          "tags": "Soundtheory"
+        },
+        {
+          "name": "Looperator",
+          "tags": "Sugar Bytes"
+        },
+        {
+          "name": "Melodyne",
+          "tags": "Celemony"
+        },
+        {
+          "name": "Murda Melodies",
+          "tags": "Slate Digital"
+        },
+        {
+          "name": "Nectar",
+          "tags": "Izotope"
+        },
+        {
+          "name": "Neoverb",
+          "tags": "Izotope"
+        },
         {
           "name": "Neural DSP",
           "badges": [
@@ -486,60 +553,213 @@ const windowsData = {
           ],
           "note": "Abasi, Cory Wong X, Darkglass Ultra, Fortin: Cali Suite, Nameless Suite, NTS Suite, Gojira, John Mayer X, Mantra, Mateus Asato, Misha Mansoor X, Nolly X, OMEGA Ampworks Granophyre, Parallax, Plini, Soldano SLO-100 X, Tim Henson X"
         },
-        "Neutron",
-        "Portal",
-        "Raum",
-        "RC-20 Retro Color",
-        "Real Guitar 5",
-        "Reels",
-        "Regroover",
-        "Reverse",
-        "Rift",
-        "RX 10",
-        "Scaler 2",
-        "Serato Sample 2",
-        "Seventh Heaven Professional",
-        "Shaperbox 3",
-        "SketchCassette II",
-        "Slate Digital Virtual Tape Machines",
-        "SSL Native Plugins",
-        "Strum GS-2",
-        "Super VHS",
-        "T-Racks",
-        "TAL-Dub-X",
-        "Tantra",
-        "The God Particle",
-        "Thermal",
-        "Transient Master",
-        "Uhbik Bundle",
-        "Vinyl Strip",
-        "Warmverb",
-        "XO",
-        "Xvox"
+        {
+          "name": "Neutron",
+          "tags": "Izotope"
+        },
+        {
+          "name": "Portal",
+          "tags": "Output"
+        },
+        {
+          "name": "Raum",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "RC-20 Retro Color",
+          "tags": "XLN Audio"
+        },
+        {
+          "name": "Real Guitar 5",
+          "tags": "MusicLab"
+        },
+        {
+          "name": "Reels",
+          "tags": "AudioThing"
+        },
+        {
+          "name": "Regroover",
+          "tags": "Accusonus"
+        },
+        {
+          "name": "Reverse",
+          "tags": "Initial Audio"
+        },
+        {
+          "name": "Rift",
+          "tags": "Minimal Audio"
+        },
+        {
+          "name": "RX 10",
+          "tags": "Izotope"
+        },
+        {
+          "name": "Scaler 2",
+          "tags": "Scaler Music"
+        },
+        {
+          "name": "Serato Sample 2",
+          "tags": "Serato"
+        },
+        {
+          "name": "Seventh Heaven Professional",
+          "tags": "LiquidSonics"
+        },
+        {
+          "name": "Shaperbox 3",
+          "tags": "Cableguys"
+        },
+        {
+          "name": "SketchCassette II",
+          "tags": "Aberrant DSP"
+        },
+        {
+          "name": "Slate Digital Virtual Tape Machines",
+          "tags": "Slate Digital"
+        },
+        {
+          "name": "SSL Native Plugins",
+          "tags": "SSL,Solid State Logic"
+        },
+        {
+          "name": "Strum GS-2",
+          "tags": "Applied Acoustics Systems,AAS"
+        },
+        {
+          "name": "Super VHS",
+          "tags": "Baby Audio"
+        },
+        {
+          "name": "T-Racks",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "TAL-Dub-X",
+          "tags": "TAL Software"
+        },
+        {
+          "name": "Tantra",
+          "tags": "DS Audio,Dmitry Sches"
+        },
+        {
+          "name": "The God Particle",
+          "tags": "Cradle"
+        },
+        {
+          "name": "Thermal",
+          "tags": "Output"
+        },
+        {
+          "name": "Transient Master",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Uhbik Bundle",
+          "tags": "u-he"
+        },
+        {
+          "name": "Vinyl Strip",
+          "tags": "AudioThing"
+        },
+        {
+          "name": "Warmverb",
+          "tags": "Tone2"
+        },
+        {
+          "name": "XO",
+          "tags": "XLN Audio"
+        },
+        {
+          "name": "Xvox",
+          "tags": "Nuro Audio"
+        }
       ],
       "tier20": [
-        "Bias FX 2",
-        "CamelCrusher",
-        "CamelSpace",
-        "Cassette",
-        "Comeback Kid",
-        "Decimort 1 or 2",
-        "Discord4",
-        "EchoMelt",
-        "Eventide Ensemble Bundle",
-        "Eventide Newfangled Elevate Bundle",
-        "Glitch 2",
-        "Klevgrand Complete Bundle",
+        {
+          "name": "Bias FX 2",
+          "tags": "Positive Grid"
+        },
+        {
+          "name": "CamelCrusher",
+          "tags": "Camel Audio"
+        },
+        {
+          "name": "CamelSpace",
+          "tags": "Camel Audio"
+        },
+        {
+          "name": "Cassette",
+          "tags": "Wavesfactory"
+        },
+        {
+          "name": "Comeback Kid",
+          "tags": "Baby Audio"
+        },
+        {
+          "name": "Decimort 1 or 2",
+          "tags": "D16"
+        },
+        {
+          "name": "Discord4",
+          "tags": "Audio Damage"
+        },
+        {
+          "name": "EchoMelt",
+          "tags": "Psychic Modulation"
+        },
+        {
+          "name": "Eventide Ensemble Bundle",
+          "tags": "Eventide"
+        },
+        {
+          "name": "Eventide Newfangled Elevate Bundle",
+          "tags": "Eventide"
+        },
+        {
+          "name": "Glitch 2",
+          "tags": "illformed"
+        },
+        {
+          "name": "Klevgrand Complete Bundle",
+          "tags": "Klevgrand"
+        },
         "Kyle Beats Drip Plugin",
-        "Lurssen Mastering Console",
-        "Melda MComplete",
-        "Mixbox",
-        "OTT",
-        "Overloud TH3",
-        "Pitchwheel",
-        "Thenathan Underwater",
-        "Trash 2",
-        "VocalSynth 2"
+        {
+          "name": "Lurssen Mastering Console",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "Melda MComplete Bundle",
+          "tags": "MeldaProduction"
+        },
+        {
+          "name": "Mixbox",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "OTT",
+          "tags": "Xfer"
+        },
+        {
+          "name": "Overloud TH3",
+          "tags": "Overloud"
+        },
+        {
+          "name": "Pitchwheel",
+          "tags": "QuikQuak"
+        },
+        {
+          "name": "Trash 2",
+          "tags": "Izotope"
+        },
+        {
+          "name": "Underwater",
+          "tags": "Thenatan"
+        },
+        {
+          "name": "VocalSynth 2",
+          "tags": "Izotope"
+        }
       ]
     },
     "daws": {
