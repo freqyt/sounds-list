@@ -34,7 +34,8 @@ const windowsData = {
           "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks",
           "badges": [
             "BEST SELLER"
-          ]
+          ],
+          "tags": "Spectrasonics,Omnisphere,Keyscape,Trilian"
         },
         {
           "name": "ElectraX Bundle",
@@ -42,7 +43,8 @@ const windowsData = {
           "includes": "ElectraX + 200 Custom Banks",
           "badges": [
             "BEST SELLER"
-          ]
+          ],
+          "tags": "Tone2"
         },
         {
           "name": "Serum Bundle",
