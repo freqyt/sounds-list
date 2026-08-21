@@ -123,6 +123,9 @@ function goBack() {
   const platformScreen = document.getElementById('platform-screen');
   const catalogueScreen = document.getElementById('catalogue-screen');
 
+  // Immediately scroll to top so there's zero jump when landing screen appears
+  window.scrollTo(0, 0);
+
   clearBrowseState();
   document.documentElement.classList.remove('has-active-session');
   catalogueScreen.classList.add('exit-right');
@@ -130,7 +133,7 @@ function goBack() {
   setTimeout(() => {
     catalogueScreen.classList.remove('active');
     platformScreen.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo(0, 0);
 
     clearSearch();
 
