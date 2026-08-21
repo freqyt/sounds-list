@@ -856,6 +856,28 @@ html, body {
   flex-shrink: 0;
 }
 
+.plugin-price-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  padding: 0.12rem 0.45rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.vst-bank-section {
+  margin-bottom: 1.75rem;
+}
+
+.vst-bank-section .section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 /* ═══════════════════════════════════════════════════════════
    BADGES (NEW, HOT, SALE)
 ═══════════════════════════════════════════════════════════ */

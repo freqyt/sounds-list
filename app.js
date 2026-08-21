@@ -624,31 +624,96 @@ function renderCatalogue() {
     html += spotlightHtml;
   }
 
-  // 1. Bundles (custom manual ordering preserved)
-  if (cat.bundles && cat.bundles.length > 0) {
-    totalVisible += cat.bundles.length;
-    html += renderSection('Bundles', cat.bundles.map(b => renderBundleCard(b, '', state.activeCategory)).join(''), 'bundles-grid');
-  }
+  // ── PRESET BANKS: SEPARATE BY VST ──
+  if (state.activeCategory === 'banks') {
+    const allItems = [
+      ...(cat.tier40 || []),
+      ...(cat.tier30 || []),
+      ...(cat.tier20 || [])
+    ];
 
-  // 2. $40 Tier (Always Alphabetical)
-  if (cat.tier40 && cat.tier40.length > 0) {
-    const sorted = sortItemsAZ(cat.tier40);
-    totalVisible += sorted.length;
-    html += renderSection('$40 Each', sorted.map(item => renderPluginCard(item, '', '$40', state.activeCategory)).join(''), 'plugins-grid');
-  }
+    // Group items by VST Synth name (e.g. "Omnisphere", "Analog Lab", "ElectraX", "Serum", "Portal", etc.)
+    const vstGroups = {};
+    allItems.forEach(item => {
+      const n = normalizeItem(item);
+      let vstName = 'Other Soundbanks';
+      if (n.name.includes(' - ')) {
+        vstName = n.name.split(' - ')[0].trim();
+      } else if (n.tags) {
+        const firstTag = n.tags.split(',')[0].trim();
+        if (firstTag && !firstTag.toLowerCase().includes('bank')) vstName = firstTag;
+      }
+      if (!vstGroups[vstName]) vstGroups[vstName] = [];
+      vstGroups[vstName].push(item);
+    });
 
-  // 3. $30 Tier (Always Alphabetical)
-  if (cat.tier30 && cat.tier30.length > 0) {
-    const sorted = sortItemsAZ(cat.tier30);
-    totalVisible += sorted.length;
-    html += renderSection('$30 Each', sorted.map(item => renderPluginCard(item, '', '$30', state.activeCategory)).join(''), 'plugins-grid');
-  }
+    const usedBundleNames = new Set();
 
-  // 4. $20 Tier (Always Alphabetical)
-  if (cat.tier20 && cat.tier20.length > 0) {
-    const sorted = sortItemsAZ(cat.tier20);
-    totalVisible += sorted.length;
-    html += renderSection('$20 Each', sorted.map(item => renderPluginCard(item, '', '$20', state.activeCategory)).join(''), 'plugins-grid');
+    // Render each VST group in alphabetical order
+    Object.keys(vstGroups).sort().forEach(vstName => {
+      const items = sortItemsAZ(vstGroups[vstName]);
+      totalVisible += items.length;
+
+      // Find matching bundle(s) for this VST
+      const matchingBundles = (cat.bundles || []).filter(b => {
+        const bn = (b.name || '').toLowerCase();
+        const bt = (b.tags || '').toLowerCase();
+        const vn = vstName.toLowerCase();
+        return bn.includes(vn) || bt.includes(vn);
+      });
+
+      matchingBundles.forEach(b => usedBundleNames.add(b.name));
+
+      let sectionInner = '';
+      if (matchingBundles.length > 0) {
+        sectionInner += `<div class="bundles-grid" style="margin-bottom: 0.85rem;">${matchingBundles.map(b => renderBundleCard(b, '', 'banks')).join('')}</div>`;
+      }
+      sectionInner += `<div class="plugins-grid">${items.map(item => renderPluginCard(item, '', '$30', 'banks')).join('')}</div>`;
+
+      html += `
+        <section class="section vst-bank-section">
+          <div class="section-header">
+            <h3 class="section-title">${getCategorySvg('banks')} ${esc(vstName)} Banks</h3>
+          </div>
+          ${sectionInner}
+        </section>
+      `;
+    });
+
+    // Render any remaining global bundles that were not tied to a single VST
+    const remainingBundles = (cat.bundles || []).filter(b => !usedBundleNames.has(b.name));
+    if (remainingBundles.length > 0) {
+      totalVisible += remainingBundles.length;
+      html = renderSection('Mega Bundles & Vaults', remainingBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid') + html;
+    }
+  } else {
+    // ── STANDARD CATEGORIES (Instruments, FX, DAWs, Software, Kontakt) ──
+    // 1. Bundles (custom manual ordering preserved)
+    if (cat.bundles && cat.bundles.length > 0) {
+      totalVisible += cat.bundles.length;
+      html += renderSection('Bundles', cat.bundles.map(b => renderBundleCard(b, '', state.activeCategory)).join(''), 'bundles-grid');
+    }
+
+    // 2. $40 Tier (Always Alphabetical)
+    if (cat.tier40 && cat.tier40.length > 0) {
+      const sorted = sortItemsAZ(cat.tier40);
+      totalVisible += sorted.length;
+      html += renderSection('$40 Each', sorted.map(item => renderPluginCard(item, '', '$40', state.activeCategory)).join(''), 'plugins-grid');
+    }
+
+    // 3. $30 Tier (Always Alphabetical)
+    if (cat.tier30 && cat.tier30.length > 0) {
+      const sorted = sortItemsAZ(cat.tier30);
+      totalVisible += sorted.length;
+      html += renderSection('$30 Each', sorted.map(item => renderPluginCard(item, '', '$30', state.activeCategory)).join(''), 'plugins-grid');
+    }
+
+    // 4. $20 Tier (Always Alphabetical)
+    if (cat.tier20 && cat.tier20.length > 0) {
+      const sorted = sortItemsAZ(cat.tier20);
+      totalVisible += sorted.length;
+      html += renderSection('$20 Each', sorted.map(item => renderPluginCard(item, '', '$20', state.activeCategory)).join(''), 'plugins-grid');
+    }
   }
 
   // Empty State
@@ -804,18 +869,21 @@ function renderBundleCard(bundle, q, catKey = '') {
 
 function renderPluginCard(item, q, tier = '$40', catKey = '') {
   const n = normalizeItem(item);
-  const cartKey = getCartItemKey('plugin', n.name, tier);
+  const numPrice = (n.price !== undefined && n.price !== null && n.price !== '') ? Number(n.price) : (Number(tier.replace('$', '')) || 40);
+  const displayTier = n.price !== undefined ? `$${n.price}` : tier;
+  const cartKey = getCartItemKey('plugin', n.name, displayTier);
   const inCart = state.cart.some(item => item.id === cartKey);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, false);
   const noteHtml = n.note ? `<span class="plugin-note-tag">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
-  const numPrice = (n.price !== undefined && n.price !== null && n.price !== '') ? Number(n.price) : (Number(tier.replace('$', '')) || 40);
+  const isBanks = catKey === 'banks' || state.activeCategory === 'banks' || n.price !== undefined;
+  const priceTagHtml = isBanks ? `<span class="plugin-price-tag">$${numPrice}</span>` : '';
 
   return `
     <div
       class="plugin-card ${n.note ? 'has-note' : ''} ${inCart ? 'in-cart' : ''}"
       data-cart-key="${esc(cartKey)}"
-      onclick="toggleCartItem('plugin', '${ea(n.name)}', ${numPrice}, '${ea(tier)}', ${JSON.stringify(n.badges).replace(/"/g, '&quot;')}, '${ea(n.note)}')"
+      onclick="toggleCartItem('plugin', '${ea(n.name)}', ${numPrice}, '${ea(displayTier)}', ${JSON.stringify(n.badges).replace(/"/g, '&quot;')}, '${ea(n.note)}')"
     >
       <div class="plugin-card-left">
         ${thumbHtml}
@@ -825,6 +893,7 @@ function renderPluginCard(item, q, tier = '$40', catKey = '') {
         </div>
       </div>
       <div class="plugin-badges-wrap">
+        ${priceTagHtml}
         ${badgesHtml}
         <span class="cart-check-indicator ${inCart ? 'in-cart' : ''}" title="Add to Order">${inCart ? '✓' : '+'}</span>
       </div>
