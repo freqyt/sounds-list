@@ -82,7 +82,7 @@ const windowsData = {
           "badges": [
             "NEW"
           ],
-          "tags": "u-He"
+          "tags": "u-he"
         }
       ],
       "tier40": [
