@@ -91,21 +91,6 @@ function setupCatalogue() {
 
   renderTabs();
   renderCatalogue();
-  updateTotalStats();
-}
-
-function updateTotalStats() {
-  const data = getData();
-  let totalCount = 0;
-  for (const key in data.categories) {
-    const cat = data.categories[key];
-    totalCount += (cat.bundles?.length || 0);
-    totalCount += (cat.tier40?.length || 0);
-    totalCount += (cat.tier30?.length || 0);
-    totalCount += (cat.tier20?.length || 0);
-  }
-  const statEl = document.getElementById('quick-count');
-  if (statEl) statEl.textContent = `${totalCount} items`;
 }
 
 // ── Category Tabs ────────────────────────────────────────
