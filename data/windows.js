@@ -768,15 +768,25 @@ const windowsData = {
       "bundles": [],
       "tier40": [
         "Ableton Live 12",
-        "Cubase",
+        {
+          "name": "Cubase",
+          "tags": "Steinberg"
+        },
         {
           "name": "FL Studio 26",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "Image-Line"
         },
-        "Pro Tools 12",
-        "Studio One"
+        {
+          "name": "Pro Tools 12",
+          "tags": "Avid"
+        },
+        {
+          "name": "Studio One",
+          "tags": "PreSonus"
+        }
       ],
       "tier30": [],
       "tier20": []
