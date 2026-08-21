@@ -78,20 +78,51 @@ const macData = {
         }
       ],
       "tier40": [
-        "Arturia Analog Lab 5",
-        "Arturia Pigments 3",
-        "Arturia V Collection 11",
-        "Keyscape",
-        "KORG Bundle",
+        {
+          "name": "Arturia Analog Lab 5",
+          "tags": "Arturia"
+        },
+        {
+          "name": "Arturia Pigments 3",
+          "tags": "Arturia"
+        },
+        {
+          "name": "Arturia V Collection 11",
+          "tags": "Arturia"
+        },
+        {
+          "name": "Keyscape",
+          "tags": "Spectrasonics"
+        },
+        {
+          "name": "KORG Bundle",
+          "tags": "KORG"
+        },
         {
           "name": "Nexus 5 Starter",
-          "note": "Starter version with 1000+ presets"
+          "note": "Starter version with 1000+ presets",
+          "tags": "reFX"
         },
-        "Omnisphere 3",
-        "Roland Cloud",
-        "Roland ZENOLOGY Pro",
-        "Serum 2",
-        "Trilian"
+        {
+          "name": "Omnisphere 3",
+          "tags": "Spectrasonics"
+        },
+        {
+          "name": "Roland Cloud",
+          "tags": "Roland"
+        },
+        {
+          "name": "Roland ZENOLOGY Pro",
+          "tags": "Roland"
+        },
+        {
+          "name": "Serum 2",
+          "tags": "Xfer"
+        },
+        {
+          "name": "Trilian",
+          "tags": "Spectrasonics"
+        }
       ],
       "tier30": [
         "Addictive Drums",
