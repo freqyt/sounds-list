@@ -455,14 +455,42 @@ body::before {
   border-radius: var(--radius-sm);
   color: var(--text-3);
   padding: 0.28rem 0.45rem;
-  font-size: 0.85rem;
   cursor: pointer;
+  font-size: 0.85rem;
   transition: all var(--trans);
   flex-shrink: 0;
-  line-height: 1;
-  margin-left: auto;
 }
-.delete-btn:hover { border-color: rgba(239,68,68,0.35); color: #fca5a5; background: rgba(239,68,68,0.08); }
+.delete-btn:hover { border-color: rgba(239,68,68,0.4); color: #ef4444; background: rgba(239,68,68,0.08); }
+
+.reorder-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.move-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-2);
+  font-size: 0.55rem;
+  padding: 0.08rem 0.28rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: all var(--trans);
+}
+
+.move-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.move-btn:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
 
 /* ── Add button ── */
 .add-item-btn {

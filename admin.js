@@ -126,6 +126,13 @@ function renderPanel() {
   const cat  = adm.data[adm.platform].categories[adm.category];
   const main = document.getElementById('admin-main');
 
+  // Auto-sort plugin tiers alphabetically (Bundles remain in custom order)
+  ['tier40', 'tier30', 'tier20'].forEach(tierKey => {
+    if (cat[tierKey] && cat[tierKey].length) {
+      sortTierAlphabetically(tierKey);
+    }
+  });
+
   main.innerHTML = `
     <div class="panel-header">
       <h2 class="panel-title">${cat.icon} ${cat.label}</h2>
@@ -185,12 +192,17 @@ function itemRow(item, idx, tierKey) {
   `;
 }
 
-// ── Bundle row ────────────────────────────────────────────
+// ── Bundle row (Free Re-ordering) ─────────────────────────
 function bundleRow(b, idx, tierKey) {
   const norm = normalizeBundle(b);
+  const total = (getTier(tierKey) || []).length;
   return `
     <div class="admin-bundle-row" data-idx="${idx}">
       <div class="bundle-row-top">
+        <div class="reorder-btns">
+          <button class="move-btn" title="Move Up" ${idx === 0 ? 'disabled' : ''} onclick="moveBundle(${idx}, -1)">▲</button>
+          <button class="move-btn" title="Move Down" ${idx === total - 1 ? 'disabled' : ''} onclick="moveBundle(${idx}, 1)">▼</button>
+        </div>
         <input class="admin-input input-image" type="text"
           value="${ea(norm.image)}" placeholder="🖼️ Icon / URL"
           title="Icon emoji (e.g. 📦) or image URL (https://...)"
@@ -227,17 +239,39 @@ function badgeToggles(activeBadges, idx, tierKey) {
       <label class="badge-toggle badge-${slug} ${isOn ? 'on' : ''}"
         title="${badge}">
         <input type="checkbox" ${isOn ? 'checked' : ''}
-          onchange="toggleBadge('${tierKey}',${idx},'${badge}',this)" />
+        onchange="toggleBadge('${tierKey}',${idx},'${badge}',this)" />
         ${badge}
       </label>
     `;
   }).join('');
 }
 
-// ── CRUD ─────────────────────────────────────────────────
+// ── CRUD & Automatic Sorting ──────────────────────────────
 
 function getTier(tierKey) {
   return adm.data[adm.platform].categories[adm.category][tierKey];
+}
+
+function sortTierAlphabetically(tierKey) {
+  if (tierKey === 'bundles') return;
+  const items = getTier(tierKey);
+  if (!items || !items.length) return;
+  items.sort((a, b) => {
+    const nameA = (typeof a === 'string' ? a : (a.name || '')).trim().toLowerCase();
+    const nameB = (typeof b === 'string' ? b : (b.name || '')).trim().toLowerCase();
+    return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
+  });
+}
+
+function moveBundle(idx, dir) {
+  const bundles = getTier('bundles');
+  const targetIdx = idx + dir;
+  if (targetIdx < 0 || targetIdx >= bundles.length) return;
+  const temp = bundles[idx];
+  bundles[idx] = bundles[targetIdx];
+  bundles[targetIdx] = temp;
+  autoSave();
+  renderPanel();
 }
 
 function updateField(tierKey, idx, field, value) {
@@ -245,6 +279,11 @@ function updateField(tierKey, idx, field, value) {
   const n = tierKey === 'bundles' ? normalizeBundle(items[idx]) : normalizeItem(items[idx]);
   n[field] = value;
   items[idx] = n;
+
+  if (field === 'name' && tierKey !== 'bundles') {
+    sortTierAlphabetically(tierKey);
+    renderPanel();
+  }
   autoSave();
 }
 
@@ -259,7 +298,6 @@ function toggleBadge(tierKey, idx, badge, checkbox) {
   }
   items[idx] = n;
 
-  // Update the toggle label's active class immediately (no re-render needed)
   checkbox.parentElement.classList.toggle('on', checkbox.checked);
   autoSave();
 }
@@ -268,9 +306,13 @@ function addItem(tierKey, type) {
   const items = getTier(tierKey);
   items.push(
     type === 'bundle'
-      ? { name: 'New Bundle', price: 0, includes: '', note: '', badges: [] }
-      : { name: 'New Plugin', badges: [], note: '' }
+      ? { name: 'New Bundle', price: 0, includes: '', note: '', badges: [], image: '' }
+      : { name: 'New Plugin', badges: [], note: '', image: '' }
   );
+
+  if (tierKey !== 'bundles') {
+    sortTierAlphabetically(tierKey);
+  }
   autoSave();
   renderPanel();
 

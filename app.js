@@ -242,10 +242,17 @@ function renderCatalogue() {
   const q = state.searchQuery.toLowerCase();
   const main = document.getElementById('catalogue-main');
 
-  let totalVisible = 0;
-  let html = '';
+  // Helper: Alphabetical sort for plugin items
+  const sortItemsAZ = (list) => {
+    if (!list) return [];
+    return [...list].sort((a, b) => {
+      const nameA = (typeof a === 'string' ? a : (a.name || '')).trim().toLowerCase();
+      const nameB = (typeof b === 'string' ? b : (b.name || '')).trim().toLowerCase();
+      return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
+    });
+  };
 
-  // 1. Bundles
+  // 1. Bundles (custom manual ordering preserved)
   if (cat.bundles && cat.bundles.length > 0) {
     const filtered = cat.bundles.filter(b => matchesBundleSearch(b, q));
     if (filtered.length > 0) {
@@ -254,27 +261,30 @@ function renderCatalogue() {
     }
   }
 
-  // 2. $40 Tier
+  // 2. $40 Tier (Always Alphabetical)
   if (cat.tier40 && cat.tier40.length > 0) {
-    const filtered = cat.tier40.filter(item => matchesSearch(item, q));
+    const sorted = sortItemsAZ(cat.tier40);
+    const filtered = sorted.filter(item => matchesSearch(item, q));
     if (filtered.length > 0) {
       totalVisible += filtered.length;
       html += renderSection('$40 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
     }
   }
 
-  // 3. $30 Tier
+  // 3. $30 Tier (Always Alphabetical)
   if (cat.tier30 && cat.tier30.length > 0) {
-    const filtered = cat.tier30.filter(item => matchesSearch(item, q));
+    const sorted = sortItemsAZ(cat.tier30);
+    const filtered = sorted.filter(item => matchesSearch(item, q));
     if (filtered.length > 0) {
       totalVisible += filtered.length;
       html += renderSection('$30 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
     }
   }
 
-  // 4. $20 Tier
+  // 4. $20 Tier (Always Alphabetical)
   if (cat.tier20 && cat.tier20.length > 0) {
-    const filtered = cat.tier20.filter(item => matchesSearch(item, q));
+    const sorted = sortItemsAZ(cat.tier20);
+    const filtered = sorted.filter(item => matchesSearch(item, q));
     if (filtered.length > 0) {
       totalVisible += filtered.length;
       html += renderSection('$20 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
