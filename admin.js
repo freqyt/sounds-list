@@ -14,7 +14,11 @@ const CATEGORY_SVGS = {
 };
 
 function getCategorySvg(key, fallback = '') {
-  const norm = (key || '').toLowerCase().trim();
+  const norm = String(key || '').toLowerCase().trim();
+  if (norm.includes('inst') || norm.includes('piano') || norm.includes('synth')) return CATEGORY_SVGS.instruments;
+  if (norm.includes('fx') || norm.includes('mix') || norm.includes('master') || norm.includes('effect')) return CATEGORY_SVGS.fx;
+  if (norm.includes('daw') || norm.includes('host') || norm.includes('studio')) return CATEGORY_SVGS.daws;
+  if (norm.includes('soft') || norm.includes('app') || norm.includes('tool')) return CATEGORY_SVGS.software;
   if (CATEGORY_SVGS[norm]) return CATEGORY_SVGS[norm];
   return fallback || '';
 }
