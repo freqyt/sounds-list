@@ -1,55 +1,62 @@
 const windowsData = {
-  platform: "Windows",
-  categories: {
-    instruments: {
-      label: "Instruments",
-      icon: "🎹",
-      bundles: [
+  "platform": "Windows",
+  "categories": {
+    "instruments": {
+      "label": "Instruments",
+      "icon": "🎹",
+      "bundles": [
         {
-          name: "Arturia Bundle",
-          price: 100,
-          includes: "Arturia V Collection, Analog Lab & Pigments"
+          "name": "Arturia Bundle",
+          "price": 100,
+          "includes": "Arturia V Collection, Analog Lab & Pigments"
         },
         {
-          name: "Spectrasonics Bundle",
-          price: 75,
-          includes: "Omnisphere, Keyscape, Trilian + 200 Preset Banks"
+          "name": "Spectrasonics Bundle",
+          "price": 75,
+          "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
-          name: "ElectraX Bundle",
-          price: 60,
-          includes: "ElectraX + 200 Banks"
+          "name": "ElectraX Bundle",
+          "price": 60,
+          "includes": "ElectraX + 200 Custom Banks"
         },
         {
-          name: "Serum Bundle",
-          price: 60,
-          includes: "Serum 2 (NEW) + 150 Banks",
-          badge: "NEW"
+          "name": "Serum Bundle",
+          "price": 60,
+          "includes": "Serum 2 + 150 Custom Banks",
+          "badges": [
+            "NEW"
+          ]
         },
         {
-          name: "Nexus 5 Complete",
-          price: 80,
-          includes: "Nexus 5 including the full 20,000+ preset library"
+          "name": "Nexus 5 Complete",
+          "price": 80,
+          "includes": "Nexus 5 including the full 20,000+ preset library"
         },
         {
-          name: "Kontakt 8 Starter Bundle",
-          price: 75,
-          includes: "Kontakt + 10 of the best banks"
+          "name": "Kontakt 8 Starter Bundle",
+          "price": 75,
+          "includes": "Kontakt + 10 of the best selling banks"
         },
         {
-          name: "Sonic Extensions Bundle",
-          price: 50,
-          includes: "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
-          note: "Cracked Omni 2.8 Required"
+          "name": "Sonic Extensions Bundle",
+          "price": 50,
+          "includes": "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
+          "note": "Omnisphere 2.8+ Required"
         },
         {
-          name: "u-he Bundle",
-          price: 50,
-          includes: "ACE, Bazille, Diva, Repro-1 & 5, Zebra3",
-          badges: ["NEW"]
+          "name": "u-he Bundle",
+          "price": 50,
+          "includes": "ACE, Bazille, Diva, Repro-1 & 5, Zebra3",
+          "badges": [
+            "NEW"
+          ]
         }
       ],
-      tier40: [
+      "tier40": [
         "Arturia Analog Lab 5",
         "Arturia V Collection 11",
         "Arturia Pigments 3",
@@ -63,7 +70,7 @@ const windowsData = {
         "Keyscape",
         "Trilian"
       ],
-      tier30: [
+      "tier30": [
         "Absynth 5",
         "Addictive Drums",
         "Addictive Keys",
@@ -74,7 +81,12 @@ const windowsData = {
         "DUNE 3",
         "ElectraX",
         "Kontakt 8 (No banks included)",
-        { name: "Kult", badge: "NEW" },
+        {
+          "name": "Kult",
+          "badges": [
+            "NEW"
+          ]
+        },
         "Heat Up 3",
         "The Prince",
         "Philharmonik 2",
@@ -86,7 +98,7 @@ const windowsData = {
         "Saurus",
         "Scorch"
       ],
-      tier20: [
+      "tier20": [
         "Albino 3",
         "BioTek 3",
         "Blue II",
@@ -138,44 +150,46 @@ const windowsData = {
         "Z3TA+2"
       ]
     },
-    fx: {
-      label: "FX & Mixing",
-      icon: "🎛️",
-      bundles: [
+    "fx": {
+      "label": "FX & Mixing",
+      "icon": "🎛️",
+      "bundles": [
         {
-          name: "Starter Bundle",
-          price: 100,
-          includes: "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle"
+          "name": "Starter Bundle",
+          "price": 100,
+          "includes": "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle"
         },
         {
-          name: "Vocal Bundle",
-          price: 70,
-          includes: "Waves 16 Complete, Auto Tune 11 Pro"
+          "name": "Vocal Bundle",
+          "price": 70,
+          "includes": "Waves 16 Complete, Auto Tune 11 Pro"
         },
         {
-          name: "Hihat Sauce",
-          price: 60,
-          includes: "Effectrix 2, Looperator & Shaperbox 3"
+          "name": "Hihat Sauce",
+          "price": 60,
+          "includes": "Effectrix 2, Looperator & Shaperbox 3"
         },
         {
-          name: "Sample Sauce",
-          price: 60,
-          includes: "Portal, Soothe2 & RC-20"
+          "name": "Sample Sauce",
+          "price": 60,
+          "includes": "Portal, Soothe2 & RC-20"
         },
         {
-          name: "Antares Bundle",
-          price: 80,
-          includes: "Auto-Key 2, Auto-Tune EFX+, Auto-Tune Pro X, Auto-Tune Slice, Auto-Tune SoundSoap, Auto-Tune Vocal EQ, Auto-Tune Vocodist, Mic Mod, Vocal Reverb, AVOX: ARTICULATOR, ASPIRE, CHOIR, DUO, MUTATOR, PUNCH, SYBIL, THROAT, WARM",
-          note: "Total of 18 Plugins"
+          "name": "Antares Bundle",
+          "price": 80,
+          "includes": "Auto-Key 2, Auto-Tune EFX+, Auto-Tune Pro X, Auto-Tune Slice, Auto-Tune SoundSoap, Auto-Tune Vocal EQ, Auto-Tune Vocodist, Mic Mod, Vocal Reverb, AVOX: ARTICULATOR, ASPIRE, CHOIR, DUO, MUTATOR, PUNCH, SYBIL, THROAT, WARM",
+          "note": "Total of 18 Plugins"
         },
         {
-          name: "DADA LIFE Bundle",
-          price: 30,
-          includes: "Endless Smile, Eternal Return, Sausage Fattener, Space In-Your-Face, Wide Awake",
-          badge: "NEW"
+          "name": "DADA LIFE Bundle",
+          "price": 30,
+          "includes": "Endless Smile, Eternal Return, Sausage Fattener, Space In-Your-Face, Wide Awake",
+          "badges": [
+            "NEW"
+          ]
         }
       ],
-      tier40: [
+      "tier40": [
         "Antares Auto-Tune Pro X",
         "Arturia FX Collection",
         "Fabfilter Bundle",
@@ -185,11 +199,16 @@ const windowsData = {
         "SoundToys Bundle",
         "Soothe2",
         "Valhalla Bundle",
-        { name: "Vocalign Pro 6", badge: "NEW" },
+        {
+          "name": "Vocalign Pro 6",
+          "badges": [
+            "NEW"
+          ]
+        },
         "Waves 16 Complete",
         "Xvox Pro"
       ],
-      tier30: [
+      "tier30": [
         "AmpliTube 4",
         "Analog Pro",
         "Effectrix 2",
@@ -202,7 +221,13 @@ const windowsData = {
         "RX 10",
         "Looperator",
         "Melodyne",
-        { name: "Neural DSP", badge: "NEW", note: "Abasi, Cory Wong X, Darkglass Ultra, Fortin: Cali Suite, Nameless Suite, NTS Suite, Gojira, John Mayer X, Mantra, Mateus Asato, Misha Mansoor X, Nolly X, OMEGA Ampworks Granophyre, Parallax, Plini, Soldano SLO-100 X, Tim Henson X" },
+        {
+          "name": "Neural DSP",
+          "badges": [
+            "NEW"
+          ],
+          "note": "Abasi, Cory Wong X, Darkglass Ultra, Fortin: Cali Suite, Nameless Suite, NTS Suite, Gojira, John Mayer X, Mantra, Mateus Asato, Misha Mansoor X, Nolly X, OMEGA Ampworks Granophyre, Parallax, Plini, Soldano SLO-100 X, Tim Henson X"
+        },
         "Portal",
         "Raum",
         "RC-20 Retro Color",
@@ -231,7 +256,7 @@ const windowsData = {
         "XO",
         "Xvox"
       ],
-      tier20: [
+      "tier20": [
         "Bias FX 2",
         "CamelCrusher",
         "CamelSpace",
@@ -256,32 +281,37 @@ const windowsData = {
         "Thenathan Underwater"
       ]
     },
-    daws: {
-      label: "DAWs",
-      icon: "💻",
-      bundles: [],
-      tier40: [
+    "daws": {
+      "label": "DAWs",
+      "icon": "💻",
+      "bundles": [],
+      "tier40": [
         "Ableton Live 12",
         "Cubase",
-        "FL Studio",
+        {
+          "name": "FL Studio 26",
+          "badges": [
+            "NEW"
+          ]
+        },
         "Studio One",
         "Pro Tools 12"
       ],
-      tier30: [],
-      tier20: []
+      "tier30": [],
+      "tier20": []
     },
-    software: {
-      label: "Software",
-      icon: "🖥️",
-      bundles: [
+    "software": {
+      "label": "Software",
+      "icon": "🖥️",
+      "bundles": [
         {
-          name: "Editing Bundle",
-          price: 120,
-          includes: "After Effects, Illustrator, Photoshop, Premiere Pro"
+          "name": "Editing Bundle",
+          "price": 120,
+          "includes": "After Effects, Illustrator, Photoshop, Premiere Pro"
         }
       ],
-      tier40: [],
-      tier30: [
+      "tier40": [],
+      "tier30": [
         "After Effects",
         "Audition",
         "InDesign",
@@ -291,7 +321,7 @@ const windowsData = {
         "Premiere Pro",
         "VEGAS Pro"
       ],
-      tier20: []
+      "tier20": []
     }
   }
 };
