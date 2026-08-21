@@ -177,11 +177,29 @@ html, body {
   align-items: center;
 }
 
+.logo-link {
+  display: inline-block;
+  border-radius: 22px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.22s ease;
+}
+
+.logo-link:hover {
+  transform: translateY(-2px) scale(1.04);
+  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.4));
+}
+
+.logo-link:active {
+  transform: scale(0.96);
+}
+
 .logo-img {
   width: 92px;
   height: 92px;
   border-radius: 22px;
   object-fit: cover;
+  display: block;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 4px 20px rgba(59, 130, 246, 0.18);
 }
