@@ -193,27 +193,38 @@ function renderSidebar() {
   `).join('');
 }
 
-// ── Deals & Promotions Panel ──────────────────────────────
-function getPlatformDeal() {
-  const platData = adm.data[adm.platform];
-  if (!platData.deal) {
-    platData.deal = {
+// ── Deals & Promotions Panel (Storewide Global) ───────────
+function getGlobalDeal() {
+  let deal = adm.data.windows?.deal || adm.data.mac?.deal;
+  if (!deal) {
+    deal = {
       enabled: true,
       type: 'bundle_x_for_y',
       badge: '🔥 SPECIAL DEAL',
       title: 'Any 3 Plugins for $100',
-      description: 'Pick any 3 single plugins ($40 or $30 tier) and get all 3 for just $100 total!',
+      description: 'Pick any 3 single plugins and get all 3 for just $100 total!',
+      customNote: '',
       percentOff: 20,
       bundleQty: 3,
       bundlePrice: 100,
       bogoBuyQty: 2,
       bogoGetQty: 1,
       customPrice: 75,
-      customIncludes: 'Omnisphere, Keyscape, Trilian + 200 Preset Banks',
-      customNote: 'Includes all updates & expansion banks'
+      customIncludes: 'Omnisphere, Keyscape, Trilian + 200 Preset Banks'
     };
   }
-  return platData.deal;
+  if (!adm.data.windows) adm.data.windows = {};
+  if (!adm.data.mac) adm.data.mac = {};
+  adm.data.windows.deal = deal;
+  adm.data.mac.deal = deal;
+  return deal;
+}
+
+function saveGlobalDeal(deal) {
+  adm.data.windows.deal = clone(deal);
+  adm.data.mac.deal = clone(deal);
+  savePlatformData('windows', adm.data.windows);
+  savePlatformData('mac', adm.data.mac);
 }
 
 function buildDealPreviewHtml(deal) {
@@ -250,8 +261,7 @@ function buildDealPreviewHtml(deal) {
 
 function renderDealsPanel() {
   const main = document.getElementById('admin-main');
-  const deal = getPlatformDeal();
-  const platName = adm.platform === 'windows' ? 'Windows' : 'Mac';
+  const deal = getGlobalDeal();
 
   let typeSpecificFields = '';
 
@@ -303,7 +313,7 @@ function renderDealsPanel() {
         <div class="deals-title-row">
           <div class="deals-main-title">
             <span>⚡ Deals & Promotions Manager</span>
-            <span class="admin-tag">${platName}</span>
+            <span class="admin-tag">Storewide (Windows & Mac)</span>
           </div>
           <label class="deals-toggle-wrap">
             <input type="checkbox" ${deal.enabled ? 'checked' : ''} onchange="toggleDealEnabled(this.checked)" />
@@ -311,7 +321,7 @@ function renderDealsPanel() {
           </label>
         </div>
         <p class="deals-subtitle">
-          Configure storefront deals, multi-buy bundles (e.g. 3 for $100), % off storewide discounts, or BOGO deals. These automatically calculate in customers' carts and display in the top spotlight banner!
+          Configure storefront deals, multi-buy bundles (e.g. 3 for $100), % off storewide discounts, or BOGO deals. Active promotions automatically apply to both Windows and Mac catalogues!
         </p>
       </div>
 
@@ -354,7 +364,7 @@ function renderDealsPanel() {
         </div>
 
         <div class="form-field">
-          <label class="form-label">Deal Description / Included Items</label>
+          <label class="form-label">Deal Description / Subtitle</label>
           <input type="text" class="form-input" value="${esc(deal.description || deal.customIncludes || '')}" oninput="updateDealField('description', this.value)" />
         </div>
 
@@ -372,9 +382,8 @@ function renderDealsPanel() {
           </div>
         </div>
 
-        <div class="deals-actions-bar">
-          <button class="hbtn" onclick="copyDealToBothPlatforms()">🔄 Copy Deal to Both Windows & Mac</button>
-          <button class="hbtn hbtn-primary" onclick="saveDealsChanges()">✓ Save Deal Configuration</button>
+        <div class="deals-actions-bar" style="justify-content: flex-end;">
+          <button class="hbtn hbtn-primary" onclick="saveDealsChanges()">✓ Save Deal Storewide</button>
         </div>
       </div>
     </div>
@@ -382,7 +391,7 @@ function renderDealsPanel() {
 }
 
 function setDealType(type) {
-  const deal = getPlatformDeal();
+  const deal = getGlobalDeal();
   deal.type = type;
   if (type === 'bundle_x_for_y' && (!deal.title || deal.title === 'Special Promotion' || deal.title.includes('%'))) {
     deal.title = `Any ${deal.bundleQty || 3} Plugins for $${deal.bundlePrice || 100}`;
@@ -398,14 +407,14 @@ function setDealType(type) {
     deal.description = 'Omnisphere, Keyscape, Trilian + 200 Preset Banks';
     deal.customPrice = 75;
   }
-  savePlatformData(adm.platform, adm.data[adm.platform]);
+  saveGlobalDeal(deal);
   renderDealsPanel();
 }
 
 function updateDealField(field, val) {
-  const deal = getPlatformDeal();
+  const deal = getGlobalDeal();
   deal[field] = val;
-  savePlatformData(adm.platform, adm.data[adm.platform]);
+  saveGlobalDeal(deal);
 
   // Update live preview in real time without redrawing inputs:
   const previewEl = document.getElementById('deal-live-preview');
@@ -415,25 +424,16 @@ function updateDealField(field, val) {
 }
 
 function toggleDealEnabled(checked) {
-  const deal = getPlatformDeal();
+  const deal = getGlobalDeal();
   deal.enabled = checked;
-  savePlatformData(adm.platform, adm.data[adm.platform]);
-  renderDealsPanel();
-}
-
-function copyDealToBothPlatforms() {
-  const deal = getPlatformDeal();
-  adm.data.windows.deal = clone(deal);
-  adm.data.mac.deal = clone(deal);
-  savePlatformData('windows', adm.data.windows);
-  savePlatformData('mac', adm.data.mac);
-  alert('🎉 Deal successfully copied to both Windows and Mac catalogues!\nRemember to click "🚀 Publish Live" to deploy to GitHub.');
+  saveGlobalDeal(deal);
   renderDealsPanel();
 }
 
 function saveDealsChanges() {
-  savePlatformData(adm.platform, adm.data[adm.platform]);
-  alert('✓ Deal saved! Click "🚀 Publish Live" in the top bar to push worldwide.');
+  const deal = getGlobalDeal();
+  saveGlobalDeal(deal);
+  alert('✓ Promotion saved across both Windows and Mac catalogues!\n\nClick "🚀 Publish Live" in the top bar to deploy worldwide.');
   renderDealsPanel();
 }
 
