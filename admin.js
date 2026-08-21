@@ -64,7 +64,7 @@ function handleLogout() {
 }
 
 // ── Dashboard boot ────────────────────────────────────────
-function bootDashboard() {
+async function bootDashboard() {
   adm.data.windows = clone(getPlatformData('windows'));
   adm.data.mac     = clone(getPlatformData('mac'));
   adm.platform     = 'windows';
@@ -75,6 +75,35 @@ function bootDashboard() {
 
   renderSidebar();
   renderPanel();
+
+  // Seamlessly sync with fresh live truth from GitHub in background
+  if (typeof fetchLiveRepoData === 'function') {
+    try {
+      const [liveWin, liveMac] = await Promise.all([
+        fetchLiveRepoData('windows'),
+        fetchLiveRepoData('mac')
+      ]);
+
+      let updated = false;
+      if (liveWin) {
+        adm.data.windows = clone(liveWin);
+        savePlatformData('windows', adm.data.windows);
+        updated = true;
+      }
+      if (liveMac) {
+        adm.data.mac = clone(liveMac);
+        savePlatformData('mac', adm.data.mac);
+        updated = true;
+      }
+
+      if (updated) {
+        renderSidebar();
+        renderPanel();
+      }
+    } catch(e) {
+      console.warn('Background GitHub sync failed:', e);
+    }
+  }
 }
 
 function clone(obj) {

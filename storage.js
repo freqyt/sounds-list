@@ -192,6 +192,46 @@ async function commitToGitHub(allData) {
 
 /* ── Platform Data Layer ───────────────────────────────── */
 
+async function fetchLiveRepoData(platform) {
+  const { token, repo } = getGitHubConfig();
+  if (token && repo) {
+    try {
+      const fileUrl = `https://api.github.com/repos/${repo}/contents/data/${platform}.js?ref=master&_t=${Date.now()}`;
+      const res = await fetch(fileUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        cache: 'no-store'
+      });
+      if (res.ok) {
+        const json = await res.json();
+        const decoded = decodeURIComponent(escape(atob(json.content.replace(/\s/g, ''))));
+        const match = decoded.match(/=\s*(\{[\s\S]*\});?\s*$/);
+        if (match && match[1]) {
+          return JSON.parse(match[1]);
+        }
+      }
+    } catch(e) {
+      console.warn('Could not fetch from GitHub API:', e);
+    }
+  }
+
+  // Fallback: fetch raw static data with cache-buster
+  try {
+    const res = await fetch(`data/${platform}.js?_t=${Date.now()}`, { cache: 'no-store' });
+    if (res.ok) {
+      const text = await res.text();
+      const match = text.match(/=\s*(\{[\s\S]*\});?\s*$/);
+      if (match && match[1]) {
+        return JSON.parse(match[1]);
+      }
+    }
+  } catch(e) {}
+
+  return null;
+}
+
 function getPlatformData(platform) {
   try {
     const stored = localStorage.getItem(STORAGE_KEYS[platform]);
