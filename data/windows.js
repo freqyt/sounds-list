@@ -64,7 +64,7 @@ const windowsData = {
         "KORG Bundle",
         {
           "name": "Nexus 5",
-          "note": "Starter Version, see above for Complete"
+          "note": "Starter Version, see bundles for Complete"
         },
         "Omnisphere 3",
         "Roland Cloud",
@@ -77,11 +77,11 @@ const windowsData = {
         "Addictive Drums",
         "Addictive Keys",
         {
-          "name": "Ample Bass (Many available)",
+          "name": "Ample Bass",
           "note": "Many available, ask about it"
         },
         {
-          "name": "Ample Guitar (Many available)",
+          "name": "Ample Guitar",
           "note": "Many available, ask about it"
         },
         "ANA2",
@@ -207,8 +207,8 @@ const windowsData = {
         "Goodhertz Bundle",
         "Guitar Rig 7",
         "Ozone 12",
-        "SoundToys Bundle",
         "Soothe2",
+        "SoundToys Bundle",
         "Valhalla Bundle",
         {
           "name": "Vocalign Pro 6",
@@ -223,15 +223,12 @@ const windowsData = {
         "AmpliTube 4",
         "Analog Pro",
         "Effectrix 2",
-        "The God Particle",
         "Gullfoss",
+        "Looperator",
+        "Melodyne",
         "Murda Melodies",
         "Nectar",
         "Neoverb",
-        "Neutron",
-        "RX 10",
-        "Looperator",
-        "Melodyne",
         {
           "name": "Neural DSP",
           "badges": [
@@ -239,14 +236,16 @@ const windowsData = {
           ],
           "note": "Abasi, Cory Wong X, Darkglass Ultra, Fortin: Cali Suite, Nameless Suite, NTS Suite, Gojira, John Mayer X, Mantra, Mateus Asato, Misha Mansoor X, Nolly X, OMEGA Ampworks Granophyre, Parallax, Plini, Soldano SLO-100 X, Tim Henson X"
         },
+        "Neutron",
         "Portal",
         "Raum",
         "RC-20 Retro Color",
-        "Reels",
-        "Reverse",
         "Real Guitar 5",
+        "Reels",
         "Regroover",
+        "Reverse",
         "Rift",
+        "RX 10",
         "Scaler 2",
         "Serato Sample 2",
         "Seventh Heaven Professional",
@@ -256,11 +255,12 @@ const windowsData = {
         "SSL Native Plugins",
         "Strum GS-2",
         "Super VHS",
-        "Thermal",
         "T-Racks",
         "TAL-Dub-X",
-        "Transient Master",
         "Tantra",
+        "The God Particle",
+        "Thermal",
+        "Transient Master",
         "Uhbik Bundle",
         "Vinyl Strip",
         "Warmverb",
@@ -279,17 +279,17 @@ const windowsData = {
         "Eventide Ensemble Bundle",
         "Eventide Newfangled Elevate Bundle",
         "Glitch 2",
-        "Trash 2",
-        "VocalSynth 2",
         "Klevgrand Complete Bundle",
         "Kyle Beats Drip Plugin",
         "Lurssen Mastering Console",
         "Melda MComplete",
         "Mixbox",
-        "Overloud TH3",
         "OTT",
+        "Overloud TH3",
         "Pitchwheel",
-        "Thenathan Underwater"
+        "Thenathan Underwater",
+        "Trash 2",
+        "VocalSynth 2"
       ]
     },
     "daws": {
