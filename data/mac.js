@@ -8,34 +8,22 @@ const macData = {
         {
           "name": "Arturia Bundle",
           "price": 100,
-          "includes": "Arturia V Collection, Analog Lab & Pigments",
-          "badges": [
-            "BEST SELLER"
-          ]
+          "includes": "Arturia V Collection, Analog Lab & Pigments"
         },
         {
           "name": "Spectrasonics Bundle",
           "price": 75,
-          "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks",
-          "badges": [
-            "BEST SELLER"
-          ]
+          "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks"
         },
         {
           "name": "ElectraX Bundle",
           "price": 60,
-          "includes": "ElectraX + 200 Custom Banks",
-          "badges": [
-            "BEST SELLER"
-          ]
+          "includes": "ElectraX + 200 Custom Banks"
         },
         {
           "name": "Serum Bundle",
           "price": 60,
-          "includes": "Serum 2 + 150 Custom Banks",
-          "badges": [
-            "BEST SELLER"
-          ]
+          "includes": "Serum 2 + 150 Custom Banks"
         },
         {
           "name": "Nexus 5 Complete",
@@ -52,19 +40,27 @@ const macData = {
           "price": 50,
           "includes": "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
           "note": "Cracked Omni 2.8 Required"
+        },
+        {
+          "name": "u-he Bundle",
+          "price": 50,
+          "includes": "ACE, Bazille, Diva, Hive, Repro-1 & 5, Zebra3",
+          "badges": [
+            "NEW"
+          ]
         }
       ],
       "tier40": [
         "Arturia Analog Lab 5",
-        "Arturia Pigments 3",
         "Arturia V Collection 11",
-        "Keyscape",
+        "Arturia Pigments 3",
         "KORG Bundle",
         "Nexus 5 (Starter Version)",
-        "Omnisphere",
         "Roland Cloud",
         "Roland Zenology Pro",
         "Serum 2",
+        "Omnisphere",
+        "Keyscape",
         "Trilian"
       ],
       "tier30": [
@@ -72,20 +68,19 @@ const macData = {
         "Addictive Keys",
         {
           "name": "Ample Bass",
-          "note": " Many available, ask about it"
+          "note": " (Many available, ask about it)"
         },
         {
           "name": "Ample Guitar",
-          "note": " Many available, ask about it"
+          "note": " (Many available, ask about it)"
         },
         "ANA2",
         "DUNE 3",
         "ElectraX",
         "Heat Up 3",
-        "Hybrid",
         {
           "name": "Kontakt 8",
-          "note": " No banks included, see bundle above or ask about more banks"
+          "note": " (No banks included)"
         },
         "Kult",
         {
@@ -95,18 +90,7 @@ const macData = {
             "BEST SELLER"
           ]
         },
-        "Reaktor 6",
-        {
-          "name": "Rippler",
-          "badges": [
-            "NEW"
-          ]
-        },
-        "S.K.Y. Keys",
-        "Scorch",
-        "SubLab XL",
-        "Synthmaster 3",
-        "The Prince",
+        "Hybrid",
         "u-he ACE",
         "u-he Diva",
         "u-he Hive 2",
@@ -117,6 +101,18 @@ const macData = {
             "NEW"
           ]
         },
+        "S.K.Y. Keys",
+        "SubLab XL",
+        "Synthmaster 3",
+        "The Prince",
+        "Reaktor 6",
+        {
+          "name": "Rippler",
+          "badges": [
+            "NEW"
+          ]
+        },
+        "Scorch",
         {
           "name": "Vanguard",
           "badges": [
