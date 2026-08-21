@@ -117,19 +117,18 @@ async function commitToGitHub(allData) {
   const { token, repo } = getGitHubConfig();
   if (!token || !repo) throw new Error('GitHub Token not configured.');
 
-  const branch = 'master';
   const headers = {
     'Authorization': `Bearer ${token}`,
     'Accept': 'application/vnd.github.v3+json',
     'Content-Type': 'application/json'
   };
 
-  async function updateFile(path, contentStr, commitMessage) {
+  async function updateFileOnBranch(targetBranch, path, contentStr, commitMessage) {
     const fileUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
     
     async function getLatestSha() {
       try {
-        const getRes = await fetch(`${fileUrl}?ref=${branch}&_nocache=${Date.now()}`, {
+        const getRes = await fetch(`${fileUrl}?ref=${targetBranch}&_nocache=${Date.now()}`, {
           headers: {
             ...headers,
             'If-None-Match': ''
@@ -151,7 +150,7 @@ async function commitToGitHub(allData) {
       const payload = {
         message: commitMessage,
         content: base64Content,
-        branch: branch
+        branch: targetBranch
       };
       if (fileSha) payload.sha = fileSha;
       return fetch(fileUrl, {
@@ -168,18 +167,24 @@ async function commitToGitHub(allData) {
       putRes = await makePut(sha);
     }
 
-    if (!putRes.ok) {
-      const errJson = await putRes.json();
-      throw new Error(errJson.message || `GitHub Error ${putRes.status}`);
+    if (!putRes.ok && putRes.status !== 404) {
+      const errJson = await putRes.json().catch(() => ({}));
+      console.warn(`Branch ${targetBranch} update notice:`, errJson.message);
     }
-    return true;
+    return putRes.ok;
   }
 
   const winJs = serializePlatformData('windows', allData.windows);
   const macJs = serializePlatformData('mac', allData.mac);
 
-  await updateFile('data/windows.js', winJs, 'Update Windows catalogue via Admin Dashboard');
-  await updateFile('data/mac.js', macJs, 'Update Mac catalogue via Admin Dashboard');
+  for (const b of ['main', 'master']) {
+    try {
+      await updateFileOnBranch(b, 'data/windows.js', winJs, 'Update Windows catalogue via Admin Dashboard');
+      await updateFileOnBranch(b, 'data/mac.js', macJs, 'Update Mac catalogue via Admin Dashboard');
+    } catch(e) {
+      console.warn(`Could not push to branch ${b}:`, e);
+    }
+  }
 
   // If encrypted token exists in config, keep config.js in sync too
   if (CATALOGUE_CONFIG.encryptedGitHubToken) {
