@@ -325,15 +325,20 @@ html, body {
 }
 
 .platform-indicator-pill {
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: var(--accent-bright);
-  background: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(59, 130, 246, 0.25);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
-  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
   align-items: center;
+  justify-content: center;
+  color: var(--accent-bright);
+  transition: all var(--trans);
+}
+
+.platform-indicator-pill svg {
+  display: block;
 }
 
 /* ═══════════════════════════════════════════════════════════
