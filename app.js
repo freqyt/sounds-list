@@ -351,12 +351,13 @@ function getCartItemKey(type, name, tier) {
   return `${type}_${(name || '').trim()}_${tier || ''}`.toLowerCase();
 }
 
-function toggleCartItem(type, name, price, tier, badges = [], note = '') {
+function toggleCartItem(type, name, price, tier, badges = [], note = '', catKey = '') {
   const key = getCartItemKey(type, name, tier);
   const idx = state.cart.findIndex(item => item.id === key);
   if (idx >= 0) {
     state.cart.splice(idx, 1);
   } else {
+    const isKontaktBank = (catKey === 'kontakt' || tier === '$20' || tier === 'Kontakt' || price === 20) && type === 'plugin' && !name.toLowerCase().includes('kontakt 8');
     state.cart.push({
       id: key,
       type,
@@ -364,7 +365,9 @@ function toggleCartItem(type, name, price, tier, badges = [], note = '') {
       price: Number(price) || 0,
       tier: tier || '',
       badges: Array.isArray(badges) ? badges : [],
-      note: note || ''
+      note: note || '',
+      catKey: catKey || '',
+      isKontaktBank
     });
   }
   updateCartUI();
@@ -380,117 +383,171 @@ function calculateCartTotals() {
   const deal = data.deal || null;
   const originalTotal = state.cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
 
-  if (!deal || !deal.enabled || state.cart.length === 0) {
-    return {
-      originalTotal,
-      finalTotal: originalTotal,
-      discount: 0,
-      promoLabel: '',
-      upsellMsg: '',
-      hasPromo: false
-    };
-  }
+  const isKontaktBankItem = (item) => {
+    if (item.type === 'bundle') return false;
+    const n = (item.name || '').toLowerCase();
+    if (n.includes('kontakt 8') || n.includes('kontakt engine')) return false;
+    return Boolean(item.isKontaktBank || item.catKey === 'kontakt' || item.price === 20 || (item.tier && item.tier.includes('20')));
+  };
 
-  let discount = 0;
-  let promoLabel = '';
-  let upsellMsg = '';
+  const kontaktBanks = state.cart.filter(isKontaktBankItem);
+  const regularItems = state.cart.filter(item => !isKontaktBankItem(item));
 
-  // 1. Percentage Off (% Off Storewide on entire cart including bundles)
-  if (deal.type === 'percent_off') {
-    const pct = Number(deal.percentOff) || 0;
-    if (pct > 0) {
-      discount = Math.round((originalTotal * pct) / 100);
-      if (discount > 0) {
-        promoLabel = `${pct}% OFF Deal Applied (-$${discount})`;
-        upsellMsg = `🎉 <strong>${pct}% Storewide Discount Active!</strong> You saved $${discount}`;
-      }
+  // ── 1. Dedicated Kontakt Volume Tier Pricing ($20 each / 5 for $50 / 10 for $75 / 20 for $120) ──
+  let kDiscount = 0;
+  let kPromoLabel = '';
+  let kUpsellMsg = '';
+  const kCount = kontaktBanks.length;
+
+  if (kCount > 0) {
+    const rawKTotal = kCount * 20;
+    let remaining = kCount;
+    let kCost = 0;
+
+    // 20 for $120
+    const p20 = Math.floor(remaining / 20);
+    kCost += p20 * 120;
+    remaining %= 20;
+
+    // 10 for $75
+    const p10 = Math.floor(remaining / 10);
+    kCost += p10 * 75;
+    remaining %= 10;
+
+    // 5 for $50
+    const p5 = Math.floor(remaining / 5);
+    kCost += p5 * 50;
+    remaining %= 5;
+
+    // Remaining singles ($20)
+    kCost += remaining * 20;
+
+    kDiscount = Math.max(0, rawKTotal - kCost);
+
+    if (kDiscount > 0) {
+      const labels = [];
+      if (p20 > 0) labels.push(`${p20 * 20} for $${p20 * 120}`);
+      if (p10 > 0) labels.push(`10 for $75`);
+      if (p5 > 0) labels.push(`5 for $50`);
+      kPromoLabel = `Kontakt Tier Deal: ${labels.join(' + ')} (-$${kDiscount})`;
+    }
+
+    // Upsell notifications for Kontakt libraries
+    if (kCount < 5) {
+      const needed = 5 - kCount;
+      kUpsellMsg = `🎻 Add <strong>${needed} more Kontakt bank${needed === 1 ? '' : 's'}</strong> to get <strong>5 for $50</strong> (Save $50)!`;
+    } else if (kCount > 5 && kCount < 10) {
+      const needed = 10 - kCount;
+      kUpsellMsg = `🎻 Add <strong>${needed} more Kontakt bank${needed === 1 ? '' : 's'}</strong> to get <strong>10 for $75</strong> (Save $125)!`;
+    } else if (kCount > 10 && kCount < 20) {
+      const needed = 20 - kCount;
+      kUpsellMsg = `🎻 Add <strong>${needed} more Kontakt bank${needed === 1 ? '' : 's'}</strong> to get <strong>20 for $120</strong> (Save $280)!`;
+    } else if (kDiscount > 0) {
+      kUpsellMsg = `🎉 <strong>Kontakt Volume Tier Deal Applied!</strong> You saved $${kDiscount}`;
     }
   }
 
-  // 2. Multi-Buy Deal (Applies ONLY to single plugins, e.g. Any 3 for $100)
-  else if (deal.type === 'bundle_x_for_y') {
-    const qty = Math.max(1, Number(deal.bundleQty) || 3);
-    const bundlePrice = Number(deal.bundlePrice) || 100;
-    const singlePlugins = state.cart.filter(item => item.type === 'plugin');
-    const pluginCount = singlePlugins.length;
-    const bundlesCount = Math.floor(pluginCount / qty);
-    const remainder = pluginCount % qty;
-    const needed = qty - remainder;
+  // ── 2. Standard Storewide / Plugin Promo Deal (Applies ONLY to Non-Kontakt Bank items) ──
+  let regularDiscount = 0;
+  let regularPromoLabel = '';
+  let regularUpsellMsg = '';
 
-    if (bundlesCount > 0) {
-      // Sort single plugins by price descending so highest value plugins get bundled into the promo groups
-      const sorted = [...singlePlugins].sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-      for (let b = 0; b < bundlesCount; b++) {
-        const group = sorted.slice(b * qty, (b + 1) * qty);
-        const groupOriginalSum = group.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-        if (groupOriginalSum > bundlePrice) {
-          discount += (groupOriginalSum - bundlePrice);
+  if (deal && deal.enabled && regularItems.length > 0) {
+    const regularTotal = regularItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+
+    // Percentage Off
+    if (deal.type === 'percent_off') {
+      const pct = Number(deal.percentOff) || 0;
+      if (pct > 0) {
+        regularDiscount = Math.round((regularTotal * pct) / 100);
+        if (regularDiscount > 0) {
+          regularPromoLabel = `${pct}% OFF Deal Applied (-$${regularDiscount})`;
+          regularUpsellMsg = `🎉 <strong>${pct}% Storewide Discount Active!</strong> You saved $${regularDiscount}`;
         }
       }
-      if (discount > 0) {
-        promoLabel = `${deal.title || `Any ${qty} for $${bundlePrice}`} (-$${discount})`;
+    }
+    // Multi-Buy (e.g. Any 5 for $100)
+    else if (deal.type === 'bundle_x_for_y') {
+      const qty = Math.max(1, Number(deal.bundleQty) || 3);
+      const bundlePrice = Number(deal.bundlePrice) || 100;
+      const singlePlugins = regularItems.filter(item => item.type === 'plugin');
+      const pluginCount = singlePlugins.length;
+      const bundlesCount = Math.floor(pluginCount / qty);
+      const remainder = pluginCount % qty;
+      const needed = qty - remainder;
+
+      if (bundlesCount > 0) {
+        const sorted = [...singlePlugins].sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+        for (let b = 0; b < bundlesCount; b++) {
+          const group = sorted.slice(b * qty, (b + 1) * qty);
+          const groupSum = group.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+          if (groupSum > bundlePrice) {
+            regularDiscount += (groupSum - bundlePrice);
+          }
+        }
+        if (regularDiscount > 0) {
+          regularPromoLabel = `${deal.title || `Any ${qty} for $${bundlePrice}`} (-$${regularDiscount})`;
+        }
+      }
+
+      if (pluginCount === 0) {
+        regularUpsellMsg = `💡 Add <strong>${qty} single plugins</strong> to unlock the <strong>${qty} for $${bundlePrice}</strong> bundle deal!`;
+      } else if (remainder === 0 && regularDiscount > 0) {
+        regularUpsellMsg = `🎉 <strong>${qty} for $${bundlePrice} Deal Unlocked!</strong> (You saved $${regularDiscount})`;
+      } else if (needed === 1) {
+        const currentCost = singlePlugins.reduce((sum, i) => sum + (Number(i.price) || 0), 0) - regularDiscount;
+        const nextTarget = (bundlesCount + 1) * bundlePrice;
+        const addedCost = Math.max(1, nextTarget - currentCost);
+        regularUpsellMsg = `⚡ Add <strong>1 more plugin</strong> for only <strong>$${addedCost} more</strong> to get the ${qty} for $${bundlePrice} deal!`;
+      } else if (needed > 1) {
+        regularUpsellMsg = `💡 Add <strong>${needed} more plugin${needed === 1 ? '' : 's'}</strong> to unlock the <strong>${qty} for $${bundlePrice}</strong> deal!`;
       }
     }
+    // BOGO Deal
+    else if (deal.type === 'bogo') {
+      const buyQty = Math.max(1, Number(deal.bogoBuyQty) || 2);
+      const getQty = Math.max(1, Number(deal.bogoGetQty) || 1);
+      const cycle = buyQty + getQty;
+      const singlePlugins = regularItems.filter(item => item.type === 'plugin');
+      const pluginCount = singlePlugins.length;
+      const freeCycles = Math.floor(pluginCount / cycle);
+      const remainder = pluginCount % cycle;
 
-    if (pluginCount === 0) {
-      upsellMsg = `💡 Add <strong>${qty} single plugins</strong> to unlock the <strong>${qty} for $${bundlePrice}</strong> bundle deal!`;
-    } else if (remainder === 0) {
-      if (discount > 0) {
-        upsellMsg = `🎉 <strong>${qty} for $${bundlePrice} Deal Unlocked!</strong> (You saved $${discount})`;
-      } else {
-        upsellMsg = `🎉 <strong>${qty} single plugins selected!</strong>`;
+      if (freeCycles > 0) {
+        const sorted = [...singlePlugins].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+        const freeItems = sorted.slice(0, freeCycles * getQty);
+        regularDiscount = freeItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+        if (regularDiscount > 0) {
+          regularPromoLabel = `Buy ${buyQty} Get ${getQty} Free (-$${regularDiscount})`;
+        }
       }
-    } else if (needed === 1) {
-      const currentPluginsCost = singlePlugins.reduce((sum, i) => sum + (Number(i.price) || 0), 0) - discount;
-      const nextTargetCost = (bundlesCount + 1) * bundlePrice;
-      const addedCost = Math.max(1, nextTargetCost - currentPluginsCost);
-      upsellMsg = `⚡ Add <strong>1 more single plugin</strong> for only <strong>$${addedCost} more</strong> to get the ${qty} for $${bundlePrice} deal!`;
-    } else if (needed > 1) {
-      upsellMsg = `💡 Add <strong>${needed} more single plugin${needed === 1 ? '' : 's'}</strong> to unlock the <strong>${qty} for $${bundlePrice}</strong> bundle deal!`;
+
+      if (remainder === 0 && pluginCount > 0) {
+        regularUpsellMsg = `🎉 <strong>Buy ${buyQty} Get ${getQty} Free Deal Applied!</strong> (You saved $${regularDiscount})`;
+      } else if (remainder === buyQty) {
+        regularUpsellMsg = `🎁 Add <strong>${getQty} more plugin</strong> to get it <strong>100% FREE</strong>!`;
+      }
     }
   }
 
-  // 3. Buy X Get Y Free (BOGO - Applies ONLY to single plugins)
-  else if (deal.type === 'bogo') {
-    const buyQty = Math.max(1, Number(deal.bogoBuyQty) || 2);
-    const getQty = Math.max(1, Number(deal.bogoGetQty) || 1);
-    const cycle = buyQty + getQty;
-    const singlePlugins = state.cart.filter(item => item.type === 'plugin');
-    const pluginCount = singlePlugins.length;
-    const freeCycles = Math.floor(pluginCount / cycle);
-    const remainder = pluginCount % cycle;
+  const totalDiscount = kDiscount + regularDiscount;
+  const finalTotal = Math.max(0, originalTotal - totalDiscount);
 
-    if (freeCycles > 0) {
-      // Sort single plugins ascending to make the lowest priced item(s) in each cycle free
-      const sorted = [...singlePlugins].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-      const freeItems = sorted.slice(0, freeCycles * getQty);
-      discount = freeItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-      if (discount > 0) {
-        promoLabel = `Buy ${buyQty} Get ${getQty} Free (-$${discount})`;
-      }
-    }
+  const promoLabels = [];
+  if (regularPromoLabel) promoLabels.push(regularPromoLabel);
+  if (kPromoLabel) promoLabels.push(kPromoLabel);
 
-    if (pluginCount === 0) {
-      upsellMsg = `🎁 Buy any <strong>${buyQty} single plugins</strong>, get <strong>${getQty} FREE</strong>!`;
-    } else if (remainder === buyQty) {
-      upsellMsg = `🎁 Add <strong>${getQty} more single plugin${getQty === 1 ? '' : 's'}</strong> to get it <strong>100% FREE</strong>!`;
-    } else if (remainder > 0 && remainder < buyQty) {
-      const moreNeeded = buyQty - remainder;
-      upsellMsg = `🎁 Add <strong>${moreNeeded} more single plugin${moreNeeded === 1 ? '' : 's'}</strong> to qualify for <strong>FREE plugin${getQty === 1 ? '' : 's'}</strong>!`;
-    } else if (remainder === 0 && pluginCount > 0) {
-      upsellMsg = `🎉 <strong>Buy ${buyQty} Get ${getQty} Free Deal Applied!</strong> (You saved $${discount})`;
-    }
-  }
-
-  const finalTotal = Math.max(0, originalTotal - discount);
+  const upsellMsg = kUpsellMsg || regularUpsellMsg || '';
 
   return {
     originalTotal,
     finalTotal,
-    discount,
-    promoLabel,
+    discount: totalDiscount,
+    kDiscount,
+    regularDiscount,
+    promoLabel: promoLabels.join(' | '),
     upsellMsg,
-    hasPromo: discount > 0
+    hasPromo: totalDiscount > 0
   };
 }
 
@@ -868,7 +925,7 @@ function renderCatalogue() {
               <h3 class="section-title"><span>${st.icon}</span> ${esc(st.key)}</h3>
               <span class="section-count">${sorted.length}</span>
             </div>
-            <div class="plugins-grid">${sorted.map(item => renderPluginCard(item, '', '$40', 'kontakt')).join('')}</div>
+            <div class="plugins-grid">${sorted.map(item => renderPluginCard(item, '', '$20', 'kontakt')).join('')}</div>
           </section>
         `;
       }
@@ -1071,8 +1128,8 @@ function renderPluginCard(item, q, tier = '$40', catKey = '', vstContext = '') {
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, false);
   const noteHtml = n.note ? `<span class="plugin-note-tag">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
-  const isBanks = catKey === 'banks' || state.activeCategory === 'banks' || n.price !== undefined;
-  const priceTagHtml = isBanks ? `<span class="plugin-price-tag">$${numPrice}</span>` : '';
+  const isPricePill = catKey === 'banks' || state.activeCategory === 'banks' || catKey === 'kontakt' || state.activeCategory === 'kontakt' || n.price !== undefined;
+  const priceTagHtml = isPricePill ? `<span class="plugin-price-tag">$${numPrice}</span>` : '';
 
   // Clean title for display inside VST section (e.g. "Analog Lab - Volume 1" -> "Volume 1")
   let displayName = n.name;
@@ -1096,7 +1153,7 @@ function renderPluginCard(item, q, tier = '$40', catKey = '', vstContext = '') {
     <div
       class="plugin-card ${n.note ? 'has-note' : ''} ${inCart ? 'in-cart' : ''}"
       data-cart-key="${esc(cartKey)}"
-      onclick="toggleCartItem('plugin', '${ea(n.name)}', ${numPrice}, '${ea(displayTier)}', ${JSON.stringify(n.badges).replace(/"/g, '&quot;')}, '${ea(n.note)}')"
+      onclick="toggleCartItem('plugin', '${ea(n.name)}', ${numPrice}, '${ea(displayTier)}', ${JSON.stringify(n.badges).replace(/"/g, '&quot;')}, '${ea(n.note)}', '${catKey || state.activeCategory}')"
     >
       <div class="plugin-card-left">
         ${thumbHtml}
