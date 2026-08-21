@@ -403,7 +403,10 @@ const macData = {
         }
       ],
       "tier40": [
-        "Antares Auto-Tune 11 Pro",
+        {
+          "name": "Antares Auto-Tune 11 Pro",
+          "tags": "Antares"
+        },
         {
           "name": "Arturia FX Collection",
           "tags": "Arturia"
@@ -464,7 +467,6 @@ const macData = {
           "name": "Effectrix 2",
           "tags": "Sugar Bytes"
         },
-        "iZotope Nectar",
         {
           "name": "Looperator",
           "tags": "Sugar Bytes"
@@ -472,6 +474,10 @@ const macData = {
         {
           "name": "Melodyne",
           "tags": "Celemony"
+        },
+        {
+          "name": "Nectar",
+          "tags": "Izotope"
         },
         {
           "name": "Neoverb",
@@ -520,7 +526,10 @@ const macData = {
           "name": "Scaler 2",
           "tags": "Scaler Music"
         },
-        "Serato Sample 1",
+        {
+          "name": "Serato Sample 1",
+          "tags": "Serato"
+        },
         {
           "name": "Shaperbox 3",
           "tags": "Cableguys"
@@ -553,7 +562,6 @@ const macData = {
           "name": "The God Particle",
           "tags": "Cradle"
         },
-        "Thenathan Underwater",
         {
           "name": "Thermal",
           "tags": "Output"
@@ -613,7 +621,10 @@ const macData = {
           "name": "Lurssen Mastering Console",
           "tags": "IK Multimedia"
         },
-        "MeldaProduction MComplete",
+        {
+          "name": "MeldaProduction MComplete",
+          "tags": "MeldaProduction"
+        },
         {
           "name": "Mixbox",
           "tags": "IK Multimedia"
@@ -630,10 +641,13 @@ const macData = {
           "name": "Pitchwheel",
           "tags": "QuikQuak"
         },
-        "Thenathan Underwater",
         {
           "name": "Trash 2",
           "tags": "Izotope"
+        },
+        {
+          "name": "Underwater",
+          "tags": "Thenatan"
         },
         {
           "name": "VocalSynth 2",
