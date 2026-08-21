@@ -82,47 +82,74 @@ body::before {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCREENS & TRANSITIONS
+   SCREENS & CLEAN TRANSITIONS
 ═══════════════════════════════════════════════════════════ */
-.screen {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#app {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
   min-height: 100vh;
+}
+
+.screen {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  display: none;
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--trans-slow), transform var(--trans-slow);
 }
 
+.screen.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
 #platform-screen {
   z-index: 2;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1.25rem;
+  padding: 1.5rem 1.25rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100%;
+  overflow: hidden;
 }
 
 #platform-screen.active {
+  display: flex;
   opacity: 1;
   pointer-events: auto;
   transform: translateX(0);
 }
 
 #platform-screen.exit-left {
+  display: flex;
   opacity: 0;
-  transform: translateX(-40px);
+  transform: translateX(-30px);
   pointer-events: none;
 }
 
 #catalogue-screen {
   z-index: 1;
-  transform: translateX(40px);
-  display: flex;
+  transform: translateX(30px);
   flex-direction: column;
 }
 
 #catalogue-screen.active {
+  display: flex;
   opacity: 1;
   pointer-events: auto;
   transform: translateX(0);
@@ -130,8 +157,9 @@ body::before {
 }
 
 #catalogue-screen.exit-right {
+  display: flex;
   opacity: 0;
-  transform: translateX(40px);
+  transform: translateX(30px);
   pointer-events: none;
 }
 
