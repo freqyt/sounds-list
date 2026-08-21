@@ -768,8 +768,66 @@ html, body {
   padding: 0.5rem 0.95rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   transition: all var(--trans);
+}
+
+/* ── Kontakt Spotlight Volume Pricing Banner ── */
+.kontakt-pricing-banner {
+  cursor: default;
+}
+
+.kontakt-pricing-banner:hover {
+  transform: none;
+}
+
+.kontakt-tier-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.kontakt-tier-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.65rem;
+  min-width: 68px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.kontakt-tier-chip.highlight {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.kt-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.kontakt-tier-chip.highlight .kt-label {
+  color: #93c5fd;
+}
+
+.kt-price {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.spotlight-add-btn {
   white-space: nowrap;
 }
 

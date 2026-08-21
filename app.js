@@ -991,6 +991,35 @@ function renderCatalogue() {
 // ── Spotlight Banner Helper ──────────────────────────────
 
 function renderSpotlightBanner() {
+  // If customer is on the Kontakt Libraries tab, always display the dedicated Kontakt Volume Tier Pricing
+  if (state.activeCategory === 'kontakt') {
+    return `
+      <div class="spotlight-wrap">
+        <div class="spotlight-card spotlight-promo-card kontakt-pricing-banner">
+          <div class="spotlight-top-tag">
+            <span class="spotlight-badge-pill" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);">VOLUME SAVINGS</span>
+          </div>
+          <div class="spotlight-body">
+            <div class="spotlight-left">
+              <div class="spotlight-deal-icon">🎻</div>
+              <div class="spotlight-info">
+                <h4 class="spotlight-title">Kontakt Volume Tier Deals</h4>
+                <p class="spotlight-desc">Pick any libraries across 1,440+ instruments — volume discounts auto-apply in your cart!</p>
+                <div class="spotlight-note">${INFO_SVG}<span>$40 for Kontakt 8 VST at top of list (eligible for standard plugin sales)</span></div>
+              </div>
+            </div>
+            <div class="spotlight-right kontakt-tier-pills-wrap">
+              <div class="kontakt-tier-chip"><span class="kt-label">1 Bank</span><span class="kt-price">$20</span></div>
+              <div class="kontakt-tier-chip highlight"><span class="kt-label">5 Banks</span><span class="kt-price">$50</span></div>
+              <div class="kontakt-tier-chip highlight"><span class="kt-label">10 Banks</span><span class="kt-price">$75</span></div>
+              <div class="kontakt-tier-chip highlight"><span class="kt-label">20 Banks</span><span class="kt-price">$120</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   const data = getData();
   const deal = data.deal;
   if (!deal || !deal.enabled) return '';
