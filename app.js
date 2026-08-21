@@ -151,12 +151,14 @@ function switchCategory(key) {
   }
 }
 
-// ── Search Handling ──────────────────────────────────────
-
+let _searchRaf = null;
 function handleSearch(value) {
   state.searchQuery = value.trim();
   updateSearchClearBtn(state.searchQuery);
-  renderCatalogue();
+  cancelAnimationFrame(_searchRaf);
+  _searchRaf = requestAnimationFrame(() => {
+    renderCatalogue();
+  });
 }
 
 function clearSearch() {
