@@ -382,8 +382,9 @@ function renderDealsPanel() {
           </div>
         </div>
 
-        <div class="deals-actions-bar" style="justify-content: flex-end;">
-          <button class="hbtn hbtn-primary" onclick="saveDealsChanges()">✓ Save Deal Storewide</button>
+        <div class="deals-actions-bar" style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">ⓘ All changes auto-save instantly.</span>
+          <button class="hbtn hbtn-primary" onclick="publishLiveToCloud()" style="padding: 0.55rem 1.2rem; font-size: 0.88rem; font-weight: 700;">🚀 Publish Live</button>
         </div>
       </div>
     </div>
@@ -427,13 +428,6 @@ function toggleDealEnabled(checked) {
   const deal = getGlobalDeal();
   deal.enabled = checked;
   saveGlobalDeal(deal);
-  renderDealsPanel();
-}
-
-function saveDealsChanges() {
-  const deal = getGlobalDeal();
-  saveGlobalDeal(deal);
-  alert('✓ Promotion saved across both Windows and Mac catalogues!\n\nClick "🚀 Publish Live" in the top bar to deploy worldwide.');
   renderDealsPanel();
 }
 
