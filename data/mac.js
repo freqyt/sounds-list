@@ -245,10 +245,10 @@ const macData = {
         "AmpliTube 4",
         "Analog Pro",
         "Effectrix 2",
-        "The God Particle",
         "iZotope Nectar",
+        "Looperator",
+        "Melodyne",
         "Neoverb",
-        "Neutron",
         {
           "name": "Neural DSP",
           "badges": [
@@ -256,27 +256,27 @@ const macData = {
           ],
           "note": "Cory Wong X, John Mayer X, Mantra, Misha Mansoor X, Nolly X, Tim Henson X"
         },
-        "RX 10",
-        "Looperator",
-        "Melodyne",
+        "Neutron",
         "Portal",
         "Raum",
         "RC-20 Retro Color",
-        "Reverse",
         "Regroover",
+        "Reverse",
         "Rift",
+        "RX 10",
         "Scaler 2",
         "Serato Sample 1",
         "Shaperbox 3",
         "SketchCassette II",
         "Strum GS-2",
         "Super VHS",
-        "Thermal",
         "T-Racks",
         "TAL-Dub-X",
-        "Thenathan Underwater",
-        "Transient Master",
         "Tantra",
+        "The God Particle",
+        "Thenathan Underwater",
+        "Thermal",
+        "Transient Master",
         "Vinyl Strip",
         "XO",
         "Xvox"
@@ -292,16 +292,16 @@ const macData = {
         "Decimort 1 or 2",
         "Discord4",
         "EchoMelt",
-        "Trash 2",
-        "VocalSynth 2",
         "Klevgrand Complete Bundle",
         "Lurssen Mastering Console",
         "MeldaProduction MComplete",
         "Mixbox",
-        "Overloud TH3",
         "OTT",
+        "Overloud TH3",
         "Pitchwheel",
-        "Thenathan Underwater"
+        "Thenathan Underwater",
+        "Trash 2",
+        "VocalSynth 2"
       ]
     },
     "daws": {
@@ -335,11 +335,12 @@ const macData = {
       "tier30": [
         "After Effects",
         "Audition",
-        "InDesign",
+        "Davinci Resolve",
+        "Final Cut Pro",
         "Illustrator",
+        "InDesign",
         "Photoshop",
-        "Premiere Pro",
-        "Final Cut Pro"
+        "Premiere Pro"
       ],
       "tier20": []
     }
