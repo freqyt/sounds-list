@@ -39,7 +39,7 @@ const macData = {
           "name": "Sonic Extensions Bundle",
           "price": 50,
           "includes": "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
-          "note": "Cracked Omni 2.8 Required"
+          "note": "Omnisphere 2.8+ Required"
         },
         {
           "name": "u-he Bundle",
