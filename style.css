@@ -1013,6 +1013,97 @@ html, body {
   color: var(--text-muted);
 }
 
+.search-empty-state {
+  max-width: 520px;
+  margin: 1.5rem auto;
+  padding: 2.25rem 1.5rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(3, 7, 18, 0.95));
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(59, 130, 246, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.search-empty-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.15rem;
+  filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.6));
+}
+
+.search-empty-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.search-empty-title strong {
+  color: var(--accent-bright);
+}
+
+.search-empty-desc {
+  font-size: 0.88rem;
+  color: var(--text-2);
+  line-height: 1.5;
+  max-width: 440px;
+  margin-bottom: 0.65rem;
+}
+
+.search-empty-desc strong {
+  color: #fff;
+}
+
+.search-empty-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+.dm-request-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.65rem 1.25rem;
+  background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(253, 29, 29, 0.35);
+  transition: all var(--trans);
+}
+
+.dm-request-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(253, 29, 29, 0.5);
+  filter: brightness(1.08);
+}
+
+.empty-clear-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--trans);
+}
+
+.empty-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .empty-state h3 {
   font-size: 1.05rem;
   color: #fff;
