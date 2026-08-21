@@ -3684,11 +3684,6 @@ const macData = {
           "badges": []
         },
         {
-          "name": "Fable Sounds - Broadway Big Band",
-          "tags": "Fable Sounds,Cinematic & Hybrid Textures,Kontakt,Kontakt Library",
-          "badges": []
-        },
-        {
           "name": "Embertone - Chapman Trumpet",
           "tags": "Embertone,Brass & Woodwinds,Kontakt,Kontakt Library",
           "badges": []
@@ -4511,11 +4506,6 @@ const macData = {
         {
           "name": "Orange Tree Samples - Angelic Keys",
           "tags": "Orange Tree Samples,Pianos & Keys,Kontakt,Kontakt Library",
-          "badges": []
-        },
-        {
-          "name": "Orchestral Tools - The Orchestral Grands",
-          "tags": "Orchestral Tools,Pianos & Keys,Kontakt,Kontakt Library",
           "badges": []
         },
         {
@@ -5721,11 +5711,6 @@ const macData = {
         {
           "name": "Boxed_Ear_OSCar_KONTAKT",
           "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library",
-          "badges": []
-        },
-        {
-          "name": "Output_Analog_Strings_KONTAKT",
-          "tags": "Other,Strings & Orchestral,Kontakt,Kontakt Library",
           "badges": []
         },
         {
@@ -7921,6 +7906,106 @@ const macData = {
         {
           "name": "OTS - Passion  Flute",
           "tags": "OTS,Brass & Woodwinds,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Ilya Efimov - Total Guitar and Bass Bundle",
+          "tags": "Ilya Efimov,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Native.Instruments.Ethereal.Earth.KONTAKT.BLT",
+          "tags": "Other,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Native Instruments - Modular Icons",
+          "tags": "Native Instruments,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Ilya Efimov - Nylon Guitar",
+          "tags": "Ilya Efimov,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Ilya Efimov - Acoustic Guitar",
+          "tags": "Ilya Efimov,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Ilya Efimov - Nylon Guitar Strum",
+          "tags": "Ilya Efimov,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Ilya Efimov - Acoustic Guitar + Strum",
+          "tags": "Ilya Efimov,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Orange Tree Samples - Evolution Electric Guitar Strawberry",
+          "tags": "Orange Tree Samples,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Native Instruments - Brass Ensemble (Symphony Series)",
+          "tags": "Native Instruments,Strings & Orchestral,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Cinesamples - Cinebrass",
+          "tags": "Cinesamples,Brass & Woodwinds,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Cinesamples - CineBrass Twelve Horn Ensemble",
+          "tags": "Cinesamples,Strings & Orchestral,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Cinesamples - CineBrass PRO Expansion",
+          "tags": "Cinesamples,Brass & Woodwinds,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Cinesamples - CineBrass Descant Horn",
+          "tags": "Cinesamples,Brass & Woodwinds,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Cinesamples - CineBrass Core",
+          "tags": "Cinesamples,Brass & Woodwinds,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Native Instruments - Vintage Organs ONLY",
+          "tags": "Native Instruments,Guitars & Bass,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Cinesamples - Piano in Blue v2",
+          "tags": "Cinesamples,Pianos & Keys,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Spitfire_Audio_Symphonic_Strings_V_1_0_2_KONTAKT",
+          "tags": "Other,Strings & Orchestral,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "Heavyocity_Gravity_KONTAKT",
+          "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "ProjectSAM - Swing More!  7]",
+          "tags": "ProjectSAM,Cinematic & Hybrid Textures,Kontakt,Kontakt Library",
+          "badges": []
+        },
+        {
+          "name": "FALSE",
+          "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library",
           "badges": []
         }
       ],
