@@ -651,7 +651,8 @@ const macData = {
           "name": "FL Studio 26",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "Image-Line"
         },
         "Logic Pro X"
       ],
