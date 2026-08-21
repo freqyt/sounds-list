@@ -276,7 +276,7 @@ function deleteItem(tierKey, idx) {
   renderPanel();
 }
 
-// ── Auto-save ─────────────────────────────────────────────
+// ── Auto-save (Local + Cloud Sync) ─────────────────────────
 let _saveTimer = null;
 
 function autoSave() {
@@ -284,14 +284,90 @@ function autoSave() {
   if (ind) ind.textContent = 'Saving…';
 
   clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(() => {
+  _saveTimer = setTimeout(async () => {
     savePlatformData(adm.platform, adm.data[adm.platform]);
+    
+    // Auto-sync to JSONBin in background if configured
+    const { key, binId } = getJsonBinConfig();
+    let cloudSynced = false;
+    if (key && binId) {
+      cloudSynced = await saveLiveCloudData({
+        windows: adm.data.windows,
+        mac: adm.data.mac
+      });
+    }
+
     const ind2 = document.getElementById('save-ind');
     if (ind2) {
-      ind2.textContent = '✓ Saved';
-      setTimeout(() => { if (ind2) ind2.textContent = ''; }, 2000);
+      ind2.textContent = cloudSynced ? '✓ Synced to Cloud' : '✓ Saved';
+      setTimeout(() => { if (ind2) ind2.textContent = ''; }, 2500);
     }
   }, 400);
+}
+
+// ── Cloud Sync Modal ───────────────────────────────────────
+function showCloudModal() {
+  const { key, binId } = getJsonBinConfig();
+  document.getElementById('jsonbin-key').value = key || '';
+  document.getElementById('jsonbin-binid').value = binId || '';
+  const statusEl = document.getElementById('cloud-status');
+  statusEl.style.display = 'none';
+  document.getElementById('cloud-modal').style.display = 'flex';
+}
+
+function closeCloudModal(e) {
+  if (e && e.target !== document.getElementById('cloud-modal')) return;
+  document.getElementById('cloud-modal').style.display = 'none';
+}
+
+async function saveCloudConfig() {
+  const keyInput = document.getElementById('jsonbin-key').value.trim();
+  let binIdInput = document.getElementById('jsonbin-binid').value.trim();
+  const btn = document.getElementById('connect-cloud-btn');
+  const statusEl = document.getElementById('cloud-status');
+
+  if (!keyInput) {
+    statusEl.textContent = 'Please enter your JSONBin Master Key.';
+    statusEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Connecting...';
+  statusEl.style.display = 'none';
+
+  try {
+    // If no Bin ID provided, auto-create one with current data
+    if (!binIdInput) {
+      const initialData = {
+        windows: adm.data.windows || windowsData,
+        mac: adm.data.mac || macData
+      };
+      binIdInput = await createNewJsonBin(keyInput, initialData);
+      document.getElementById('jsonbin-binid').value = binIdInput;
+    }
+
+    setJsonBinConfig(keyInput, binIdInput);
+
+    // Test cloud save
+    const success = await saveLiveCloudData({
+      windows: adm.data.windows || windowsData,
+      mac: adm.data.mac || macData
+    });
+
+    if (success) {
+      alert(`🎉 Cloud Sync Connected Successfully!\n\nBin ID: ${binIdInput}\n\nAll your edits now update live across all phones and devices instantly!`);
+      document.getElementById('cloud-modal').style.display = 'none';
+    } else {
+      throw new Error('Could not write to JSONBin. Check your Master Key.');
+    }
+  } catch (err) {
+    statusEl.textContent = err.message || 'Connection failed. Please check your Master Key.';
+    statusEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save & Connect Cloud';
+  }
 }
 
 // ── Export ────────────────────────────────────────────────
@@ -326,7 +402,6 @@ function showChangePw() {
 }
 
 function closePwModal(e) {
-  // Close if clicking the backdrop itself (not the box)
   if (e && e.target !== document.getElementById('pw-modal')) return;
   document.getElementById('pw-modal').style.display = 'none';
 }

@@ -1,13 +1,14 @@
 /* ═══════════════════════════════════════════════════════════
-   storage.js — Shared data layer
-   Reads from localStorage (seeded from windows.js / mac.js).
-   Used by both app.js (catalogue) and admin.js (dashboard).
+   storage.js — Shared Data & Real-Time Cloud Layer
+   Supports JSONBin.io cloud sync + localStorage fallback.
 ═══════════════════════════════════════════════════════════ */
 
 const STORAGE_KEYS = {
   windows:      'plcat_windows_v1',
   mac:          'plcat_mac_v1',
-  passwordHash: 'plcat_pw_hash'
+  passwordHash: 'plcat_pw_hash',
+  jsonbinKey:   'plcat_jsonbin_key',
+  jsonbinBinId: 'plcat_jsonbin_bin_id'
 };
 
 /* ── Password ──────────────────────────────────────────── */
@@ -27,9 +28,100 @@ async function sha256(message) {
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+/* ── Cloud Configuration ───────────────────────────────── */
+
+function getJsonBinConfig() {
+  const key = localStorage.getItem(STORAGE_KEYS.jsonbinKey) || CATALOGUE_CONFIG.jsonbin?.apiKey || '';
+  const binId = localStorage.getItem(STORAGE_KEYS.jsonbinBinId) || CATALOGUE_CONFIG.jsonbin?.binId || '';
+  return { key, binId };
+}
+
+function setJsonBinConfig(key, binId) {
+  if (key) localStorage.setItem(STORAGE_KEYS.jsonbinKey, key.trim());
+  if (binId) localStorage.setItem(STORAGE_KEYS.jsonbinBinId, binId.trim());
+}
+
+/* ── Cloud Data Fetch & Sync ───────────────────────────── */
+
+let _cloudCache = null;
+
+async function fetchLiveCloudData() {
+  const { key, binId } = getJsonBinConfig();
+  if (!binId) return null;
+
+  try {
+    const headers = {};
+    if (key) headers['X-Master-Key'] = key;
+    
+    // Fetch latest JSON from JSONBin
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest?nocache=${Date.now()}`, {
+      headers
+    });
+    
+    if (!res.ok) return null;
+    const json = await res.json();
+    const record = json.record;
+    
+    if (record && record.windows && record.mac) {
+      _cloudCache = record;
+      // Update local storage cache
+      localStorage.setItem(STORAGE_KEYS.windows, JSON.stringify(record.windows));
+      localStorage.setItem(STORAGE_KEYS.mac, JSON.stringify(record.mac));
+      return record;
+    }
+  } catch (err) {
+    console.warn('Could not fetch cloud data, using local fallback:', err);
+  }
+  return null;
+}
+
+async function saveLiveCloudData(allData) {
+  const { key, binId } = getJsonBinConfig();
+  if (!key || !binId) return false;
+
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': key
+      },
+      body: JSON.stringify(allData)
+    });
+    return res.ok;
+  } catch (err) {
+    console.error('Cloud save failed:', err);
+    return false;
+  }
+}
+
+async function createNewJsonBin(apiKey, initialData) {
+  try {
+    const res = await fetch('https://api.jsonbin.io/v3/b', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': apiKey,
+        'X-Bin-Name': 'Sounds List Catalogue',
+        'X-Bin-Private': 'false'
+      },
+      body: JSON.stringify(initialData)
+    });
+    if (!res.ok) throw new Error(`Error: ${res.status}`);
+    const json = await res.json();
+    return json.metadata?.id || null;
+  } catch (err) {
+    console.error('Create bin failed:', err);
+    throw err;
+  }
+}
+
 /* ── Platform data ─────────────────────────────────────── */
 
 function getPlatformData(platform) {
+  if (_cloudCache && _cloudCache[platform]) {
+    return _cloudCache[platform];
+  }
   try {
     const stored = localStorage.getItem(STORAGE_KEYS[platform]);
     if (stored) return JSON.parse(stored);
@@ -47,11 +139,6 @@ function resetPlatformToDefault(platform) {
 
 /* ── Normalise helpers ─────────────────────────────────── */
 
-/**
- * Normalise any item format to: { name, badges[], note }
- * Supports legacy { badge: "NEW" } and new { badges: ["NEW","HOT"] } formats,
- * as well as plain strings.
- */
 function normalizeItem(item) {
   if (typeof item === 'string') return { name: item, badges: [], note: '' };
   const badges = Array.isArray(item.badges)
@@ -60,9 +147,6 @@ function normalizeItem(item) {
   return { name: item.name || '', badges, note: item.note || '' };
 }
 
-/**
- * Normalise a bundle to: { name, price, includes, note, badges[] }
- */
 function normalizeBundle(b) {
   const badges = Array.isArray(b.badges)
     ? [...b.badges]
@@ -76,9 +160,6 @@ function normalizeBundle(b) {
   };
 }
 
-/* ── Serialise helpers (for export) ────────────────────── */
-
-/** Compact an item: if no badges/note, return plain string */
 function compactItem(item) {
   const n = normalizeItem(item);
   if (n.badges.length === 0 && !n.note) return n.name;
@@ -88,7 +169,6 @@ function compactItem(item) {
   return obj;
 }
 
-/** Compact a bundle object */
 function compactBundle(b) {
   const n = normalizeBundle(b);
   const obj = { name: n.name, price: n.price, includes: n.includes };
@@ -97,7 +177,6 @@ function compactBundle(b) {
   return obj;
 }
 
-/** Produce an exportable JS string from a full platform data object */
 function serializePlatformData(platform, data) {
   const varName = platform === 'windows' ? 'windowsData' : 'macData';
   const out = JSON.parse(JSON.stringify(data));

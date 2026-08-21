@@ -369,6 +369,15 @@ window.addEventListener('scroll', () => {
 
 // ── Initialize on Page Load ──────────────────────────────
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   restoreBrowseState();
+
+  // Seamlessly check and fetch fresh cloud data in background
+  if (typeof fetchLiveCloudData === 'function') {
+    const cloud = await fetchLiveCloudData();
+    if (cloud && state.platform) {
+      renderTabs();
+      renderCatalogue();
+    }
+  }
 });
