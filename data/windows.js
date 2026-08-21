@@ -89,7 +89,10 @@ const windowsData = {
         "DUNE 3",
         "ElectraX",
         "Heat Up 3",
-        "Kontakt 8 (No banks included)",
+        {
+          "name": "Kontakt 8",
+          "note": "No banks included"
+        },
         {
           "name": "Kult",
           "badges": [
