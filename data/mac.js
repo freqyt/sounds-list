@@ -364,28 +364,33 @@ const macData = {
         {
           "name": "Starter Bundle",
           "price": 100,
-          "includes": "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle"
+          "includes": "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle",
+          "tags": "Fabfilter,Waves,Valhalla"
         },
         {
           "name": "Vocal Bundle",
           "price": 70,
-          "includes": "Waves 16 Complete, Auto Tune 11 Pro"
+          "includes": "Waves 16 Complete, Auto Tune 11 Pro",
+          "tags": "Waves,Antares"
         },
         {
           "name": "Hihat Sauce",
           "price": 60,
-          "includes": "Effectrix 2, Looperator & Shaperbox 3"
+          "includes": "Effectrix 2, Looperator & Shaperbox 3",
+          "tags": "Sugar Bytes,Cableguys"
         },
         {
           "name": "Sample Sauce",
           "price": 60,
-          "includes": "Portal, Soothe2 & RC-20"
+          "includes": "Portal, Soothe2 & RC-20",
+          "tags": "Output,oeksound,XLN Audio"
         },
         {
           "name": "Antares Bundle",
           "price": 80,
           "includes": "Mic Mod, Harmony, Auto Tune Artist, AVOX: Warm, Throat, Sybil, Punch, Mutator, Duo, Choir, Aspire & Articulator",
-          "note": "Total of 12 Plugins"
+          "note": "Total of 12 Plugins",
+          "tags": "Antares"
         },
         {
           "name": "DADA LIFE Bundle",
@@ -393,40 +398,85 @@ const macData = {
           "includes": "Endless Smile, Eternal Return, Sausage Fattener, Space In-Your-Face, Wide Awake",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "DADA LIFE"
         }
       ],
       "tier40": [
         "Antares Auto-Tune 11 Pro",
-        "Arturia FX Collection",
-        "FabFilter Bundle",
-        "Goodhertz Bundle",
-        "Guitar Rig 7",
-        "Ozone 12",
+        {
+          "name": "Arturia FX Collection",
+          "tags": "Arturia"
+        },
+        {
+          "name": "FabFilter Bundle",
+          "tags": "Fabfilter"
+        },
+        {
+          "name": "Goodhertz Bundle",
+          "tags": "Goodhertz,Ghz"
+        },
+        {
+          "name": "Guitar Rig 7",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Ozone 12",
+          "tags": "Izotope"
+        },
         {
           "name": "Soothe2",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "oeksound"
         },
-        "Valhalla Bundle",
+        {
+          "name": "Valhalla Bundle",
+          "tags": "Valhalla"
+        },
         {
           "name": "Vocalign Pro 6",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "Synchro Arts"
         },
-        "Waves 16 Complete",
-        "Xvox Pro"
+        {
+          "name": "Waves 16 Complete",
+          "tags": "Waves"
+        },
+        {
+          "name": "Xvox Pro",
+          "tags": "Nuro Audio"
+        }
       ],
       "tier30": [
-        "AmpliTube 4",
-        "Analog Pro",
-        "Effectrix 2",
+        {
+          "name": "AmpliTube 4",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "Analog Pro",
+          "tags": "Initial Audio"
+        },
+        {
+          "name": "Effectrix 2",
+          "tags": "Sugar Bytes"
+        },
         "iZotope Nectar",
-        "Looperator",
-        "Melodyne",
-        "Neoverb",
+        {
+          "name": "Looperator",
+          "tags": "Sugar Bytes"
+        },
+        {
+          "name": "Melodyne",
+          "tags": "Celemony"
+        },
+        {
+          "name": "Neoverb",
+          "tags": "Izotope"
+        },
         {
           "name": "Neural DSP",
           "badges": [
@@ -434,52 +484,161 @@ const macData = {
           ],
           "note": "Cory Wong X, John Mayer X, Mantra, Misha Mansoor X, Nolly X, Tim Henson X"
         },
-        "Neutron",
-        "Portal",
-        "Raum",
-        "RC-20 Retro Color",
-        "Regroover",
-        "Reverse",
-        "Rift",
-        "RX 10",
-        "Scaler 2",
+        {
+          "name": "Neutron",
+          "tags": "Izotope"
+        },
+        {
+          "name": "Portal",
+          "tags": "Output"
+        },
+        {
+          "name": "Raum",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "RC-20 Retro Color",
+          "tags": "XLN Audio"
+        },
+        {
+          "name": "Regroover",
+          "tags": "Accusonus"
+        },
+        {
+          "name": "Reverse",
+          "tags": "Initial Audio"
+        },
+        {
+          "name": "Rift",
+          "tags": "Minimal Audio"
+        },
+        {
+          "name": "RX 10",
+          "tags": "Izotope"
+        },
+        {
+          "name": "Scaler 2",
+          "tags": "Scaler Music"
+        },
         "Serato Sample 1",
-        "Shaperbox 3",
-        "SketchCassette II",
-        "Strum GS-2",
-        "Super VHS",
-        "T-Racks",
-        "TAL-Dub-X",
-        "Tantra",
-        "The God Particle",
+        {
+          "name": "Shaperbox 3",
+          "tags": "Cableguys"
+        },
+        {
+          "name": "SketchCassette II",
+          "tags": "Aberrant DSP"
+        },
+        {
+          "name": "Strum GS-2",
+          "tags": "Applied Acoustics Systems,AAS"
+        },
+        {
+          "name": "Super VHS",
+          "tags": "Baby Audio"
+        },
+        {
+          "name": "T-Racks",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "TAL-Dub-X",
+          "tags": "TAL Software"
+        },
+        {
+          "name": "Tantra",
+          "tags": "DS Audio,Dmitry Sches"
+        },
+        {
+          "name": "The God Particle",
+          "tags": "Cradle"
+        },
         "Thenathan Underwater",
-        "Thermal",
-        "Transient Master",
-        "Vinyl Strip",
-        "XO",
-        "Xvox"
+        {
+          "name": "Thermal",
+          "tags": "Output"
+        },
+        {
+          "name": "Transient Master",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Vinyl Strip",
+          "tags": "AudioThing"
+        },
+        {
+          "name": "XO",
+          "tags": "XLN Audio"
+        },
+        {
+          "name": "Xvox",
+          "tags": "Nuro Audio"
+        }
       ],
       "tier20": [
         {
           "name": "CamelCrusher",
-          "note": "Doesn't work on newer Macs"
+          "note": "Doesn't work on newer Macs",
+          "tags": "Camel Audio"
         },
-        "CamelSpace",
-        "Cassette",
-        "Comeback Kid",
-        "Decimort 1 or 2",
-        "Discord4",
-        "EchoMelt",
-        "Klevgrand Complete Bundle",
-        "Lurssen Mastering Console",
+        {
+          "name": "CamelSpace",
+          "tags": "Camel Audio"
+        },
+        {
+          "name": "Cassette",
+          "tags": "Wavesfactory"
+        },
+        {
+          "name": "Comeback Kid",
+          "tags": "Baby Audio"
+        },
+        {
+          "name": "Decimort 1 or 2",
+          "tags": "D16"
+        },
+        {
+          "name": "Discord4",
+          "tags": "Audio Damage"
+        },
+        {
+          "name": "EchoMelt",
+          "tags": "Psychic Modulation"
+        },
+        {
+          "name": "Klevgrand Complete Bundle",
+          "tags": "Klevgrand"
+        },
+        {
+          "name": "Lurssen Mastering Console",
+          "tags": "IK Multimedia"
+        },
         "MeldaProduction MComplete",
-        "Mixbox",
-        "OTT",
-        "Overloud TH3",
-        "Pitchwheel",
+        {
+          "name": "Mixbox",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "OTT",
+          "tags": "Xfer"
+        },
+        {
+          "name": "Overloud TH3",
+          "tags": "Overloud"
+        },
+        {
+          "name": "Pitchwheel",
+          "tags": "QuikQuak"
+        },
         "Thenathan Underwater",
-        "Trash 2",
-        "VocalSynth 2"
+        {
+          "name": "Trash 2",
+          "tags": "Izotope"
+        },
+        {
+          "name": "VocalSynth 2",
+          "tags": "Izotope"
+        }
       ]
     },
     "daws": {
