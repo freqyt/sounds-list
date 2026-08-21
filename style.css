@@ -574,11 +574,11 @@ html.has-active-session #catalogue-screen {
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.95rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.65rem;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -593,6 +593,12 @@ html.has-active-session #catalogue-screen {
   transform: scale(0.98);
 }
 
+.bundle-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
 .bundle-card-top {
   display: flex;
   align-items: flex-start;
@@ -604,11 +610,15 @@ html.has-active-session #catalogue-screen {
   font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
-  line-height: 1.3;
+  line-height: 1.35;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 .bundle-price {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: var(--accent-bright);
   background: rgba(59, 130, 246, 0.15);
@@ -621,7 +631,7 @@ html.has-active-session #catalogue-screen {
 }
 
 .bundle-includes {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-2);
   line-height: 1.45;
 }

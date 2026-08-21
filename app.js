@@ -317,11 +317,13 @@ function renderBundleCard(bundle, q) {
 
   return `
     <article class="bundle-card">
-      <div class="bundle-card-top">
-        <div class="bundle-name">${highlight(n.name, q)} ${badgesHtml}</div>
-        <div class="bundle-price">$${n.price}</div>
+      <div class="bundle-main-content">
+        <div class="bundle-card-top">
+          <div class="bundle-name">${highlight(n.name, q)} ${badgesHtml}</div>
+          <div class="bundle-price">$${n.price}</div>
+        </div>
+        <p class="bundle-includes">${highlight(n.includes, q)}</p>
       </div>
-      <p class="bundle-includes">${highlight(n.includes, q)}</p>
       ${noteHtml}
     </article>
   `;
