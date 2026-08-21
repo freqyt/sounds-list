@@ -377,35 +377,36 @@ body::before {
   color: #fff;
 }
 
-/* Category Tabs (Minimal & Smooth) */
+/* Category Tabs (All 4 in a single row - zero horizontal scrolling) */
 .category-tabs {
-  display: flex;
-  gap: 0.35rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 2px;
-}
-
-.category-tabs::-webkit-scrollbar {
-  display: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.3rem;
+  width: 100%;
 }
 
 .cat-tab {
   background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-sm);
   color: var(--text-2);
-  padding: 0.4rem 0.9rem;
-  font-size: 0.82rem;
+  padding: 0.42rem 0.15rem;
+  font-size: 0.76rem;
   font-weight: 600;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  gap: 0.15rem;
   transition: all var(--trans);
-  white-space: nowrap;
-  flex-shrink: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.cat-tab span:first-child {
+  font-size: 0.95rem;
+  line-height: 1;
 }
 
 .cat-tab:hover {
@@ -417,7 +418,7 @@ body::before {
   background: var(--accent);
   border-color: var(--accent-bright);
   color: #fff;
-  box-shadow: 0 0 14px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
 }
 
 /* ═══════════════════════════════════════════════════════════
