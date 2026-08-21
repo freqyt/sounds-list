@@ -18,12 +18,12 @@ const macData = {
         {
           "name": "ElectraX Bundle",
           "price": 60,
-          "includes": "ElectraX + 200 Banks"
+          "includes": "ElectraX + 200 Custom Banks"
         },
         {
           "name": "Serum Bundle",
           "price": 60,
-          "includes": "Serum 2 + 150 Banks"
+          "includes": "Serum 2 + 150 Custom Banks"
         },
         {
           "name": "Nexus 5 Complete",
@@ -33,7 +33,7 @@ const macData = {
         {
           "name": "Kontakt 8 Starter Bundle",
           "price": 75,
-          "includes": "Kontakt + 10 of the best banks"
+          "includes": "Kontakt + 10 of the best selling banks"
         },
         {
           "name": "Sonic Extensions Bundle",
