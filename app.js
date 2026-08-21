@@ -1,14 +1,21 @@
 /* ═══════════════════════════════════════════════════════════
-   SOUNDS LIST — MINIMAL & FAST app.js
-   Features: Zero clutter, state persistence on refresh,
-   instant live search, dynamic badge support & animations.
+   SOUNDS LIST — FAST & INTERACTIVE STOREFRONT (app.js)
+   Features:
+   1. Universal Cross-Category Live Search
+   2. Interactive Order Builder / Cart with 1-Click Copy
+   3. Featured Deal / Spotlight Banner
+   4. Floating Quick Search Button & Scroll Top
+   5. Dynamic Badge, Icon & Subtitle Support
 ═══════════════════════════════════════════════════════════ */
 
 let state = {
   platform: null,
   activeCategory: null,
-  searchQuery: ''
+  searchQuery: '',
+  cart: []
 };
+
+// ── String Escaping Helpers ──────────────────────────────
 
 function esc(str) {
   return String(str || '')
@@ -16,6 +23,15 @@ function esc(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+function ea(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/'/g, '&#39;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function highlight(text, query) {
@@ -30,8 +46,6 @@ function getData() {
   }
   return state.platform === 'windows' ? windowsData : macData;
 }
-
-// ── State Persistence & URL Hash ─────────────────────────
 
 // ── Screen Transitions ───────────────────────────────────
 
@@ -68,6 +82,8 @@ function goBack() {
   window.scrollTo(0, 0);
   state.platform = null;
   state.searchQuery = '';
+  state.cart = [];
+  updateCartUI();
 
   catalogueScreen.classList.add('exit-right');
 
@@ -103,6 +119,7 @@ function setupCatalogue() {
 
   renderTabs();
   renderCatalogue();
+  updateCartUI();
 }
 
 // ── Category Tabs ────────────────────────────────────────
@@ -128,8 +145,12 @@ function renderTabs() {
 
 function switchCategory(key) {
   state.activeCategory = key;
-  renderTabs();
-  renderCatalogue();
+  if (state.searchQuery) {
+    clearSearch();
+  } else {
+    renderTabs();
+    renderCatalogue();
+  }
 }
 
 // ── Search Handling ──────────────────────────────────────
@@ -145,9 +166,9 @@ function clearSearch() {
   const searchInput = document.getElementById('search-input');
   if (searchInput) {
     searchInput.value = '';
-    searchInput.focus();
   }
   updateSearchClearBtn('');
+  renderTabs();
   renderCatalogue();
 }
 
@@ -155,6 +176,17 @@ function updateSearchClearBtn(val) {
   const btn = document.getElementById('search-clear-btn');
   if (btn) {
     btn.style.display = val ? 'inline-flex' : 'none';
+  }
+}
+
+function openFloatingSearch() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const input = document.getElementById('search-input');
+  if (input) {
+    setTimeout(() => {
+      input.focus();
+      input.select();
+    }, 200);
   }
 }
 
@@ -179,16 +211,110 @@ function matchesBundleSearch(bundle, q) {
   );
 }
 
+// ── Interactive Cart / Order Builder ──────────────────────
+
+function getCartItemKey(type, name, tier) {
+  return `${type}_${(name || '').trim()}_${tier || ''}`.toLowerCase();
+}
+
+function toggleCartItem(type, name, price, tier, badges = [], note = '') {
+  const key = getCartItemKey(type, name, tier);
+  const idx = state.cart.findIndex(item => item.id === key);
+  if (idx >= 0) {
+    state.cart.splice(idx, 1);
+  } else {
+    state.cart.push({
+      id: key,
+      type,
+      name: name.trim(),
+      price: Number(price) || 0,
+      tier: tier || '',
+      badges: Array.isArray(badges) ? badges : [],
+      note: note || ''
+    });
+  }
+  updateCartUI();
+}
+
+function clearCart() {
+  state.cart = [];
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const bar = document.getElementById('order-cart-bar');
+  const countEl = document.getElementById('cart-count');
+  const totalEl = document.getElementById('cart-total');
+
+  const totalCount = state.cart.length;
+  const totalPrice = state.cart.reduce((sum, item) => sum + (item.price || 0), 0);
+
+  if (countEl) countEl.textContent = `${totalCount} item${totalCount === 1 ? '' : 's'} selected`;
+  if (totalEl) totalEl.textContent = `$${totalPrice}`;
+
+  if (bar) {
+    bar.classList.toggle('visible', totalCount > 0);
+  }
+
+  // Update card active classes dynamically
+  document.querySelectorAll('.plugin-card, .bundle-card, .spotlight-card').forEach(card => {
+    const key = card.getAttribute('data-cart-key');
+    if (key) {
+      const isIn = state.cart.some(item => item.id === key);
+      card.classList.toggle('in-cart', isIn);
+      const checkEl = card.querySelector('.cart-check-indicator');
+      if (checkEl) {
+        checkEl.textContent = isIn ? '✓' : '+';
+        checkEl.classList.toggle('in-cart', isIn);
+      }
+    }
+  });
+
+  const spotlightAddBtn = document.getElementById('spotlight-add-btn');
+  if (spotlightAddBtn) {
+    const key = spotlightAddBtn.getAttribute('data-cart-key');
+    const isIn = key && state.cart.some(item => item.id === key);
+    spotlightAddBtn.innerHTML = isIn ? '✓ Added' : '+ Add Deal';
+    spotlightAddBtn.classList.toggle('in-cart', isIn);
+  }
+}
+
+async function copyOrderList() {
+  if (state.cart.length === 0) return;
+  const platName = state.platform === 'windows' ? 'Windows' : 'Mac';
+  const lines = state.cart.map(item => {
+    const tag = item.type === 'bundle' ? 'Bundle' : item.tier;
+    return `• ${item.name} (${tag}) - $${item.price}`;
+  });
+  const total = state.cart.reduce((sum, item) => sum + (item.price || 0), 0);
+
+  const orderText = `🎵 FREQ Sounds List Order (${platName}):\n${lines.join('\n')}\n━━━━━━━━━━━━━━━━━━\n💰 Total: $${total}`;
+
+  try {
+    await navigator.clipboard.writeText(orderText);
+    const textEl = document.getElementById('cart-copy-text');
+    const btn = document.getElementById('cart-copy-btn');
+    if (textEl && btn) {
+      const prev = textEl.textContent;
+      textEl.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        textEl.textContent = prev;
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+  } catch (e) {
+    prompt('Copy your order list:', orderText);
+  }
+}
+
 // ── Main Render ──────────────────────────────────────────
 
 function renderCatalogue() {
   const data = getData();
-  const cat = data.categories[state.activeCategory];
-  const q = state.searchQuery.toLowerCase();
+  const q = state.searchQuery.toLowerCase().trim();
   const main = document.getElementById('catalogue-main');
-
-  let totalVisible = 0;
-  let html = '';
+  if (!main) return;
 
   // Helper: Alphabetical sort for plugin items
   const sortItemsAZ = (list) => {
@@ -200,57 +326,197 @@ function renderCatalogue() {
     });
   };
 
+  // ── 1. GLOBAL SEARCH MODE (Scans Across ALL Categories) ──
+  if (q) {
+    let totalVisible = 0;
+    let html = '';
+
+    html += `
+      <div class="search-results-banner">
+        <span class="search-results-title">🔍 Search results for "<strong>${esc(state.searchQuery)}</strong>" across all categories:</span>
+      </div>
+    `;
+
+    Object.entries(data.categories).forEach(([catKey, cat]) => {
+      let catHtml = '';
+      let catCount = 0;
+
+      // Bundles
+      if (cat.bundles && cat.bundles.length > 0) {
+        const filtered = cat.bundles.filter(b => matchesBundleSearch(b, q));
+        if (filtered.length > 0) {
+          catCount += filtered.length;
+          catHtml += renderSection('Bundles', filtered.map(b => renderBundleCard(b, q, catKey)).join(''), 'bundles-grid');
+        }
+      }
+
+      // $40 Tier
+      if (cat.tier40 && cat.tier40.length > 0) {
+        const sorted = sortItemsAZ(cat.tier40);
+        const filtered = sorted.filter(item => matchesSearch(item, q));
+        if (filtered.length > 0) {
+          catCount += filtered.length;
+          catHtml += renderSection('$40 Each', filtered.map(item => renderPluginCard(item, q, '$40', catKey)).join(''), 'plugins-grid');
+        }
+      }
+
+      // $30 Tier
+      if (cat.tier30 && cat.tier30.length > 0) {
+        const sorted = sortItemsAZ(cat.tier30);
+        const filtered = sorted.filter(item => matchesSearch(item, q));
+        if (filtered.length > 0) {
+          catCount += filtered.length;
+          catHtml += renderSection('$30 Each', filtered.map(item => renderPluginCard(item, q, '$30', catKey)).join(''), 'plugins-grid');
+        }
+      }
+
+      // $20 Tier
+      if (cat.tier20 && cat.tier20.length > 0) {
+        const sorted = sortItemsAZ(cat.tier20);
+        const filtered = sorted.filter(item => matchesSearch(item, q));
+        if (filtered.length > 0) {
+          catCount += filtered.length;
+          catHtml += renderSection('$20 Each', filtered.map(item => renderPluginCard(item, q, '$20', catKey)).join(''), 'plugins-grid');
+        }
+      }
+
+      if (catCount > 0) {
+        totalVisible += catCount;
+        html += `
+          <div class="search-category-group">
+            <div class="search-category-header">
+              <span class="search-cat-icon">${cat.icon}</span>
+              <span class="search-cat-name">${cat.label}</span>
+              <span class="search-cat-badge">${catCount} match${catCount === 1 ? '' : 'es'}</span>
+            </div>
+            ${catHtml}
+          </div>
+        `;
+      }
+    });
+
+    if (totalVisible === 0) {
+      html = `
+        <div class="empty-state">
+          <h3>No results found</h3>
+          <p>No products match "${esc(state.searchQuery)}" across any category.</p>
+          <button class="empty-btn" onclick="clearSearch()">Clear Search</button>
+        </div>
+      `;
+    }
+
+    main.innerHTML = html;
+    updateCartUI();
+    return;
+  }
+
+  // ── 2. NORMAL CATEGORY VIEW ─────────────────────────────
+  const cat = data.categories[state.activeCategory];
+  if (!cat) return;
+
+  let totalVisible = 0;
+  let html = '';
+
+  // Featured Spotlight Banner (at top of main view)
+  const spotlightBundle = getSpotlightBundle(data);
+  if (spotlightBundle) {
+    html += renderSpotlightBanner(spotlightBundle);
+  }
+
   // 1. Bundles (custom manual ordering preserved)
   if (cat.bundles && cat.bundles.length > 0) {
-    const filtered = cat.bundles.filter(b => matchesBundleSearch(b, q));
-    if (filtered.length > 0) {
-      totalVisible += filtered.length;
-      html += renderSection('Bundles', filtered.map(b => renderBundleCard(b, q)).join(''), 'bundles-grid');
-    }
+    totalVisible += cat.bundles.length;
+    html += renderSection('Bundles', cat.bundles.map(b => renderBundleCard(b, '', state.activeCategory)).join(''), 'bundles-grid');
   }
 
   // 2. $40 Tier (Always Alphabetical)
   if (cat.tier40 && cat.tier40.length > 0) {
     const sorted = sortItemsAZ(cat.tier40);
-    const filtered = sorted.filter(item => matchesSearch(item, q));
-    if (filtered.length > 0) {
-      totalVisible += filtered.length;
-      html += renderSection('$40 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
-    }
+    totalVisible += sorted.length;
+    html += renderSection('$40 Each', sorted.map(item => renderPluginCard(item, '', '$40', state.activeCategory)).join(''), 'plugins-grid');
   }
 
   // 3. $30 Tier (Always Alphabetical)
   if (cat.tier30 && cat.tier30.length > 0) {
     const sorted = sortItemsAZ(cat.tier30);
-    const filtered = sorted.filter(item => matchesSearch(item, q));
-    if (filtered.length > 0) {
-      totalVisible += filtered.length;
-      html += renderSection('$30 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
-    }
+    totalVisible += sorted.length;
+    html += renderSection('$30 Each', sorted.map(item => renderPluginCard(item, '', '$30', state.activeCategory)).join(''), 'plugins-grid');
   }
 
   // 4. $20 Tier (Always Alphabetical)
   if (cat.tier20 && cat.tier20.length > 0) {
     const sorted = sortItemsAZ(cat.tier20);
-    const filtered = sorted.filter(item => matchesSearch(item, q));
-    if (filtered.length > 0) {
-      totalVisible += filtered.length;
-      html += renderSection('$20 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
-    }
+    totalVisible += sorted.length;
+    html += renderSection('$20 Each', sorted.map(item => renderPluginCard(item, '', '$20', state.activeCategory)).join(''), 'plugins-grid');
   }
 
   // Empty State
   if (totalVisible === 0) {
     html = `
       <div class="empty-state">
-        <h3>No results found</h3>
-        <p>No products match "${esc(state.searchQuery)}" in ${esc(cat.label)}.</p>
-        <button class="empty-btn" onclick="clearSearch()">Clear Search</button>
+        <h3>No products yet</h3>
+        <p>This category has no items listed.</p>
       </div>
     `;
   }
 
   main.innerHTML = html;
+  updateCartUI();
+}
+
+// ── Spotlight Banner Helper ──────────────────────────────
+
+function getSpotlightBundle(data) {
+  if (data.categories && data.categories.instruments && data.categories.instruments.bundles) {
+    const best = data.categories.instruments.bundles.find(b => {
+      const n = normalizeBundle(b);
+      return (n.badges || []).some(bg => String(bg).toLowerCase().includes('best'));
+    });
+    if (best) return normalizeBundle(best);
+    if (data.categories.instruments.bundles.length > 0) {
+      return normalizeBundle(data.categories.instruments.bundles[0]);
+    }
+  }
+  return null;
+}
+
+function renderSpotlightBanner(bundle) {
+  const cartKey = getCartItemKey('bundle', bundle.name, 'Bundle');
+  const inCart = state.cart.some(item => item.id === cartKey);
+  const thumbHtml = renderThumbnailHtml(bundle.image, true);
+  const badgesHtml = renderBadgesHtml(bundle.badges);
+
+  return `
+    <div class="spotlight-wrap">
+      <div class="spotlight-card ${inCart ? 'in-cart' : ''}" data-cart-key="${esc(cartKey)}">
+        <div class="spotlight-top-tag">
+          <span class="spotlight-badge-pill">🔥 FEATURED DEAL</span>
+          ${badgesHtml}
+        </div>
+        <div class="spotlight-body">
+          <div class="spotlight-left">
+            ${thumbHtml}
+            <div class="spotlight-info">
+              <h4 class="spotlight-title">${esc(bundle.name)}</h4>
+              <p class="spotlight-desc">${esc(bundle.includes)}</p>
+              ${bundle.note ? `<div class="spotlight-note">${INFO_SVG}<span>${esc(bundle.note)}</span></div>` : ''}
+            </div>
+          </div>
+          <div class="spotlight-right">
+            <div class="spotlight-price">$${bundle.price}</div>
+            <button
+              id="spotlight-add-btn"
+              class="spotlight-add-btn ${inCart ? 'in-cart' : ''}"
+              data-cart-key="${esc(cartKey)}"
+              onclick="toggleCartItem('bundle', '${ea(bundle.name)}', ${bundle.price}, 'Bundle', ${JSON.stringify(bundle.badges).replace(/"/g, '&quot;')}, '${ea(bundle.note)}')"
+            >
+              ${inCart ? '✓ Added' : '+ Add Deal'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ── HTML Builders ────────────────────────────────────────
@@ -280,34 +546,50 @@ function renderThumbnailHtml(imageStr, isBundle = false) {
 
 const INFO_SVG = `<svg class="info-svg" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.8"></circle><line x1="8" y1="7.2" x2="8" y2="11.5"></line><circle cx="8" cy="4.5" r="0.75" fill="currentColor"></circle></svg>`;
 
-function renderBundleCard(bundle, q) {
+function renderBundleCard(bundle, q, catKey = '') {
   const n = normalizeBundle(bundle);
+  const cartKey = getCartItemKey('bundle', n.name, 'Bundle');
+  const inCart = state.cart.some(item => item.id === cartKey);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, true);
   const noteHtml = n.note ? `<span class="bundle-note-inline">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
 
   return `
-    <article class="bundle-card">
+    <article
+      class="bundle-card ${inCart ? 'in-cart' : ''}"
+      data-cart-key="${esc(cartKey)}"
+      onclick="toggleCartItem('bundle', '${ea(n.name)}', ${n.price}, 'Bundle', ${JSON.stringify(n.badges).replace(/"/g, '&quot;')}, '${ea(n.note)}')"
+    >
       <div class="bundle-card-top">
         <div class="bundle-header-left">
           ${thumbHtml}
           <div class="bundle-name">${highlight(n.name, q)} ${badgesHtml}</div>
         </div>
-        <div class="bundle-price">$${n.price}</div>
+        <div class="bundle-card-top-right">
+          <div class="bundle-price">$${n.price}</div>
+          <span class="cart-check-indicator ${inCart ? 'in-cart' : ''}" title="Add to Order">${inCart ? '✓' : '+'}</span>
+        </div>
       </div>
       <p class="bundle-includes">${highlight(n.includes, q)} ${noteHtml}</p>
     </article>
   `;
 }
 
-function renderPluginCard(item, q) {
+function renderPluginCard(item, q, tier = '$40', catKey = '') {
   const n = normalizeItem(item);
+  const cartKey = getCartItemKey('plugin', n.name, tier);
+  const inCart = state.cart.some(item => item.id === cartKey);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, false);
   const noteHtml = n.note ? `<span class="plugin-note-tag">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
+  const numPrice = Number(tier.replace('$', '')) || 40;
 
   return `
-    <div class="plugin-card ${n.note ? 'has-note' : ''}">
+    <div
+      class="plugin-card ${n.note ? 'has-note' : ''} ${inCart ? 'in-cart' : ''}"
+      data-cart-key="${esc(cartKey)}"
+      onclick="toggleCartItem('plugin', '${ea(n.name)}', ${numPrice}, '${ea(tier)}', ${JSON.stringify(n.badges).replace(/"/g, '&quot;')}, '${ea(n.note)}')"
+    >
       <div class="plugin-card-left">
         ${thumbHtml}
         <div class="plugin-info-wrap">
@@ -317,6 +599,7 @@ function renderPluginCard(item, q) {
       </div>
       <div class="plugin-badges-wrap">
         ${badgesHtml}
+        <span class="cart-check-indicator ${inCart ? 'in-cart' : ''}" title="Add to Order">${inCart ? '✓' : '+'}</span>
       </div>
     </div>
   `;
@@ -331,17 +614,19 @@ function renderBadgesHtml(badges) {
   }).join(' ');
 }
 
-// ── Floating Scroll To Top ────────────────────────────────
+// ── Floating Scroll & Search Actions ─────────────────────
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.addEventListener('scroll', () => {
-  const btn = document.getElementById('scroll-top-btn');
-  if (btn) {
-    btn.classList.toggle('visible', window.scrollY > 300);
-  }
+  const scrollTopBtn = document.getElementById('scroll-top-btn');
+  const searchBtn = document.getElementById('floating-search-btn');
+  const show = window.scrollY > 150;
+
+  if (scrollTopBtn) scrollTopBtn.classList.toggle('visible', show);
+  if (searchBtn) searchBtn.classList.toggle('visible', show);
 });
 
 // ── Initialize on Page Load ──────────────────────────────
