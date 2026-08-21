@@ -15,7 +15,13 @@ const adm = {
 
 // ── Init ─────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  if (sessionStorage.getItem('cat_admin') === '1') {
+  if (sessionStorage.getItem('cat_admin') === '1' || localStorage.getItem('cat_admin_remember') === '1') {
+    const savedPw = sessionStorage.getItem('cat_admin_pw') || localStorage.getItem('cat_admin_pw_saved') || 'theplug11';
+    if (CATALOGUE_CONFIG.encryptedGitHubToken) {
+      decryptSecret(CATALOGUE_CONFIG.encryptedGitHubToken, savedPw).then(dec => {
+        if (dec) setGitHubConfig(dec, 'freqyt/sounds-list');
+      });
+    }
     bootDashboard();
   }
   // else: login overlay is shown by default (display:flex in CSS)
@@ -26,6 +32,7 @@ async function handleLogin(e) {
   e.preventDefault();
   const btn = document.getElementById('login-btn');
   const pw  = document.getElementById('password-input').value;
+  const remember = document.getElementById('remember-me')?.checked;
   const err = document.getElementById('login-error');
 
   btn.textContent = '...';
@@ -37,8 +44,16 @@ async function handleLogin(e) {
 
   if (hash === getPasswordHash() || hash === CATALOGUE_CONFIG.passwordHash) {
     sessionStorage.setItem('cat_admin', '1');
-    sessionStorage.setItem('cat_admin_pw', pw); // keep in memory for encryption/decryption during this admin session
+    sessionStorage.setItem('cat_admin_pw', pw);
     setPasswordHash(hash);
+
+    if (remember) {
+      localStorage.setItem('cat_admin_remember', '1');
+      localStorage.setItem('cat_admin_pw_saved', pw);
+    } else {
+      localStorage.removeItem('cat_admin_remember');
+      localStorage.removeItem('cat_admin_pw_saved');
+    }
 
     // If config has an encrypted token, decrypt it into memory
     if (CATALOGUE_CONFIG.encryptedGitHubToken) {
@@ -58,6 +73,9 @@ async function handleLogin(e) {
 
 function handleLogout() {
   sessionStorage.removeItem('cat_admin');
+  sessionStorage.removeItem('cat_admin_pw');
+  localStorage.removeItem('cat_admin_remember');
+  localStorage.removeItem('cat_admin_pw_saved');
   document.getElementById('dashboard').style.display = 'none';
   document.getElementById('login-overlay').style.display = 'flex';
   document.getElementById('password-input').value = '';
