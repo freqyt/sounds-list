@@ -75,7 +75,8 @@ const macData = {
           "includes": "ACE, Bazille, Diva, Hive, Repro-1 & 5, Zebra3",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "u-He"
         }
       ],
       "tier40": [
