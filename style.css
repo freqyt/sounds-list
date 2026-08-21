@@ -542,16 +542,10 @@ html, body {
 ═══════════════════════════════════════════════════════════ */
 .sub-filter-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.35rem;
-  overflow-x: auto;
-  padding: 0.25rem 0 0.15rem;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.sub-filter-bar::-webkit-scrollbar {
-  display: none;
+  padding: 0.35rem 0 0.15rem;
 }
 
 .sub-filter-pill {
