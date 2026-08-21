@@ -5,8 +5,8 @@
 ═══════════════════════════════════════════════════════════ */
 
 const STORAGE_KEYS = {
-  windows:      'plcat_windows_v1',
-  mac:          'plcat_mac_v1',
+  windows:      'plcat_windows_v2',
+  mac:          'plcat_mac_v2',
   passwordHash: 'plcat_pw_hash',
   githubToken:  'plcat_github_token',
   githubRepo:   'plcat_github_repo'
@@ -257,15 +257,37 @@ function resetPlatformToDefault(platform) {
   localStorage.removeItem(STORAGE_KEYS[platform]);
 }
 
-/* ── Normalise Helpers ─────────────────────────────────── */
+/* ── Normalise & Sanitise Helpers ──────────────────────── */
+
+function cleanReleaseName(raw) {
+  if (!raw || typeof raw !== 'string') return '';
+  let s = raw;
+  s = s.replace(/\[\s*rutracker[^\s\]]*\s*\]/gi, '');
+  s = s.replace(/\(\s*rutracker[^\s\)]*\s*\)/gi, '');
+  s = s.replace(/rutracker(-\d+|\.\w+)?/gi, '');
+  s = s.replace(/\[\s*torrent[^\s\]]*\s*\]/gi, '');
+  s = s.replace(/\.torrent$/gi, '');
+  s = s.replace(/\[\s*(audionews|audioz|vstclub|peertracker)[^\]]*\]/gi, '');
+  s = s.replace(/\[\s*\d{5,}\s*\]/g, '');
+  s = s.replace(/\[\s*(R2R|V\.R|VR|dada|SYNTHiC4TE|DECiBEL|AudioP2P|MAGNETRiXX|FANTASTiC|DISCOVER|AUDiO|Repack)\s*\]/gi, '');
+  s = s.replace(/\[\s*kontakt[^\s\]]*\s*\]/gi, '');
+  s = s.replace(/\[\s*\d{2}\.\d{4}\s*\]/g, '');
+  s = s.replace(/\s*\]\s*$/, '');
+  s = s.replace(/\s*\d+\]\s*$/, '');
+  s = s.replace(/\s+/g, ' ').trim();
+  s = s.replace(/\s*-\s*$/, '').trim();
+  s = s.replace(/^\s*-\s*/, '').trim();
+  s = s.replace(/\s*-\s*-\s*/g, ' - ');
+  return s;
+}
 
 function normalizeItem(item) {
-  if (typeof item === 'string') return { name: item, badges: [], note: '', image: '', tags: '', price: undefined };
+  if (typeof item === 'string') return { name: cleanReleaseName(item), badges: [], note: '', image: '', tags: '', price: undefined };
   const badges = Array.isArray(item.badges)
     ? [...item.badges]
     : (item.badge ? [item.badge] : []);
   return {
-    name: item.name || '',
+    name: cleanReleaseName(item.name || ''),
     price: (item.price !== undefined && item.price !== null && item.price !== '') ? Number(item.price) : undefined,
     badges,
     note: item.note || '',
@@ -279,7 +301,7 @@ function normalizeBundle(b) {
     ? [...b.badges]
     : (b.badge ? [b.badge] : []);
   return {
-    name:     b.name     || '',
+    name:     cleanReleaseName(b.name || ''),
     price:    Number(b.price) || 0,
     includes: b.includes || '',
     note:     b.note     || '',
