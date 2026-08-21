@@ -18,7 +18,7 @@ const macData = {
   "categories": {
     "instruments": {
       "label": "Instruments",
-      "icon": "🎹",
+      "icon": "",
       "bundles": [
         {
           "name": "Arturia Bundle",
@@ -234,7 +234,7 @@ const macData = {
     },
     "fx": {
       "label": "FX & Mixing",
-      "icon": "🎛️",
+      "icon": "",
       "bundles": [
         {
           "name": "Starter Bundle",
@@ -359,7 +359,7 @@ const macData = {
     },
     "daws": {
       "label": "DAWs",
-      "icon": "💻",
+      "icon": "",
       "bundles": [],
       "tier40": [
         "Ableton Live 12",
@@ -376,7 +376,7 @@ const macData = {
     },
     "software": {
       "label": "Software",
-      "icon": "🖥️",
+      "icon": "",
       "bundles": [
         {
           "name": "Editing Bundle",

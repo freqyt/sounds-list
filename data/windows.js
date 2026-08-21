@@ -18,7 +18,7 @@ const windowsData = {
   "categories": {
     "instruments": {
       "label": "Instruments",
-      "icon": "🎹",
+      "icon": "",
       "bundles": [
         {
           "name": "Arturia Bundle",
@@ -233,7 +233,7 @@ const windowsData = {
     },
     "fx": {
       "label": "FX & Mixing",
-      "icon": "🎛️",
+      "icon": "",
       "bundles": [
         {
           "name": "Starter Bundle",
@@ -364,7 +364,7 @@ const windowsData = {
     },
     "daws": {
       "label": "DAWs",
-      "icon": "💻",
+      "icon": "",
       "bundles": [],
       "tier40": [
         "Ableton Live 12",
@@ -383,7 +383,7 @@ const windowsData = {
     },
     "software": {
       "label": "Software",
-      "icon": "🖥️",
+      "icon": "",
       "bundles": [
         {
           "name": "Editing Bundle",
