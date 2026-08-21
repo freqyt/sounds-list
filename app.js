@@ -666,9 +666,9 @@ function renderCatalogue() {
 
       let sectionInner = '';
       if (matchingBundles.length > 0) {
-        sectionInner += `<div class="bundles-grid" style="margin-bottom: 0.85rem;">${matchingBundles.map(b => renderBundleCard(b, '', 'banks')).join('')}</div>`;
+        sectionInner += `<div class="bundles-grid" style="margin-bottom: 0.85rem;">${matchingBundles.map(b => renderBundleCard(b, '', 'banks', vstName)).join('')}</div>`;
       }
-      sectionInner += `<div class="plugins-grid">${items.map(item => renderPluginCard(item, '', '$30', 'banks')).join('')}</div>`;
+      sectionInner += `<div class="plugins-grid">${items.map(item => renderPluginCard(item, '', '$30', 'banks', vstName)).join('')}</div>`;
 
       html += `
         <section class="section vst-bank-section">
@@ -838,13 +838,21 @@ function renderThumbnailHtml(imageStr, isBundle = false) {
 
 const INFO_SVG = `<svg class="info-svg" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.8"></circle><line x1="8" y1="7.2" x2="8" y2="11.5"></line><circle cx="8" cy="4.5" r="0.75" fill="currentColor"></circle></svg>`;
 
-function renderBundleCard(bundle, q, catKey = '') {
+function renderBundleCard(bundle, q, catKey = '', vstContext = '') {
   const n = normalizeBundle(bundle);
   const cartKey = getCartItemKey('bundle', n.name, 'Bundle');
   const inCart = state.cart.some(item => item.id === cartKey);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, true);
   const noteHtml = n.note ? `<span class="bundle-note-inline">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
+
+  // Clean title for display inside VST section (e.g. "Analog Lab Bank Suite" -> "Bank Suite")
+  let displayName = n.name;
+  if (vstContext && !q) {
+    if (displayName.toLowerCase().startsWith(vstContext.toLowerCase() + ' ')) {
+      displayName = displayName.substring(vstContext.length + 1).trim();
+    }
+  }
 
   return `
     <article
@@ -855,7 +863,7 @@ function renderBundleCard(bundle, q, catKey = '') {
       <div class="bundle-card-top">
         <div class="bundle-header-left">
           ${thumbHtml}
-          <div class="bundle-name">${highlight(n.name, q)} ${badgesHtml}</div>
+          <div class="bundle-name">${highlight(displayName, q)} ${badgesHtml}</div>
         </div>
         <div class="bundle-card-top-right">
           <div class="bundle-price">$${n.price}</div>
@@ -867,7 +875,7 @@ function renderBundleCard(bundle, q, catKey = '') {
   `;
 }
 
-function renderPluginCard(item, q, tier = '$40', catKey = '') {
+function renderPluginCard(item, q, tier = '$40', catKey = '', vstContext = '') {
   const n = normalizeItem(item);
   const numPrice = (n.price !== undefined && n.price !== null && n.price !== '') ? Number(n.price) : (Number(tier.replace('$', '')) || 40);
   const displayTier = n.price !== undefined ? `$${n.price}` : tier;
@@ -879,6 +887,16 @@ function renderPluginCard(item, q, tier = '$40', catKey = '') {
   const isBanks = catKey === 'banks' || state.activeCategory === 'banks' || n.price !== undefined;
   const priceTagHtml = isBanks ? `<span class="plugin-price-tag">$${numPrice}</span>` : '';
 
+  // Clean title for display inside VST section (e.g. "Analog Lab - Volume 1" -> "Volume 1")
+  let displayName = n.name;
+  if (vstContext && !q) {
+    if (displayName.toLowerCase().startsWith(vstContext.toLowerCase() + ' - ')) {
+      displayName = displayName.substring(vstContext.length + 3).trim();
+    } else if (displayName.toLowerCase().startsWith(vstContext.toLowerCase() + ' ')) {
+      displayName = displayName.substring(vstContext.length + 1).trim();
+    }
+  }
+
   return `
     <div
       class="plugin-card ${n.note ? 'has-note' : ''} ${inCart ? 'in-cart' : ''}"
@@ -888,7 +906,7 @@ function renderPluginCard(item, q, tier = '$40', catKey = '') {
       <div class="plugin-card-left">
         ${thumbHtml}
         <div class="plugin-info-wrap">
-          <span class="plugin-name">${highlight(n.name, q)}</span>
+          <span class="plugin-name">${highlight(displayName, q)}</span>
           ${noteHtml}
         </div>
       </div>
