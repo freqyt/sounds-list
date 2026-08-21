@@ -803,14 +803,35 @@ const windowsData = {
       ],
       "tier40": [],
       "tier30": [
-        "After Effects",
-        "Audition",
-        "Davinci Resolve",
-        "Illustrator",
-        "InDesign",
+        {
+          "name": "After Effects",
+          "tags": "Adobe"
+        },
+        {
+          "name": "Audition",
+          "tags": "Adobe"
+        },
+        {
+          "name": "Davinci Resolve",
+          "tags": "Blackmagic Design"
+        },
+        {
+          "name": "Illustrator",
+          "tags": "Adobe"
+        },
+        {
+          "name": "InDesign",
+          "tags": "Adobe"
+        },
         "Lightroom",
-        "Photoshop",
-        "Premiere Pro",
+        {
+          "name": "Photoshop",
+          "tags": "Adobe"
+        },
+        {
+          "name": "Premiere Pro",
+          "tags": "Adobe"
+        },
         "VEGAS Pro"
       ],
       "tier20": []
