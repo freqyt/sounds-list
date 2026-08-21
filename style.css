@@ -637,15 +637,15 @@ html.has-active-session #catalogue-screen {
 }
 
 .bundle-note {
-  font-size: 0.76rem;
-  color: #93c5fd;
-  background: rgba(59, 130, 246, 0.08);
-  border: 1px solid rgba(59, 130, 246, 0.22);
-  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-2);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.28rem 0.55rem;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   line-height: 1.35;
 }
 
@@ -748,33 +748,31 @@ html.has-active-session #catalogue-screen {
 }
 
 .plugin-note-tag {
-  color: #93c5fd;
+  color: var(--text-muted);
   font-size: 0.72rem;
   line-height: 1.25;
-  font-weight: 500;
-  opacity: 0.95;
+  font-weight: 450;
+  opacity: 0.9;
   word-break: break-word;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  margin-top: 0.1rem;
+  margin-top: 0.12rem;
 }
 
-.info-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.info-svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.bundle-note .info-svg {
   width: 13px;
   height: 13px;
-  font-size: 0.6rem;
-  font-weight: 800;
-  font-style: normal;
-  border-radius: 50%;
-  background: rgba(59, 130, 246, 0.25);
-  color: #93c5fd;
-  border: 1px solid rgba(96, 165, 250, 0.4);
-  line-height: 1;
-  flex-shrink: 0;
+  color: var(--text-2);
+  opacity: 0.9;
 }
 
 /* ═══════════════════════════════════════════════════════════

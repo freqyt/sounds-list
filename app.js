@@ -333,11 +333,13 @@ function renderThumbnailHtml(imageStr, isBundle = false) {
   return `<div class="${isBundle ? 'bundle-thumb-wrap' : 'plugin-thumb-wrap'}"><span class="${isBundle ? 'bundle-thumb-icon' : 'plugin-thumb-icon'}">${esc(clean)}</span></div>`;
 }
 
+const INFO_SVG = `<svg class="info-svg" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.8"></circle><line x1="8" y1="7.2" x2="8" y2="11.5"></line><circle cx="8" cy="4.5" r="0.75" fill="currentColor"></circle></svg>`;
+
 function renderBundleCard(bundle, q) {
   const n = normalizeBundle(bundle);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, true);
-  const noteHtml = n.note ? `<div class="bundle-note"><span class="info-icon">ℹ</span> ${esc(n.note)}</div>` : '';
+  const noteHtml = n.note ? `<div class="bundle-note">${INFO_SVG}<span>${esc(n.note)}</span></div>` : '';
 
   return `
     <article class="bundle-card">
@@ -360,7 +362,7 @@ function renderPluginCard(item, q) {
   const n = normalizeItem(item);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, false);
-  const noteHtml = n.note ? `<span class="plugin-note-tag"><span class="info-icon">ℹ</span> ${esc(n.note)}</span>` : '';
+  const noteHtml = n.note ? `<span class="plugin-note-tag">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
 
   return `
     <div class="plugin-card ${n.note ? 'has-note' : ''}">
