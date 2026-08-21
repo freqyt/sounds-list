@@ -127,6 +127,7 @@ const macData = {
         }
       ],
       "tier30": [
+        "Absynth 5",
         "Addictive Drums",
         "Addictive Keys",
         {
