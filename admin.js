@@ -10,6 +10,7 @@ const BADGES = ['NEW', 'HOT', 'SALE', 'BEST SELLER'];
 const adm = {
   platform: 'windows',
   category: 'instruments',
+  view: 'catalogue', // 'catalogue' | 'deals'
   data: { windows: null, mac: null }
 };
 
@@ -87,6 +88,7 @@ async function bootDashboard() {
   adm.data.mac     = clone(getPlatformData('mac'));
   adm.platform     = 'windows';
   adm.category     = firstCatKey('windows');
+  adm.view         = 'catalogue';
 
   document.getElementById('login-overlay').style.display = 'none';
   document.getElementById('dashboard').style.display = 'flex';
@@ -116,7 +118,7 @@ async function bootDashboard() {
 
       if (updated) {
         renderSidebar();
-        renderPanel();
+        if (adm.view === 'deals') renderDealsPanel(); else renderPanel();
       }
     } catch(e) {
       console.warn('Background GitHub sync failed:', e);
@@ -135,37 +137,283 @@ function firstCatKey(platform) {
 // ── Platform switch ───────────────────────────────────────
 function switchPlatform(platform) {
   adm.platform = platform;
-  adm.category = firstCatKey(platform);
-
   ['windows','mac'].forEach(p => {
     document.getElementById(`plat-btn-${p}`)
       .classList.toggle('active', p === platform);
   });
 
   renderSidebar();
-  renderPanel();
+  if (adm.view === 'deals') {
+    renderDealsPanel();
+  } else {
+    renderPanel();
+  }
 }
 
 // ── Category switch ───────────────────────────────────────
 function switchCategory(key) {
+  adm.view = 'catalogue';
   adm.category = key;
-  document.querySelectorAll('.sb-cat').forEach(el => {
-    el.classList.toggle('active', el.dataset.key === key);
-  });
+  renderSidebar();
   renderPanel();
+}
+
+function openDealsView() {
+  adm.view = 'deals';
+  renderSidebar();
+  renderDealsPanel();
 }
 
 // ── Sidebar ───────────────────────────────────────────────
 function renderSidebar() {
   const cats = adm.data[adm.platform].categories;
   const container = document.getElementById('sb-categories');
+  const dealsBtn = document.getElementById('sb-deals-btn');
+  if (dealsBtn) {
+    dealsBtn.classList.toggle('active', adm.view === 'deals');
+  }
+
   container.innerHTML = Object.entries(cats).map(([key, cat]) => `
     <button
-      class="sb-item sb-cat ${key === adm.category ? 'active' : ''}"
+      class="sb-item sb-cat ${adm.view === 'catalogue' && key === adm.category ? 'active' : ''}"
       data-key="${key}"
       onclick="switchCategory('${key}')"
     >${cat.icon} ${cat.label}</button>
   `).join('');
+}
+
+// ── Deals & Promotions Panel ──────────────────────────────
+function getPlatformDeal() {
+  const platData = adm.data[adm.platform];
+  if (!platData.deal) {
+    platData.deal = {
+      enabled: true,
+      type: 'bundle_x_for_y',
+      badge: '🔥 SPECIAL DEAL',
+      title: 'Any 3 Plugins for $100',
+      description: 'Pick any 3 single plugins ($40 or $30 tier) and get all 3 for just $100 total!',
+      percentOff: 20,
+      bundleQty: 3,
+      bundlePrice: 100,
+      bogoBuyQty: 2,
+      bogoGetQty: 1,
+      customPrice: 75,
+      customIncludes: 'Omnisphere, Keyscape, Trilian + 200 Preset Banks',
+      customNote: 'Includes all updates & expansion banks'
+    };
+  }
+  return platData.deal;
+}
+
+function renderDealsPanel() {
+  const main = document.getElementById('admin-main');
+  const deal = getPlatformDeal();
+  const platName = adm.platform === 'windows' ? 'Windows' : 'Mac';
+
+  let typeSpecificFields = '';
+
+  if (deal.type === 'bundle_x_for_y') {
+    typeSpecificFields = `
+      <div class="form-grid-2">
+        <div class="form-field">
+          <label class="form-label">Number of Plugins (Quantity)</label>
+          <input type="number" min="2" max="20" class="form-input" value="${deal.bundleQty || 3}" oninput="updateDealField('bundleQty', this.value)" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Bundle Price ($ USD)</label>
+          <input type="number" min="1" max="9999" class="form-input" value="${deal.bundlePrice || 100}" oninput="updateDealField('bundlePrice', this.value)" />
+        </div>
+      </div>
+    `;
+  } else if (deal.type === 'percent_off') {
+    typeSpecificFields = `
+      <div class="form-field">
+        <label class="form-label">Discount Percentage (% Off)</label>
+        <input type="number" min="1" max="99" class="form-input" value="${deal.percentOff || 20}" oninput="updateDealField('percentOff', this.value)" />
+      </div>
+    `;
+  } else if (deal.type === 'bogo') {
+    typeSpecificFields = `
+      <div class="form-grid-2">
+        <div class="form-field">
+          <label class="form-label">Buy Quantity</label>
+          <input type="number" min="1" max="10" class="form-input" value="${deal.bogoBuyQty || 2}" oninput="updateDealField('bogoBuyQty', this.value)" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Get Free Quantity</label>
+          <input type="number" min="1" max="10" class="form-input" value="${deal.bogoGetQty || 1}" oninput="updateDealField('bogoGetQty', this.value)" />
+        </div>
+      </div>
+    `;
+  } else if (deal.type === 'spotlight_custom') {
+    typeSpecificFields = `
+      <div class="form-grid-2">
+        <div class="form-field">
+          <label class="form-label">Custom Deal Price ($ USD)</label>
+          <input type="number" min="1" max="9999" class="form-input" value="${deal.customPrice || 75}" oninput="updateDealField('customPrice', this.value)" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Extra Note / Highlights</label>
+          <input type="text" class="form-input" value="${esc(deal.customNote || '')}" placeholder="e.g. Includes 200 expansion banks" oninput="updateDealField('customNote', this.value)" />
+        </div>
+      </div>
+    `;
+  }
+
+  // Live Preview calculation
+  let previewRight = '';
+  if (deal.type === 'spotlight_custom') {
+    previewRight = `<div class="spotlight-price" style="font-size:1.3rem; font-weight:800; color:var(--accent);">$${deal.customPrice || 75}</div><button class="hbtn hbtn-primary">+ Add Deal</button>`;
+  } else if (deal.type === 'bundle_x_for_y') {
+    previewRight = `<div class="spotlight-deal-tag" style="display:flex; gap:0.35rem; align-items:baseline;"><span style="color:var(--text-2); font-weight:700;">${deal.bundleQty || 3} for</span><span style="font-size:1.3rem; font-weight:800; color:var(--accent);">$${deal.bundlePrice || 100}</span></div><span class="admin-tag">Auto-applies in cart</span>`;
+  } else if (deal.type === 'percent_off') {
+    previewRight = `<div class="spotlight-deal-tag"><span style="font-size:1.3rem; font-weight:800; color:var(--accent);">${deal.percentOff || 20}% OFF</span></div><span class="admin-tag">Auto-applies in cart</span>`;
+  } else if (deal.type === 'bogo') {
+    previewRight = `<div class="spotlight-deal-tag"><span style="font-size:1.1rem; font-weight:800; color:var(--accent);">Buy ${deal.bogoBuyQty || 2} Get ${deal.bogoGetQty || 1} Free</span></div><span class="admin-tag">Auto-applies in cart</span>`;
+  }
+
+  main.innerHTML = `
+    <div class="deals-container">
+      <div class="deals-header-card">
+        <div class="deals-title-row">
+          <div class="deals-main-title">
+            <span>⚡ Deals & Promotions Manager</span>
+            <span class="admin-tag">${platName}</span>
+          </div>
+          <label class="deals-toggle-wrap">
+            <input type="checkbox" ${deal.enabled ? 'checked' : ''} onchange="toggleDealEnabled(this.checked)" />
+            <span>${deal.enabled ? 'Promotion Active' : 'Promotion Disabled'}</span>
+          </label>
+        </div>
+        <p class="deals-subtitle">
+          Configure storefront deals, multi-buy bundles (e.g. 3 for $100), % off storewide discounts, or BOGO deals. These automatically calculate in customers' carts and display in the top spotlight banner!
+        </p>
+      </div>
+
+      <div class="deals-type-grid">
+        <div class="deal-type-card ${deal.type === 'bundle_x_for_y' ? 'active' : ''}" onclick="setDealType('bundle_x_for_y')">
+          <div class="deal-type-icon">📦</div>
+          <div class="deal-type-name">Multi-Buy Bundle</div>
+          <div class="deal-type-desc">e.g. Any 3 Plugins for $100. Auto-bundles in cart.</div>
+        </div>
+
+        <div class="deal-type-card ${deal.type === 'percent_off' ? 'active' : ''}" onclick="setDealType('percent_off')">
+          <div class="deal-type-icon">🏷️</div>
+          <div class="deal-type-name">Percentage Off</div>
+          <div class="deal-type-desc">e.g. 20% OFF Storewide. Auto-discounts cart total.</div>
+        </div>
+
+        <div class="deal-type-card ${deal.type === 'bogo' ? 'active' : ''}" onclick="setDealType('bogo')">
+          <div class="deal-type-icon">🎁</div>
+          <div class="deal-type-name">Buy X Get Y Free</div>
+          <div class="deal-type-desc">e.g. Buy 2 Get 1 Free. Lowest item becomes $0.</div>
+        </div>
+
+        <div class="deal-type-card ${deal.type === 'spotlight_custom' ? 'active' : ''}" onclick="setDealType('spotlight_custom')">
+          <div class="deal-type-icon">⭐</div>
+          <div class="deal-type-name">Custom Bundle Deal</div>
+          <div class="deal-type-desc">Featured spotlight bundle with 1-click add button.</div>
+        </div>
+      </div>
+
+      <div class="deals-form-card">
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Badge Tag (Banner Pill)</label>
+            <input type="text" class="form-input" value="${esc(deal.badge || '🔥 SPECIAL DEAL')}" oninput="updateDealField('badge', this.value)" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Deal / Promotion Title</label>
+            <input type="text" class="form-input" value="${esc(deal.title || '')}" oninput="updateDealField('title', this.value)" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Deal Description / Included Items</label>
+          <input type="text" class="form-input" value="${esc(deal.description || deal.customIncludes || '')}" oninput="updateDealField('description', this.value)" />
+        </div>
+
+        ${typeSpecificFields}
+
+        <div class="deals-preview-wrap">
+          <label class="form-label" style="margin-bottom:0.75rem; display:block;">Live Storefront Preview</label>
+          <div style="background:linear-gradient(135deg, rgba(15,23,42,0.9), rgba(3,7,18,0.95)); border:1px solid rgba(59,130,246,0.35); border-radius:14px; padding:1.25rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
+              <span class="badge" style="background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; font-size:0.65rem; padding:0.2rem 0.55rem; border-radius:100px;">${esc(deal.badge || '🔥 SPECIAL DEAL')}</span>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+              <div style="display:flex; align-items:center; gap:0.9rem;">
+                <div style="font-size:1.8rem;">💎</div>
+                <div>
+                  <h4 style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">${esc(deal.title || 'Special Promotion')}</h4>
+                  <p style="font-size:0.84rem; color:var(--text-2); margin-bottom:0.2rem;">${esc(deal.description || 'Pick any items to claim special pricing!')}</p>
+                  ${deal.customNote ? `<div style="font-size:0.75rem; color:var(--text-muted);">ⓘ ${esc(deal.customNote)}</div>` : ''}
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:0.75rem; flex-shrink:0;">
+                ${previewRight}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="deals-actions-bar">
+          <button class="hbtn" onclick="copyDealToBothPlatforms()">🔄 Copy Deal to Both Windows & Mac</button>
+          <button class="hbtn hbtn-primary" onclick="saveDealsChanges()">✓ Save Deal Configuration</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function setDealType(type) {
+  const deal = getPlatformDeal();
+  deal.type = type;
+  if (type === 'bundle_x_for_y' && (!deal.title || deal.title === 'Special Promotion' || deal.title.includes('%'))) {
+    deal.title = `Any ${deal.bundleQty || 3} Plugins for $${deal.bundlePrice || 100}`;
+    deal.description = `Pick any ${deal.bundleQty || 3} single plugins and get all ${deal.bundleQty || 3} for just $${deal.bundlePrice || 100} total!`;
+  } else if (type === 'percent_off') {
+    deal.title = `${deal.percentOff || 20}% OFF Storewide Flash Sale`;
+    deal.description = 'Limited time discount applied automatically to your entire order at checkout!';
+  } else if (type === 'bogo') {
+    deal.title = `Buy ${deal.bogoBuyQty || 2} Get ${deal.bogoGetQty || 1} Free`;
+    deal.description = `Add any ${(deal.bogoBuyQty || 2) + (deal.bogoGetQty || 1)} plugins to your order to get the lowest priced item free!`;
+  } else if (type === 'spotlight_custom') {
+    deal.title = 'Spectrasonics Bundle Deal';
+    deal.description = 'Omnisphere, Keyscape, Trilian + 200 Preset Banks';
+    deal.customPrice = 75;
+  }
+  savePlatformData(adm.platform, adm.data[adm.platform]);
+  renderDealsPanel();
+}
+
+function updateDealField(field, val) {
+  const deal = getPlatformDeal();
+  deal[field] = val;
+  savePlatformData(adm.platform, adm.data[adm.platform]);
+}
+
+function toggleDealEnabled(checked) {
+  const deal = getPlatformDeal();
+  deal.enabled = checked;
+  savePlatformData(adm.platform, adm.data[adm.platform]);
+  renderDealsPanel();
+}
+
+function copyDealToBothPlatforms() {
+  const deal = getPlatformDeal();
+  adm.data.windows.deal = clone(deal);
+  adm.data.mac.deal = clone(deal);
+  savePlatformData('windows', adm.data.windows);
+  savePlatformData('mac', adm.data.mac);
+  alert('🎉 Deal successfully copied to both Windows and Mac catalogues!\nRemember to click "🚀 Publish Live" to deploy to GitHub.');
+  renderDealsPanel();
+}
+
+function saveDealsChanges() {
+  savePlatformData(adm.platform, adm.data[adm.platform]);
+  alert('✓ Deal saved! Click "🚀 Publish Live" in the top bar to push worldwide.');
+  renderDealsPanel();
 }
 
 // ── Main panel ────────────────────────────────────────────

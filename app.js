@@ -211,7 +211,7 @@ function matchesBundleSearch(bundle, q) {
   );
 }
 
-// ── Interactive Cart / Order Builder ──────────────────────
+// ── Interactive Cart / Order Builder & Promotion Engine ──
 
 function getCartItemKey(type, name, tier) {
   return `${type}_${(name || '').trim()}_${tier || ''}`.toLowerCase();
@@ -241,16 +241,116 @@ function clearCart() {
   updateCartUI();
 }
 
+function calculateCartTotals() {
+  const data = getData();
+  const deal = data.deal || null;
+  const originalTotal = state.cart.reduce((sum, item) => sum + (item.price || 0), 0);
+
+  if (!deal || !deal.enabled || state.cart.length === 0) {
+    return {
+      originalTotal,
+      finalTotal: originalTotal,
+      discount: 0,
+      promoLabel: '',
+      hasPromo: false
+    };
+  }
+
+  // 1. Percentage Off (% Off Storewide)
+  if (deal.type === 'percent_off') {
+    const pct = Number(deal.percentOff) || 0;
+    if (pct > 0) {
+      const discount = Math.round((originalTotal * pct) / 100);
+      const finalTotal = Math.max(0, originalTotal - discount);
+      return {
+        originalTotal,
+        finalTotal,
+        discount,
+        promoLabel: `${pct}% OFF Deal Applied (-$${discount})`,
+        hasPromo: discount > 0
+      };
+    }
+  }
+
+  // 2. Multi-Buy Deal (e.g. Any 3 plugins for $100)
+  if (deal.type === 'bundle_x_for_y') {
+    const qty = Number(deal.bundleQty) || 3;
+    const bundlePrice = Number(deal.bundlePrice) || 100;
+    // Plugins eligible for multi-buy (single plugins)
+    const eligible = state.cart.filter(item => item.type === 'plugin' || item.price <= 40);
+    const bundlesCount = Math.floor(eligible.length / qty);
+
+    if (bundlesCount > 0) {
+      // Sort eligible items by price descending so highest value gets bundled
+      const sorted = [...eligible].sort((a, b) => b.price - a.price);
+      const bundledItems = sorted.slice(0, bundlesCount * qty);
+      const bundledOriginalVal = bundledItems.reduce((sum, i) => sum + i.price, 0);
+      const bundledPromoVal = bundlesCount * bundlePrice;
+      const discount = Math.max(0, bundledOriginalVal - bundledPromoVal);
+      const finalTotal = Math.max(0, originalTotal - discount);
+      return {
+        originalTotal,
+        finalTotal,
+        discount,
+        promoLabel: `${deal.title || `Any ${qty} for $${bundlePrice}`} (-$${discount})`,
+        hasPromo: discount > 0
+      };
+    }
+  }
+
+  // 3. Buy X Get Y Free (BOGO)
+  if (deal.type === 'bogo') {
+    const buyQty = Number(deal.bogoBuyQty) || 2;
+    const getQty = Number(deal.bogoGetQty) || 1;
+    const cycle = buyQty + getQty;
+    const eligible = state.cart.filter(item => item.type === 'plugin' || item.price <= 40);
+    const freeCount = Math.floor(eligible.length / cycle) * getQty;
+
+    if (freeCount > 0) {
+      // Free items are the lowest priced items in the eligible group
+      const sorted = [...eligible].sort((a, b) => a.price - b.price);
+      const freeItems = sorted.slice(0, freeCount);
+      const discount = freeItems.reduce((sum, i) => sum + i.price, 0);
+      const finalTotal = Math.max(0, originalTotal - discount);
+      return {
+        originalTotal,
+        finalTotal,
+        discount,
+        promoLabel: `Buy ${buyQty} Get ${getQty} Free (-$${discount})`,
+        hasPromo: discount > 0
+      };
+    }
+  }
+
+  return {
+    originalTotal,
+    finalTotal: originalTotal,
+    discount: 0,
+    promoLabel: '',
+    hasPromo: false
+  };
+}
+
 function updateCartUI() {
   const bar = document.getElementById('order-cart-bar');
   const countEl = document.getElementById('cart-count');
   const totalEl = document.getElementById('cart-total');
 
   const totalCount = state.cart.length;
-  const totalPrice = state.cart.reduce((sum, item) => sum + (item.price || 0), 0);
+  const totals = calculateCartTotals();
 
   if (countEl) countEl.textContent = `${totalCount} item${totalCount === 1 ? '' : 's'} selected`;
-  if (totalEl) totalEl.textContent = `$${totalPrice}`;
+  if (totalEl) {
+    if (totals.hasPromo) {
+      totalEl.innerHTML = `
+        <span class="cart-orig-strike">$${totals.originalTotal}</span>
+        <span class="cart-promo-total">$${totals.finalTotal}</span>
+        <span class="cart-savings-pill">Save $${totals.discount}</span>
+      `;
+    } else {
+      totalEl.textContent = `$${totals.finalTotal}`;
+    }
+  }
 
   if (bar) {
     bar.classList.toggle('visible', totalCount > 0);
@@ -282,13 +382,19 @@ function updateCartUI() {
 async function copyOrderList() {
   if (state.cart.length === 0) return;
   const platName = state.platform === 'windows' ? 'Windows' : 'Mac';
+  const totals = calculateCartTotals();
+
   const lines = state.cart.map(item => {
     const tag = item.type === 'bundle' ? 'Bundle' : item.tier;
     return `• ${item.name} (${tag}) - $${item.price}`;
   });
-  const total = state.cart.reduce((sum, item) => sum + (item.price || 0), 0);
 
-  const orderText = `🎵 FREQ Sounds List Order (${platName}):\n${lines.join('\n')}\n━━━━━━━━━━━━━━━━━━\n💰 Total: $${total}`;
+  let orderText = `🎵 FREQ Sounds List Order (${platName}):\n${lines.join('\n')}\n━━━━━━━━━━━━━━━━━━\n`;
+  if (totals.hasPromo) {
+    orderText += `🏷️ Promo Applied: ${totals.promoLabel}\n💰 Total: $${totals.finalTotal} (You saved $${totals.discount}!)\n`;
+  } else {
+    orderText += `💰 Total: $${totals.finalTotal}\n`;
+  }
 
   try {
     await navigator.clipboard.writeText(orderText);
@@ -418,10 +524,133 @@ function renderCatalogue() {
   let html = '';
 
   // Featured Spotlight Banner (at top of main view)
-  const spotlightBundle = getSpotlightBundle(data);
-  if (spotlightBundle) {
-    html += renderSpotlightBanner(spotlightBundle);
+  const spotlightHtml = renderSpotlightBanner();
+  if (spotlightHtml) {
+    html += spotlightHtml;
   }
+
+  // 1. Bundles (custom manual ordering preserved)
+  if (cat.bundles && cat.bundles.length > 0) {
+    totalVisible += cat.bundles.length;
+    html += renderSection('Bundles', cat.bundles.map(b => renderBundleCard(b, '', state.activeCategory)).join(''), 'bundles-grid');
+  }
+
+  // 2. $40 Tier (Always Alphabetical)
+  if (cat.tier40 && cat.tier40.length > 0) {
+    const sorted = sortItemsAZ(cat.tier40);
+    totalVisible += sorted.length;
+    html += renderSection('$40 Each', sorted.map(item => renderPluginCard(item, '', '$40', state.activeCategory)).join(''), 'plugins-grid');
+  }
+
+  // 3. $30 Tier (Always Alphabetical)
+  if (cat.tier30 && cat.tier30.length > 0) {
+    const sorted = sortItemsAZ(cat.tier30);
+    totalVisible += sorted.length;
+    html += renderSection('$30 Each', sorted.map(item => renderPluginCard(item, '', '$30', state.activeCategory)).join(''), 'plugins-grid');
+  }
+
+  // 4. $20 Tier (Always Alphabetical)
+  if (cat.tier20 && cat.tier20.length > 0) {
+    const sorted = sortItemsAZ(cat.tier20);
+    totalVisible += sorted.length;
+    html += renderSection('$20 Each', sorted.map(item => renderPluginCard(item, '', '$20', state.activeCategory)).join(''), 'plugins-grid');
+  }
+
+  // Empty State
+  if (totalVisible === 0) {
+    html = `
+      <div class="empty-state">
+        <h3>No products yet</h3>
+        <p>This category has no items listed.</p>
+      </div>
+    `;
+  }
+
+  main.innerHTML = html;
+  updateCartUI();
+}
+
+// ── Spotlight Banner Helper ──────────────────────────────
+
+function renderSpotlightBanner() {
+  const data = getData();
+  const deal = data.deal;
+  if (!deal || !deal.enabled) return '';
+
+  const badgeText = deal.badge || '🔥 FEATURED DEAL';
+  const title = deal.title || 'Special Promotion';
+  const desc = deal.description || deal.customIncludes || '';
+  const note = deal.customNote || '';
+  const type = deal.type || 'bundle_x_for_y';
+
+  let rightHtml = '';
+  if (type === 'spotlight_custom') {
+    const price = Number(deal.customPrice) || 75;
+    const cartKey = getCartItemKey('bundle', title, 'Bundle');
+    const inCart = state.cart.some(item => item.id === cartKey);
+    rightHtml = `
+      <div class="spotlight-price">$${price}</div>
+      <button
+        id="spotlight-add-btn"
+        class="spotlight-add-btn ${inCart ? 'in-cart' : ''}"
+        data-cart-key="${esc(cartKey)}"
+        onclick="toggleCartItem('bundle', '${ea(title)}', ${price}, 'Bundle', ['DEAL'], '${ea(note)}')"
+      >
+        ${inCart ? '✓ Added' : '+ Add Deal'}
+      </button>
+    `;
+  } else if (type === 'bundle_x_for_y') {
+    const qty = deal.bundleQty || 3;
+    const price = deal.bundlePrice || 100;
+    rightHtml = `
+      <div class="spotlight-deal-tag">
+        <span class="spotlight-deal-qty">${qty} for</span>
+        <span class="spotlight-price">$${price}</span>
+      </div>
+      <span class="spotlight-hint">Auto-applies in cart</span>
+    `;
+  } else if (type === 'percent_off') {
+    const pct = deal.percentOff || 20;
+    rightHtml = `
+      <div class="spotlight-deal-tag">
+        <span class="spotlight-price">${pct}% OFF</span>
+      </div>
+      <span class="spotlight-hint">Auto-applies in cart</span>
+    `;
+  } else if (type === 'bogo') {
+    const buy = deal.bogoBuyQty || 2;
+    const get = deal.bogoGetQty || 1;
+    rightHtml = `
+      <div class="spotlight-deal-tag">
+        <span class="spotlight-price">Buy ${buy} Get ${get} Free</span>
+      </div>
+      <span class="spotlight-hint">Auto-applies in cart</span>
+    `;
+  }
+
+  return `
+    <div class="spotlight-wrap">
+      <div class="spotlight-card spotlight-promo-card">
+        <div class="spotlight-top-tag">
+          <span class="spotlight-badge-pill">${esc(badgeText)}</span>
+        </div>
+        <div class="spotlight-body">
+          <div class="spotlight-left">
+            <div class="spotlight-deal-icon">💎</div>
+            <div class="spotlight-info">
+              <h4 class="spotlight-title">${esc(title)}</h4>
+              <p class="spotlight-desc">${esc(desc)}</p>
+              ${note ? `<div class="spotlight-note">${INFO_SVG}<span>${esc(note)}</span></div>` : ''}
+            </div>
+          </div>
+          <div class="spotlight-right">
+            ${rightHtml}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
 
   // 1. Bundles (custom manual ordering preserved)
   if (cat.bundles && cat.bundles.length > 0) {
