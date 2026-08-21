@@ -8,22 +8,34 @@ const macData = {
         {
           "name": "Arturia Bundle",
           "price": 100,
-          "includes": "Arturia V Collection, Analog Lab & Pigments"
+          "includes": "Arturia V Collection, Analog Lab & Pigments",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "Spectrasonics Bundle",
           "price": 75,
-          "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks"
+          "includes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "ElectraX Bundle",
           "price": 60,
-          "includes": "ElectraX + 200 Custom Banks"
+          "includes": "ElectraX + 200 Custom Banks",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "Serum Bundle",
           "price": 60,
-          "includes": "Serum 2 + 150 Custom Banks"
+          "includes": "Serum 2 + 150 Custom Banks",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "Nexus 5 Complete",
@@ -39,7 +51,7 @@ const macData = {
           "name": "Sonic Extensions Bundle",
           "price": 50,
           "includes": "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
-          "note": "Omnisphere 2.8+ Required"
+          "note": "Cracked Omni 2.8 Required"
         }
       ],
       "tier40": [
@@ -300,11 +312,11 @@ const macData = {
       "tier30": [
         "After Effects",
         "Audition",
-        "Final Cut Pro",
-        "Illustrator",
         "InDesign",
+        "Illustrator",
         "Photoshop",
-        "Premiere Pro"
+        "Premiere Pro",
+        "Final Cut Pro"
       ],
       "tier20": []
     }
