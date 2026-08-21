@@ -251,7 +251,7 @@ function resetPlatformToDefault(platform) {
 /* ── Normalise Helpers ─────────────────────────────────── */
 
 function normalizeItem(item) {
-  if (typeof item === 'string') return { name: item, badges: [], note: '', image: '' };
+  if (typeof item === 'string') return { name: item, badges: [], note: '', image: '', tags: '' };
   const badges = Array.isArray(item.badges)
     ? [...item.badges]
     : (item.badge ? [item.badge] : []);
@@ -259,7 +259,8 @@ function normalizeItem(item) {
     name: item.name || '',
     badges,
     note: item.note || '',
-    image: item.image || item.icon || ''
+    image: item.image || item.icon || '',
+    tags: item.tags || ''
   };
 }
 
@@ -273,17 +274,19 @@ function normalizeBundle(b) {
     includes: b.includes || '',
     note:     b.note     || '',
     badges,
-    image:    b.image    || b.icon || ''
+    image:    b.image    || b.icon || '',
+    tags:     b.tags     || ''
   };
 }
 
 function compactItem(item) {
   const n = normalizeItem(item);
-  if (n.badges.length === 0 && !n.note && !n.image) return n.name;
+  if (n.badges.length === 0 && !n.note && !n.image && !n.tags) return n.name;
   const obj = { name: n.name };
   if (n.badges.length) obj.badges = n.badges;
   if (n.note)          obj.note   = n.note;
   if (n.image)         obj.image  = n.image;
+  if (n.tags)          obj.tags   = n.tags;
   return obj;
 }
 
@@ -293,6 +296,7 @@ function compactBundle(b) {
   if (n.note)          obj.note   = n.note;
   if (n.badges.length) obj.badges = n.badges;
   if (n.image)         obj.image  = n.image;
+  if (n.tags)          obj.tags   = n.tags;
   return obj;
 }
 

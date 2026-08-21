@@ -486,6 +486,10 @@ function itemRow(item, idx, tierKey) {
       <input class="admin-input input-name" type="text"
         value="${ea(norm.name)}" placeholder="Plugin name"
         onchange="updateField('${tierKey}',${idx},'name',this.value)" />
+      <input class="admin-input input-tags" type="text"
+        value="${ea(norm.tags)}" placeholder="🏷️ Search tags (e.g. Adobe, DAW)"
+        title="Search Keywords: customers searching these words will find this product (e.g. Adobe, Synth, Mastering)"
+        onchange="updateField('${tierKey}',${idx},'tags',this.value)" />
       <div class="badge-toggles">${badgeToggles(norm.badges, idx, tierKey)}</div>
       <input class="admin-input input-note" type="text"
         value="${ea(norm.note)}" placeholder="Note (optional)"
@@ -519,6 +523,10 @@ function bundleRow(b, idx, tierKey) {
             value="${norm.price}" min="0" placeholder="0"
             onchange="updateField('${tierKey}',${idx},'price',Number(this.value))" />
         </div>
+        <input class="admin-input input-tags" type="text"
+          value="${ea(norm.tags)}" placeholder="🏷️ Search tags (e.g. Spectrasonics, Keys)"
+          title="Search Keywords — customers searching these words will find this bundle"
+          onchange="updateField('${tierKey}',${idx},'tags',this.value)" />
         <div class="badge-toggles">${badgeToggles(norm.badges, idx, tierKey)}</div>
         <button class="delete-btn" title="Delete bundle"
           onclick="deleteItem('${tierKey}',${idx})">🗑</button>
@@ -625,8 +633,8 @@ function addItem(tierKey, type) {
   // Add new item to the bottom of the list without sorting immediately
   items.push(
     type === 'bundle'
-      ? { name: 'New Bundle', price: 0, includes: '', note: '', badges: [], image: '' }
-      : { name: 'New Plugin', badges: [], note: '', image: '' }
+      ? { name: 'New Bundle', price: 0, includes: '', note: '', badges: [], image: '', tags: '' }
+      : { name: 'New Plugin', badges: [], note: '', image: '', tags: '' }
   );
 
   autoSave();

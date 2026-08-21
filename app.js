@@ -193,20 +193,17 @@ function openFloatingSearch() {
 function matchesSearch(item, q) {
   if (!q) return true;
   const n = normalizeItem(item);
-  return (
-    n.name.toLowerCase().includes(q) ||
-    (n.note && n.note.toLowerCase().includes(q))
-  );
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  const target = `${n.name} ${n.tags || ''} ${n.note || ''} ${n.badges ? n.badges.join(' ') : ''}`.toLowerCase();
+  return words.every(w => target.includes(w));
 }
 
 function matchesBundleSearch(bundle, q) {
   if (!q) return true;
   const n = normalizeBundle(bundle);
-  return (
-    n.name.toLowerCase().includes(q) ||
-    (n.includes && n.includes.toLowerCase().includes(q)) ||
-    (n.note && n.note.toLowerCase().includes(q))
-  );
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  const target = `${n.name} ${n.tags || ''} ${n.includes || ''} ${n.note || ''} ${n.badges ? n.badges.join(' ') : ''}`.toLowerCase();
+  return words.every(w => target.includes(w));
 }
 
 // ── Interactive Cart / Order Builder & Promotion Engine ──
