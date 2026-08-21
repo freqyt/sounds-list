@@ -89,7 +89,7 @@ const windowsData = {
         },
         "Omnisphere 3",
         "Roland Cloud",
-        "Roland Zenology Pro",
+        "Roland ZENOLOGY Pro",
         "Serum 2",
         "Trilian"
       ],
