@@ -35,9 +35,7 @@ function ea(str) {
 }
 
 function highlight(text, query) {
-  if (!query) return esc(text);
-  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  return esc(text).replace(re, '<mark class="highlight">$1</mark>');
+  return esc(text);
 }
 
 function getData() {
@@ -475,12 +473,6 @@ function renderCatalogue() {
   if (q) {
     let totalVisible = 0;
     let html = '';
-
-    html += `
-      <div class="search-results-banner">
-        <span class="search-results-title">🔍 Search results for "<strong>${esc(state.searchQuery)}</strong>" across all categories:</span>
-      </div>
-    `;
 
     Object.entries(data.categories).forEach(([catKey, cat]) => {
       let catHtml = '';
