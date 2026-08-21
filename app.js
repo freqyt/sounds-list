@@ -242,6 +242,9 @@ function renderCatalogue() {
   const q = state.searchQuery.toLowerCase();
   const main = document.getElementById('catalogue-main');
 
+  let totalVisible = 0;
+  let html = '';
+
   // Helper: Alphabetical sort for plugin items
   const sortItemsAZ = (list) => {
     if (!list) return [];
