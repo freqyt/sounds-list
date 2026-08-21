@@ -284,21 +284,18 @@ function renderBundleCard(bundle, q) {
   const n = normalizeBundle(bundle);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, true);
-  const noteHtml = n.note ? `<div class="bundle-note">${INFO_SVG}<span>${esc(n.note)}</span></div>` : '';
+  const noteHtml = n.note ? `<span class="bundle-note-inline">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
 
   return `
     <article class="bundle-card">
-      <div class="bundle-main-content">
-        <div class="bundle-card-top">
-          <div class="bundle-header-left">
-            ${thumbHtml}
-            <div class="bundle-name">${highlight(n.name, q)} ${badgesHtml}</div>
-          </div>
-          <div class="bundle-price">$${n.price}</div>
+      <div class="bundle-card-top">
+        <div class="bundle-header-left">
+          ${thumbHtml}
+          <div class="bundle-name">${highlight(n.name, q)} ${badgesHtml}</div>
         </div>
-        <p class="bundle-includes">${highlight(n.includes, q)}</p>
+        <div class="bundle-price">$${n.price}</div>
       </div>
-      ${noteHtml}
+      <p class="bundle-includes">${highlight(n.includes, q)} ${noteHtml}</p>
     </article>
   `;
 }
