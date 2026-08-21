@@ -52,15 +52,18 @@ const macData = {
       ],
       "tier40": [
         "Arturia Analog Lab 5",
-        "Arturia V Collection 11",
         "Arturia Pigments 3",
+        "Arturia V Collection 11",
+        "Keyscape",
         "KORG Bundle",
-        "Nexus 5 (Starter Version)",
+        {
+          "name": "Nexus 5",
+          "note": "Starter Version, see above for Complete"
+        },
+        "Omnisphere",
         "Roland Cloud",
         "Roland Zenology Pro",
         "Serum 2",
-        "Omnisphere",
-        "Keyscape",
         "Trilian"
       ],
       "tier30": [
@@ -68,19 +71,20 @@ const macData = {
         "Addictive Keys",
         {
           "name": "Ample Bass",
-          "note": " (Many available, ask about it)"
+          "note": "Many available, ask about it"
         },
         {
           "name": "Ample Guitar",
-          "note": " (Many available, ask about it)"
+          "note": "Many available, ask about it"
         },
         "ANA2",
         "DUNE 3",
         "ElectraX",
         "Heat Up 3",
+        "Hybrid",
         {
           "name": "Kontakt 8",
-          "note": " (No banks included)"
+          "note": "No banks included"
         },
         "Kult",
         {
@@ -90,7 +94,18 @@ const macData = {
             "BEST SELLER"
           ]
         },
-        "Hybrid",
+        "Reaktor 6",
+        {
+          "name": "Rippler",
+          "badges": [
+            "NEW"
+          ]
+        },
+        "S.K.Y. Keys",
+        "Scorch",
+        "SubLab XL",
+        "Synthmaster 3",
+        "The Prince",
         "u-he ACE",
         "u-he Diva",
         "u-he Hive 2",
@@ -101,18 +116,6 @@ const macData = {
             "NEW"
           ]
         },
-        "S.K.Y. Keys",
-        "SubLab XL",
-        "Synthmaster 3",
-        "The Prince",
-        "Reaktor 6",
-        {
-          "name": "Rippler",
-          "badges": [
-            "NEW"
-          ]
-        },
-        "Scorch",
         {
           "name": "Vanguard",
           "badges": [
