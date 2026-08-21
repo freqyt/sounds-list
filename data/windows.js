@@ -26,7 +26,8 @@ const windowsData = {
           "includes": "Arturia V Collection, Analog Lab & Pigments",
           "badges": [
             "BEST SELLER"
-          ]
+          ],
+          "tags": "Arturia"
         },
         {
           "name": "Spectrasonics Bundle",
@@ -52,7 +53,8 @@ const windowsData = {
           "includes": "Serum 2 + 150 Custom Banks",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "Xfer"
         },
         {
           "name": "Nexus 5 Complete",
@@ -63,13 +65,15 @@ const windowsData = {
         {
           "name": "Kontakt 8 Starter Bundle",
           "price": 75,
-          "includes": "Kontakt + 10 of the best selling banks"
+          "includes": "Kontakt + 10 of the best selling banks",
+          "tags": "Native Instruments,NI"
         },
         {
           "name": "Sonic Extensions Bundle",
           "price": 50,
           "includes": "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
-          "note": "Omnisphere 2.8+ Required"
+          "note": "Omnisphere 2.8+ Required",
+          "tags": "Spectrasonics"
         },
         {
           "name": "u-he Bundle",
@@ -131,7 +135,7 @@ const windowsData = {
       "tier30": [
         {
           "name": "Absynth 5",
-          "tags": "Native Instruments"
+          "tags": "Native Instruments,NI"
         },
         {
           "name": "Addictive Drums",
@@ -155,80 +159,256 @@ const windowsData = {
           "name": "ANA2",
           "tags": "Slate Digital"
         },
-        "Doobie Powell's Peculiar Sounds",
-        "DUNE 3",
-        "ElectraX",
-        "Heat Up 3",
+        {
+          "name": "Doobie Powell's Peculiar Sounds",
+          "tags": "Gospel Producers"
+        },
+        {
+          "name": "DUNE 3",
+          "tags": "Synapse Audio"
+        },
+        {
+          "name": "ElectraX",
+          "tags": "Tone2"
+        },
+        {
+          "name": "Heat Up 3",
+          "tags": "Initial Audio"
+        },
         {
           "name": "Kontakt 8",
-          "note": "No banks included"
+          "note": "No banks included",
+          "tags": "Native Instruments,NI"
         },
         {
           "name": "Kult",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "Dawesome"
         },
-        "Philharmonik 2",
-        "Reaktor 6",
-        "Retrologue 2",
-        "S.K.Y. Keys",
-        "Saurus",
-        "Scorch",
-        "SubLab XL",
-        "Synthmaster 3",
-        "The Prince"
+        {
+          "name": "Philharmonik 2",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "Reaktor 6",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Retrologue 2",
+          "tags": "Steinberg"
+        },
+        {
+          "name": "S.K.Y. Keys",
+          "tags": "SKY Studios"
+        },
+        {
+          "name": "Saurus",
+          "tags": "Tone2"
+        },
+        {
+          "name": "Scorch",
+          "tags": "Sauceware Audio"
+        },
+        {
+          "name": "SubLab XL",
+          "tags": "Future Audio Workshop"
+        },
+        {
+          "name": "Synthmaster 3",
+          "tags": "KV331 Audio"
+        },
+        {
+          "name": "The Prince",
+          "tags": "Cradle"
+        }
       ],
       "tier20": [
-        "Albino 3",
-        "BioTek 3",
-        "Blue II",
-        "Blue3",
-        "Chromaphone 2",
-        "Collective",
-        "Cthulhu",
-        "FM8",
-        "Gladiator",
-        "Hammond B3-X",
-        "Horror Box XL",
-        "Hybrid 3",
-        "Hypersonic 2",
-        "Icarus",
-        "KORG Gadget 2",
+        {
+          "name": "Albino 3",
+          "tags": "Rob Papen"
+        },
+        {
+          "name": "BioTek 3",
+          "tags": "Tracktion"
+        },
+        {
+          "name": "Blue II",
+          "tags": "Rob Papen"
+        },
+        {
+          "name": "Blue3",
+          "tags": "Rob Papen"
+        },
+        {
+          "name": "Chromaphone 2",
+          "tags": "Applied Acoustics Systems,AAS"
+        },
+        {
+          "name": "Collective",
+          "tags": "Tracktion"
+        },
+        {
+          "name": "Cthulhu",
+          "tags": "Xfer"
+        },
+        {
+          "name": "FM8",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Gladiator",
+          "tags": "Tone2"
+        },
+        {
+          "name": "Hammond B3-X",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "Horror Box XL",
+          "tags": "Electronik Soundlab"
+        },
+        {
+          "name": "Hybrid 3",
+          "tags": "AIR Music Technology"
+        },
+        {
+          "name": "Hypersonic 2",
+          "tags": "Steinberg"
+        },
+        {
+          "name": "Icarus",
+          "tags": "Tone2"
+        },
+        {
+          "name": "KORG Gadget 2",
+          "tags": "KORG"
+        },
         "Kryteria",
-        "Loom 2",
-        "Lounge Lizard",
-        "LuSH-101",
-        "M-Tron Pro",
-        "MassiveX",
-        "MemoryMoon ME80",
-        "Modo Bass",
-        "Nemesis",
-        "Nerve",
-        "Obscurium",
-        "OP-X PRO-II",
-        "Palindrome",
-        "Phonec 2",
-        "Pianoteq Pro 6",
-        "Predator 2",
-        "Purity",
-        "ravity",
-        "RayBlaster",
-        "Sektor 2",
-        "Soundspot Union",
-        "Spire",
+        {
+          "name": "Loom 2",
+          "tags": "AIR Music Technology"
+        },
+        {
+          "name": "Lounge Lizard",
+          "tags": "Applied Acoustics Systems,AAS"
+        },
+        {
+          "name": "LuSH-101",
+          "tags": "D16 Group"
+        },
+        {
+          "name": "M-Tron Pro",
+          "tags": "GForce Software"
+        },
+        {
+          "name": "MassiveX",
+          "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "MemoryMoon ME80",
+          "tags": "MemoryMoon"
+        },
+        {
+          "name": "Modo Bass",
+          "tags": "IK Multimedia"
+        },
+        {
+          "name": "Nemesis",
+          "tags": "Tone2"
+        },
+        {
+          "name": "Nerve",
+          "tags": "Xfer"
+        },
+        {
+          "name": "Obscurium",
+          "tags": "Sugar Bytes"
+        },
+        {
+          "name": "OP-X PRO-II",
+          "tags": "SonicProjects"
+        },
+        {
+          "name": "Palindrome",
+          "tags": "Glitchmachines"
+        },
+        {
+          "name": "Phonec 2",
+          "tags": "Psychic Modulation"
+        },
+        {
+          "name": "Pianoteq Pro 6",
+          "tags": "Modartt"
+        },
+        {
+          "name": "Predator 2",
+          "tags": "Rob Papen"
+        },
+        {
+          "name": "Purity",
+          "tags": "Sonic-Cat,Luxonix"
+        },
+        {
+          "name": "ravity",
+          "tags": "Sonic-Cat,Luxonix"
+        },
+        {
+          "name": "RayBlaster",
+          "tags": "Tone2"
+        },
+        {
+          "name": "Sektor 2",
+          "tags": "Initial Audio"
+        },
+        {
+          "name": "Soundspot Union",
+          "tags": "Soundspot"
+        },
+        {
+          "name": "Spire",
+          "tags": "Reveal Sound"
+        },
         "Surge",
-        "Sylenth1",
-        "Synplant",
+        {
+          "name": "Sylenth1",
+          "tags": "LennarDigital"
+        },
+        {
+          "name": "Synplant",
+          "tags": "Sonic Charge"
+        },
         "Syntorial",
-        "TAL-U-No-62",
-        "TAL-U-NO-LX",
+        {
+          "name": "TAL-U-No-62",
+          "tags": "TAL Software"
+        },
+        {
+          "name": "TAL-U-NO-LX",
+          "tags": "TAL Software"
+        },
         "TrackGod 2",
-        "TrapSoul",
-        "Ultra Analog VA-2",
-        "Vocal Runs",
-        "Xpand!2",
-        "Z3TA+2"
+        {
+          "name": "TrapSoul",
+          "tags": "infinit essentials"
+        },
+        {
+          "name": "Ultra Analog VA-2",
+          "tags": "Applied Acoustics Systems,AAS"
+        },
+        {
+          "name": "Vocal Runs",
+          "tags": "Studiolinked"
+        },
+        {
+          "name": "Xpand!2",
+          "tags": "AIR Music Technology"
+        },
+        {
+          "name": "Z3TA+2",
+          "tags": "Cakewalk"
+        }
       ]
     },
     "fx": {
