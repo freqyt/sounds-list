@@ -762,6 +762,22 @@ const windowsData = {
         }
       ]
     },
+    "banks": {
+      "label": "Preset Banks",
+      "icon": "",
+      "bundles": [],
+      "tier40": [],
+      "tier30": [],
+      "tier20": []
+    },
+    "kontakt": {
+      "label": "Kontakt Libraries",
+      "icon": "",
+      "bundles": [],
+      "tier40": [],
+      "tier30": [],
+      "tier20": []
+    },
     "daws": {
       "label": "DAWs",
       "icon": "",

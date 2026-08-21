@@ -9,12 +9,16 @@ const BADGES = ['NEW', 'HOT', 'SALE', 'BEST SELLER'];
 const CATEGORY_SVGS = {
   instruments: `<svg class="sb-cat-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:6px;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6 4v10"></path><path d="M10 4v10"></path><path d="M14 4v10"></path><path d="M18 4v10"></path><line x1="2" y1="14" x2="22" y2="14"></line></svg>`,
   fx: `<svg class="sb-cat-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:6px;"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>`,
+  banks: `<svg class="sb-cat-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:6px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`,
+  kontakt: `<svg class="sb-cat-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:6px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="9" y1="7" x2="15" y2="7"></line><line x1="9" y1="11" x2="13" y2="11"></line></svg>`,
   daws: `<svg class="sb-cat-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:6px;"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line><path d="M7 10l2.5-3 2.5 5 2.5-3.5 2.5 2.5"></path></svg>`,
   software: `<svg class="sb-cat-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:6px;"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>`
 };
 
 function getCategorySvg(key, fallback = '') {
   const norm = String(key || '').toLowerCase().trim();
+  if (norm.includes('bank') || norm.includes('preset') || norm.includes('sound') || norm.includes('pack')) return CATEGORY_SVGS.banks;
+  if (norm.includes('kontakt') || norm.includes('librar') || norm.includes('nki')) return CATEGORY_SVGS.kontakt;
   if (norm.includes('inst') || norm.includes('piano') || norm.includes('synth')) return CATEGORY_SVGS.instruments;
   if (norm.includes('fx') || norm.includes('mix') || norm.includes('master') || norm.includes('effect')) return CATEGORY_SVGS.fx;
   if (norm.includes('daw') || norm.includes('host') || norm.includes('studio')) return CATEGORY_SVGS.daws;
@@ -771,12 +775,43 @@ function deleteItem(tierKey, idx) {
   renderPanel();
 }
 
+// ── Cross-Platform Category Auto-Sync (Banks & Kontakt) ──
+function syncCrossPlatformCategories() {
+  const sharedKeys = ['banks', 'kontakt'];
+  if (!adm.data.windows?.categories || !adm.data.mac?.categories) return;
+
+  sharedKeys.forEach(k => {
+    // If the active category being edited is banks or kontakt, mirror to other platform
+    if (adm.category === k) {
+      const otherPlat = adm.platform === 'windows' ? 'mac' : 'windows';
+      if (adm.data[adm.platform].categories[k]) {
+        adm.data[otherPlat].categories[k] = clone(adm.data[adm.platform].categories[k]);
+      }
+    }
+  });
+}
+
+function syncAllCrossPlatformCategories() {
+  const sharedKeys = ['banks', 'kontakt'];
+  if (!adm.data.windows?.categories || !adm.data.mac?.categories) return;
+
+  sharedKeys.forEach(k => {
+    const sourcePlat = adm.platform;
+    const targetPlat = sourcePlat === 'windows' ? 'mac' : 'windows';
+    if (adm.data[sourcePlat].categories[k]) {
+      adm.data[targetPlat].categories[k] = clone(adm.data[sourcePlat].categories[k]);
+    }
+  });
+}
+
 // ── Local Auto-save (0 API Requests) ──────────────────────
 let _saveTimer = null;
 
 function autoSave() {
   clearTimeout(_saveTimer);
   _saveTimer = setTimeout(() => {
+    // Auto-mirror cross-platform categories (Preset Banks & Kontakt)
+    syncCrossPlatformCategories();
     savePlatformData('windows', adm.data.windows);
     savePlatformData('mac', adm.data.mac);
     const ind2 = document.getElementById('save-ind');
@@ -794,6 +829,9 @@ async function publishLiveToCloud() {
     showCloudModal();
     return;
   }
+
+  // Ensure banks & kontakt are 100% synchronized across Windows & Mac
+  syncAllCrossPlatformCategories();
 
   // Intelligently sync all tags across matching products on Windows & Mac
   syncAllTagsCrossPlatform();

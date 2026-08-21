@@ -469,11 +469,11 @@ html, body {
   50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
 }
 
-/* Category Tabs (All 4 in a single row - zero horizontal scrolling) */
+/* Category Tabs (Clean responsive grid - desktop 6 cols, mobile 3 cols x 2 rows) */
 .category-tabs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.3rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.35rem;
   width: 100%;
 }
 
@@ -1456,6 +1456,11 @@ html, body {
 
   .sticky-controls {
     padding: 0.4rem 0.75rem;
+  }
+
+  .category-tabs {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.3rem;
   }
 
   .spotlight-body {
