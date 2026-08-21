@@ -3,17 +3,17 @@ const macData = {
   "deal": {
     "enabled": true,
     "type": "bundle_x_for_y",
-    "badge": "🔥 SPECIAL DEAL",
-    "title": "Any 3 Plugins for $100",
-    "description": "Pick any 3 single plugins ($40 or $30 tier) and get all 3 for just $100 total!",
+    "badge": "",
+    "title": "5 Plugins for $100",
+    "description": "Pick any 5 single plugins and get all 5 for just $100 total!",
     "percentOff": 20,
-    "bundleQty": 3,
+    "bundleQty": "5",
     "bundlePrice": 100,
     "bogoBuyQty": 2,
     "bogoGetQty": 1,
     "customPrice": 75,
     "customIncludes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks",
-    "customNote": "Includes all updates & expansion banks"
+    "customNote": ""
   },
   "categories": {
     "instruments": {
