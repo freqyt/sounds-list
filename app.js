@@ -108,6 +108,7 @@ function selectPlatform(platform) {
   platformScreen.classList.add('exit-left');
 
   setTimeout(() => {
+    document.documentElement.classList.add('has-active-session');
     platformScreen.classList.remove('active');
     catalogueScreen.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -123,6 +124,7 @@ function goBack() {
   const catalogueScreen = document.getElementById('catalogue-screen');
 
   clearBrowseState();
+  document.documentElement.classList.remove('has-active-session');
   catalogueScreen.classList.add('exit-right');
 
   setTimeout(() => {

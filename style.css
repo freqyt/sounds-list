@@ -163,6 +163,19 @@ html, body {
   pointer-events: none;
 }
 
+/* Zero-flicker instant session restoration */
+html.has-active-session #platform-screen {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+html.has-active-session #catalogue-screen {
+  display: flex !important;
+  opacity: 1 !important;
+  transform: none !important;
+  z-index: 3 !important;
+}
+
 /* ═══════════════════════════════════════════════════════════
    LANDING / PLATFORM SELECTOR
 ═══════════════════════════════════════════════════════════ */

@@ -4,6 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Sounds List — Audio Software & Plugin Catalogue</title>
+  <script>
+    (function() {
+      var hash = window.location.hash.replace('#', '').trim();
+      var plat = (hash.indexOf('windows') === 0) ? 'windows' : (hash.indexOf('mac') === 0) ? 'mac' : null;
+      if (!plat) {
+        try { plat = sessionStorage.getItem('sounds_platform'); } catch(e) {}
+      }
+      if (plat === 'windows' || plat === 'mac') {
+        document.documentElement.classList.add('has-active-session');
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
