@@ -58,45 +58,53 @@ const windowsData = {
       ],
       "tier40": [
         "Arturia Analog Lab 5",
-        "Arturia V Collection 11",
         "Arturia Pigments 3",
+        "Arturia V Collection 11",
+        "Keyscape",
         "KORG Bundle",
         "Nexus 5 (Starter Version)",
-        "u-he Bundle (Hive, Diva, Zebra2 + more)",
+        "Omnisphere 3",
         "Roland Cloud",
         "Roland Zenology Pro",
         "Serum 2",
-        "Omnisphere 3",
-        "Keyscape",
         "Trilian"
       ],
       "tier30": [
         "Absynth 5",
         "Addictive Drums",
         "Addictive Keys",
-        "Ample Bass (Many available)",
-        "Ample Guitar (Many available)",
+        {
+          "name": "Ample Bass",
+          "note": " (Many available, ask about it)"
+        },
+        {
+          "name": "Ample Guitar",
+          "note": " (Many available, ask about it)"
+        },
         "ANA2",
         "Doobie Powell's Peculiar Sounds",
         "DUNE 3",
         "ElectraX",
-        "Kontakt 8 (No banks included)",
+        "Heat Up 3",
+        {
+          "name": "Kontakt 8",
+          "note": " (No banks included)"
+        },
         {
           "name": "Kult",
           "badges": [
             "NEW"
           ]
         },
-        "Heat Up 3",
-        "The Prince",
         "Philharmonik 2",
         "Reaktor 6",
         "Retrologue 2",
-        "SubLab XL",
         "S.K.Y. Keys",
-        "Synthmaster 3",
         "Saurus",
-        "Scorch"
+        "Scorch",
+        "SubLab XL",
+        "Synthmaster 3",
+        "The Prince"
       ],
       "tier20": [
         "Albino 3",
@@ -126,13 +134,13 @@ const windowsData = {
         "Nerve",
         "Obscurium",
         "OP-X PRO-II",
+        "Palindrome",
         "Phonec 2",
         "Pianoteq Pro 6",
-        "ravity",
-        "RayBlaster",
-        "Palindrome",
         "Predator 2",
         "Purity",
+        "ravity",
+        "RayBlaster",
         "Sektor 2",
         "Soundspot Union",
         "Spire",
