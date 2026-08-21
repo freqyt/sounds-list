@@ -1,15 +1,19 @@
 /* ═══════════════════════════════════════════════════════════
-   storage.js — Shared Data & Real-Time Cloud Layer
-   Supports JSONBin.io cloud sync + localStorage fallback.
+   storage.js — Shared Data & Optimized Real-Time Cloud Layer
+   Features: Smart 15-minute visitor TTL caching to conserve
+   free-tier API quota, plus 1-click single-request cloud publishing.
 ═══════════════════════════════════════════════════════════ */
 
 const STORAGE_KEYS = {
-  windows:      'plcat_windows_v1',
-  mac:          'plcat_mac_v1',
-  passwordHash: 'plcat_pw_hash',
-  jsonbinKey:   'plcat_jsonbin_key',
-  jsonbinBinId: 'plcat_jsonbin_bin_id'
+  windows:        'plcat_windows_v1',
+  mac:            'plcat_mac_v1',
+  passwordHash:   'plcat_pw_hash',
+  jsonbinKey:     'plcat_jsonbin_key',
+  jsonbinBinId:   'plcat_jsonbin_bin_id',
+  lastCloudFetch: 'plcat_last_cloud_fetch'
 };
+
+const CACHE_TTL_MS = 15 * 60 * 1000; // 15 Minutes Cache Window for Public Visitors
 
 /* ── Password ──────────────────────────────────────────── */
 
@@ -41,36 +45,48 @@ function setJsonBinConfig(key, binId) {
   if (binId) localStorage.setItem(STORAGE_KEYS.jsonbinBinId, binId.trim());
 }
 
-/* ── Cloud Data Fetch & Sync ───────────────────────────── */
+/* ── Smart Quota-Optimized Cloud Fetch ─────────────────── */
 
 let _cloudCache = null;
 
-async function fetchLiveCloudData() {
+async function fetchLiveCloudData(forceRefresh = false) {
   const { key, binId } = getJsonBinConfig();
   if (!binId) return null;
 
+  const now = Date.now();
+  const lastFetch = Number(localStorage.getItem(STORAGE_KEYS.lastCloudFetch) || 0);
+
+  // 1. If within 15-minute cache TTL and not forcing, read directly from cache (0 API Requests!)
+  if (!forceRefresh && (now - lastFetch < CACHE_TTL_MS)) {
+    try {
+      const win = localStorage.getItem(STORAGE_KEYS.windows);
+      const mac = localStorage.getItem(STORAGE_KEYS.mac);
+      if (win && mac) {
+        _cloudCache = { windows: JSON.parse(win), mac: JSON.parse(mac) };
+        return _cloudCache;
+      }
+    } catch(e) {}
+  }
+
+  // 2. Fetch fresh copy from JSONBin
   try {
     const headers = {};
     if (key) headers['X-Master-Key'] = key;
-    
-    // Fetch latest JSON from JSONBin
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest?nocache=${Date.now()}`, {
-      headers
-    });
-    
+
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, { headers });
     if (!res.ok) return null;
     const json = await res.json();
     const record = json.record;
-    
+
     if (record && record.windows && record.mac) {
       _cloudCache = record;
-      // Update local storage cache
       localStorage.setItem(STORAGE_KEYS.windows, JSON.stringify(record.windows));
       localStorage.setItem(STORAGE_KEYS.mac, JSON.stringify(record.mac));
+      localStorage.setItem(STORAGE_KEYS.lastCloudFetch, String(now));
       return record;
     }
   } catch (err) {
-    console.warn('Could not fetch cloud data, using local fallback:', err);
+    console.warn('Using local fallback:', err);
   }
   return null;
 }
@@ -88,6 +104,10 @@ async function saveLiveCloudData(allData) {
       },
       body: JSON.stringify(allData)
     });
+    
+    if (res.ok) {
+      localStorage.setItem(STORAGE_KEYS.lastCloudFetch, String(Date.now()));
+    }
     return res.ok;
   } catch (err) {
     console.error('Cloud save failed:', err);

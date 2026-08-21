@@ -276,33 +276,58 @@ function deleteItem(tierKey, idx) {
   renderPanel();
 }
 
-// ── Auto-save (Local + Cloud Sync) ─────────────────────────
+// ── Local Auto-save (0 API Requests) ──────────────────────
 let _saveTimer = null;
 
 function autoSave() {
   const ind = document.getElementById('save-ind');
-  if (ind) ind.textContent = 'Saving…';
+  if (ind) ind.textContent = 'Saving draft…';
 
   clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(async () => {
+  _saveTimer = setTimeout(() => {
     savePlatformData(adm.platform, adm.data[adm.platform]);
-    
-    // Auto-sync to JSONBin in background if configured
-    const { key, binId } = getJsonBinConfig();
-    let cloudSynced = false;
-    if (key && binId) {
-      cloudSynced = await saveLiveCloudData({
-        windows: adm.data.windows,
-        mac: adm.data.mac
-      });
-    }
-
     const ind2 = document.getElementById('save-ind');
     if (ind2) {
-      ind2.textContent = cloudSynced ? '✓ Synced to Cloud' : '✓ Saved';
-      setTimeout(() => { if (ind2) ind2.textContent = ''; }, 2500);
+      ind2.textContent = '✓ Draft Saved (Click "Publish Live" to sync)';
+      setTimeout(() => { if (ind2) ind2.textContent = ''; }, 3000);
     }
-  }, 400);
+  }, 300);
+}
+
+// ── Publish Live to Cloud (Single 1-Request Sync) ──────────
+async function publishLiveToCloud() {
+  const { key, binId } = getJsonBinConfig();
+  if (!key || !binId) {
+    showCloudModal();
+    return;
+  }
+
+  const btn = document.getElementById('publish-cloud-btn');
+  const ind = document.getElementById('save-ind');
+  btn.disabled = true;
+  btn.textContent = '⏳ Publishing...';
+
+  try {
+    const success = await saveLiveCloudData({
+      windows: adm.data.windows,
+      mac: adm.data.mac
+    });
+
+    if (success) {
+      if (ind) {
+        ind.textContent = '🚀 Live Worldwide!';
+        setTimeout(() => { if (ind) ind.textContent = ''; }, 3000);
+      }
+      alert('🎉 Published Live!\n\nAll your latest changes are now live across all phones and devices worldwide.');
+    } else {
+      throw new Error('Failed to publish to JSONBin.');
+    }
+  } catch (err) {
+    alert('Could not publish to cloud. Please check your Master Key in Cloud Settings.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 Publish Live';
+  }
 }
 
 // ── Cloud Sync Modal ───────────────────────────────────────
