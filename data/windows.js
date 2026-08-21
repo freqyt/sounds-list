@@ -8,10 +8,7 @@ const windowsData = {
         {
           "name": "Arturia Bundle",
           "price": 100,
-          "includes": "Arturia V Collection, Analog Lab & Pigments",
-          "badges": [
-            "BEST SELLER"
-          ]
+          "includes": "Arturia V Collection, Analog Lab & Pigments"
         },
         {
           "name": "Spectrasonics Bundle",
@@ -24,17 +21,14 @@ const windowsData = {
         {
           "name": "ElectraX Bundle",
           "price": 60,
-          "includes": "ElectraX + 200 Custom Banks",
-          "badges": [
-            "BEST SELLER"
-          ]
+          "includes": "ElectraX + 200 Custom Banks"
         },
         {
           "name": "Serum Bundle",
           "price": 60,
           "includes": "Serum 2 + 150 Custom Banks",
           "badges": [
-            "BEST SELLER"
+            "NEW"
           ]
         },
         {
@@ -56,7 +50,7 @@ const windowsData = {
         {
           "name": "u-he Bundle",
           "price": 50,
-          "includes": "ACE, Bazille, Diva, Repro-1 & 5, Zebra3",
+          "includes": "ACE, Bazille, Diva, Hive, Repro-1 & 5, Zebra3",
           "badges": [
             "NEW"
           ]
@@ -64,53 +58,45 @@ const windowsData = {
       ],
       "tier40": [
         "Arturia Analog Lab 5",
-        "Arturia Pigments 3",
         "Arturia V Collection 11",
-        "Keyscape",
+        "Arturia Pigments 3",
         "KORG Bundle",
         "Nexus 5 (Starter Version)",
-        "Omnisphere 3",
+        "u-he Bundle (Hive, Diva, Zebra2 + more)",
         "Roland Cloud",
         "Roland Zenology Pro",
         "Serum 2",
+        "Omnisphere 3",
+        "Keyscape",
         "Trilian"
       ],
       "tier30": [
         "Absynth 5",
         "Addictive Drums",
         "Addictive Keys",
-        {
-          "name": "Ample Bass",
-          "note": " Many available, ask about it"
-        },
-        {
-          "name": "Ample Guitar",
-          "note": " Many available, ask about it"
-        },
+        "Ample Bass (Many available)",
+        "Ample Guitar (Many available)",
         "ANA2",
         "Doobie Powell's Peculiar Sounds",
         "DUNE 3",
         "ElectraX",
-        "Heat Up 3",
-        {
-          "name": "Kontakt 8",
-          "note": " No banks included, see bundle above or ask about more banks"
-        },
+        "Kontakt 8 (No banks included)",
         {
           "name": "Kult",
           "badges": [
             "NEW"
           ]
         },
+        "Heat Up 3",
+        "The Prince",
         "Philharmonik 2",
         "Reaktor 6",
         "Retrologue 2",
-        "S.K.Y. Keys",
-        "Saurus",
-        "Scorch",
         "SubLab XL",
+        "S.K.Y. Keys",
         "Synthmaster 3",
-        "The Prince"
+        "Saurus",
+        "Scorch"
       ],
       "tier20": [
         "Albino 3",
@@ -140,13 +126,13 @@ const windowsData = {
         "Nerve",
         "Obscurium",
         "OP-X PRO-II",
-        "Palindrome",
         "Phonec 2",
         "Pianoteq Pro 6",
-        "Predator 2",
-        "Purity",
         "ravity",
         "RayBlaster",
+        "Palindrome",
+        "Predator 2",
+        "Purity",
         "Sektor 2",
         "Soundspot Union",
         "Spire",
