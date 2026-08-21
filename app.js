@@ -146,9 +146,9 @@ function goBack() {
 // ── Catalogue Setup ──────────────────────────────────────
 
 function setupCatalogue() {
-  const badge = document.getElementById('platform-badge');
-  if (badge) {
-    badge.textContent = state.platform === 'windows' ? 'Windows' : 'Mac';
+  const pill = document.getElementById('current-platform-pill');
+  if (pill) {
+    pill.textContent = state.platform === 'windows' ? 'Windows' : 'Mac';
   }
 
   const searchInput = document.getElementById('search-input');
