@@ -326,8 +326,8 @@ const windowsData = {
             "NEW"
           ]
         },
-        "Studio One",
-        "Pro Tools 12"
+        "Pro Tools 12",
+        "Studio One"
       ],
       "tier30": [],
       "tier20": []
@@ -346,8 +346,9 @@ const windowsData = {
       "tier30": [
         "After Effects",
         "Audition",
-        "InDesign",
+        "Davinci Resolve",
         "Illustrator",
+        "InDesign",
         "Lightroom",
         "Photoshop",
         "Premiere Pro",
