@@ -165,14 +165,19 @@ function buildSection(title, tierKey, items, type) {
 
 // ── Item row ──────────────────────────────────────────────
 function itemRow(item, idx, tierKey) {
+  const norm = normalizeItem(item);
   return `
     <div class="admin-item-row" data-idx="${idx}">
+      <input class="admin-input input-image" type="text"
+        value="${ea(norm.image)}" placeholder="🖼️ Icon / URL"
+        title="Icon emoji (e.g. 🎹) or image URL (https://...)"
+        onchange="updateField('${tierKey}',${idx},'image',this.value)" />
       <input class="admin-input input-name" type="text"
-        value="${ea(item.name)}" placeholder="Plugin name"
+        value="${ea(norm.name)}" placeholder="Plugin name"
         onchange="updateField('${tierKey}',${idx},'name',this.value)" />
-      <div class="badge-toggles">${badgeToggles(item.badges, idx, tierKey)}</div>
+      <div class="badge-toggles">${badgeToggles(norm.badges, idx, tierKey)}</div>
       <input class="admin-input input-note" type="text"
-        value="${ea(item.note)}" placeholder="Note (optional)"
+        value="${ea(norm.note)}" placeholder="Note (optional)"
         onchange="updateField('${tierKey}',${idx},'note',this.value)" />
       <button class="delete-btn" title="Delete item"
         onclick="deleteItem('${tierKey}',${idx})">🗑</button>
@@ -182,27 +187,32 @@ function itemRow(item, idx, tierKey) {
 
 // ── Bundle row ────────────────────────────────────────────
 function bundleRow(b, idx, tierKey) {
+  const norm = normalizeBundle(b);
   return `
     <div class="admin-bundle-row" data-idx="${idx}">
       <div class="bundle-row-top">
+        <input class="admin-input input-image" type="text"
+          value="${ea(norm.image)}" placeholder="🖼️ Icon / URL"
+          title="Icon emoji (e.g. 📦) or image URL (https://...)"
+          onchange="updateField('${tierKey}',${idx},'image',this.value)" />
         <input class="admin-input input-name" type="text"
-          value="${ea(b.name)}" placeholder="Bundle name"
+          value="${ea(norm.name)}" placeholder="Bundle name"
           onchange="updateField('${tierKey}',${idx},'name',this.value)" />
         <div class="price-wrap">
           $<input class="admin-input input-price" type="number"
-            value="${b.price}" min="0" placeholder="0"
+            value="${norm.price}" min="0" placeholder="0"
             onchange="updateField('${tierKey}',${idx},'price',Number(this.value))" />
         </div>
-        <div class="badge-toggles">${badgeToggles(b.badges, idx, tierKey)}</div>
+        <div class="badge-toggles">${badgeToggles(norm.badges, idx, tierKey)}</div>
         <button class="delete-btn" title="Delete bundle"
           onclick="deleteItem('${tierKey}',${idx})">🗑</button>
       </div>
       <textarea class="admin-input input-includes"
         placeholder="What's included (e.g. Plugin A, Plugin B + 200 Banks)"
         onchange="updateField('${tierKey}',${idx},'includes',this.value)"
-      >${eh(b.includes)}</textarea>
+      >${eh(norm.includes)}</textarea>
       <input class="admin-input input-note" type="text"
-        value="${ea(b.note)}" placeholder="Warning / note (optional)"
+        value="${ea(norm.note)}" placeholder="Warning / note (optional)"
         onchange="updateField('${tierKey}',${idx},'note',this.value)" />
     </div>
   `;

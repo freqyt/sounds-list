@@ -211,11 +211,16 @@ function resetPlatformToDefault(platform) {
 /* ── Normalise Helpers ─────────────────────────────────── */
 
 function normalizeItem(item) {
-  if (typeof item === 'string') return { name: item, badges: [], note: '' };
+  if (typeof item === 'string') return { name: item, badges: [], note: '', image: '' };
   const badges = Array.isArray(item.badges)
     ? [...item.badges]
     : (item.badge ? [item.badge] : []);
-  return { name: item.name || '', badges, note: item.note || '' };
+  return {
+    name: item.name || '',
+    badges,
+    note: item.note || '',
+    image: item.image || item.icon || ''
+  };
 }
 
 function normalizeBundle(b) {
@@ -227,16 +232,18 @@ function normalizeBundle(b) {
     price:    Number(b.price) || 0,
     includes: b.includes || '',
     note:     b.note     || '',
-    badges
+    badges,
+    image:    b.image    || b.icon || ''
   };
 }
 
 function compactItem(item) {
   const n = normalizeItem(item);
-  if (n.badges.length === 0 && !n.note) return n.name;
+  if (n.badges.length === 0 && !n.note && !n.image) return n.name;
   const obj = { name: n.name };
   if (n.badges.length) obj.badges = n.badges;
   if (n.note)          obj.note   = n.note;
+  if (n.image)         obj.image  = n.image;
   return obj;
 }
 
@@ -245,6 +252,7 @@ function compactBundle(b) {
   const obj = { name: n.name, price: n.price, includes: n.includes };
   if (n.note)          obj.note   = n.note;
   if (n.badges.length) obj.badges = n.badges;
+  if (n.image)         obj.image  = n.image;
   return obj;
 }
 

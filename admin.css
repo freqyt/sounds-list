@@ -397,6 +397,7 @@ body::before {
   box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
 }
 
+.input-image { width: 110px; flex-shrink: 0; font-size: 0.78rem; }
 .input-name  { flex: 1; min-width: 140px; }
 .input-price { width: 70px; }
 .input-note  { flex: 1; min-width: 120px; font-size: 0.78rem; opacity: 0.8; }

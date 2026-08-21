@@ -310,16 +310,30 @@ function renderSection(title, innerHtml, gridClass) {
   `;
 }
 
+function renderThumbnailHtml(imageStr, isBundle = false) {
+  if (!imageStr) return '';
+  const clean = imageStr.trim();
+  const isUrl = /^https?:\/\/|^\/|^\.\/|^data:image/i.test(clean);
+  if (isUrl) {
+    return `<div class="${isBundle ? 'bundle-thumb-wrap' : 'plugin-thumb-wrap'}"><img class="${isBundle ? 'bundle-thumb-img' : 'plugin-thumb-img'}" src="${esc(clean)}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'" /></div>`;
+  }
+  return `<div class="${isBundle ? 'bundle-thumb-wrap' : 'plugin-thumb-wrap'}"><span class="${isBundle ? 'bundle-thumb-icon' : 'plugin-thumb-icon'}">${esc(clean)}</span></div>`;
+}
+
 function renderBundleCard(bundle, q) {
   const n = normalizeBundle(bundle);
   const badgesHtml = renderBadgesHtml(n.badges);
+  const thumbHtml = renderThumbnailHtml(n.image, true);
   const noteHtml = n.note ? `<div class="bundle-note">⚠ ${esc(n.note)}</div>` : '';
 
   return `
     <article class="bundle-card">
       <div class="bundle-main-content">
         <div class="bundle-card-top">
-          <div class="bundle-name">${highlight(n.name, q)} ${badgesHtml}</div>
+          <div class="bundle-header-left">
+            ${thumbHtml}
+            <div class="bundle-name">${highlight(n.name, q)} ${badgesHtml}</div>
+          </div>
           <div class="bundle-price">$${n.price}</div>
         </div>
         <p class="bundle-includes">${highlight(n.includes, q)}</p>
@@ -332,11 +346,15 @@ function renderBundleCard(bundle, q) {
 function renderPluginCard(item, q) {
   const n = normalizeItem(item);
   const badgesHtml = renderBadgesHtml(n.badges);
+  const thumbHtml = renderThumbnailHtml(n.image, false);
   const noteHtml = n.note ? `<span class="note-indicator" title="${esc(n.note)}">⚠</span>` : '';
 
   return `
     <div class="plugin-card">
-      <span class="plugin-name">${highlight(n.name, q)}</span>
+      <div class="plugin-card-left">
+        ${thumbHtml}
+        <span class="plugin-name">${highlight(n.name, q)}</span>
+      </div>
       <div class="plugin-badges-wrap">
         ${badgesHtml}
         ${noteHtml}
