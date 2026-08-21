@@ -1297,7 +1297,7 @@ const windowsData = {
           "tags": "8Dio,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "8Dio - Shepard Tones   (1)",
+          "name": "8Dio - Shepard Tones (1)",
           "price": 20,
           "tags": "8Dio,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -1507,7 +1507,7 @@ const windowsData = {
           "tags": "Other,Guitars & Bass,Kontakt,Kontakt Library"
         },
         {
-          "name": "Aria_Sounds_Aurora_Choir_KONTAKT-",
+          "name": "Aria_Sounds_Aurora_Choir_KONTAKT",
           "price": 20,
           "tags": "Other,Vocals & Choirs,Kontakt,Kontakt Library"
         },
@@ -1582,7 +1582,7 @@ const windowsData = {
           "tags": "Auddict,Strings & Orchestral,Kontakt,Kontakt Library"
         },
         {
-          "name": "Auddict - United Strings of Europe First Violins  [rutracker-5417034]",
+          "name": "Auddict - United Strings of Europe First Violins",
           "price": 20,
           "tags": "Auddict,Strings & Orchestral,Kontakt,Kontakt Library"
         },
@@ -1637,7 +1637,7 @@ const windowsData = {
           "tags": "Audiobro,Vocals & Choirs,Kontakt,Kontakt Library"
         },
         {
-          "name": "Audiobro - GENESIS Children's Choir  (1)",
+          "name": "Audiobro - GENESIS Children's Choir (1)",
           "price": 20,
           "tags": "Audiobro,Vocals & Choirs,Kontakt,Kontakt Library"
         },
@@ -2092,7 +2092,7 @@ const windowsData = {
           "tags": "Big Fish Audio,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Big Fish Audio - Vintage Strings   (1)",
+          "name": "Big Fish Audio - Vintage Strings (1)",
           "price": 20,
           "tags": "Big Fish Audio,Strings & Orchestral,Kontakt,Kontakt Library"
         },
@@ -2737,7 +2737,7 @@ const windowsData = {
           "tags": "EastWest,Strings & Orchestral,Kontakt,Kontakt Library"
         },
         {
-          "name": "EastWest - Symphonic Choirs [Repack]",
+          "name": "EastWest - Symphonic Choirs",
           "price": 20,
           "tags": "EastWest,Strings & Orchestral,Kontakt,Kontakt Library"
         },
@@ -2787,7 +2787,7 @@ const windowsData = {
           "tags": "Edition Beurmann,Pianos & Keys,Kontakt,Kontakt Library"
         },
         {
-          "name": "Embertone - Arcane Free Halloween  [rutracker-4862490]",
+          "name": "Embertone - Arcane Free Halloween",
           "price": 20,
           "tags": "Embertone,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -3937,7 +3937,7 @@ const windowsData = {
           "tags": "J-Music,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Joey_Sturgis_Miles_McPherson_Drums_KONTAKT-",
+          "name": "Joey_Sturgis_Miles_McPherson_Drums_KONTAKT",
           "price": 20,
           "tags": "Other,Drums & Percussion,Kontakt,Kontakt Library"
         },
@@ -4117,7 +4117,7 @@ const windowsData = {
           "tags": "Marcos Ciscar,Brass & Woodwinds,Kontakt,Kontakt Library"
         },
         {
-          "name": "Martin_Britz_Invictus_Guitar_KONTAKT-",
+          "name": "Martin_Britz_Invictus_Guitar_KONTAKT",
           "price": 20,
           "tags": "Other,Guitars & Bass,Kontakt,Kontakt Library"
         },
@@ -4597,7 +4597,7 @@ const windowsData = {
           "tags": "Native Instruments,Guitars & Bass,Kontakt,Kontakt Library"
         },
         {
-          "name": "Native Instruments - SPOTLIGHT COLLECTION BALINESE GAMELAN  (FULL & UPDATE)",
+          "name": "Native Instruments - SPOTLIGHT COLLECTION BALINESE GAMELAN (FULL & UPDATE)",
           "price": 20,
           "tags": "Native Instruments,Guitars & Bass,Kontakt,Kontakt Library"
         },
@@ -4607,7 +4607,7 @@ const windowsData = {
           "tags": "Native Instruments,Guitars & Bass,Kontakt,Kontakt Library"
         },
         {
-          "name": "Native Instruments - SPOTLIGHT COLLECTION EAST ASIA ]",
+          "name": "Native Instruments - SPOTLIGHT COLLECTION EAST ASIA",
           "price": 20,
           "tags": "Native Instruments,Guitars & Bass,Kontakt,Kontakt Library"
         },
@@ -4722,7 +4722,7 @@ const windowsData = {
           "tags": "Native Instruments,Strings & Orchestral,Kontakt,Kontakt Library"
         },
         {
-          "name": "Native_Instruments_Session_Guitarist_Electric_Sunburst_KONTAKT-",
+          "name": "Native_Instruments_Session_Guitarist_Electric_Sunburst_KONTAKT",
           "price": 20,
           "tags": "Other,Guitars & Bass,Kontakt,Kontakt Library"
         },
@@ -5022,7 +5022,7 @@ const windowsData = {
           "tags": "Orchestral Tools,Strings & Orchestral,Kontakt,Kontakt Library"
         },
         {
-          "name": "Orchestral Tools - Metropolis Ark 2 Orchestra Of The Deep  [rutracker-5331145]",
+          "name": "Orchestral Tools - Metropolis Ark 2 Orchestra Of The Deep",
           "price": 20,
           "tags": "Orchestral Tools,Strings & Orchestral,Kontakt,Kontakt Library"
         },
@@ -5087,7 +5087,7 @@ const windowsData = {
           "tags": "Oriental Sounds,Strings & Orchestral,Kontakt,Kontakt Library"
         },
         {
-          "name": "OTS - Passion  Flute",
+          "name": "OTS - Passion Flute",
           "price": 20,
           "tags": "OTS,Brass & Woodwinds,Kontakt,Kontakt Library"
         },
@@ -5112,17 +5112,17 @@ const windowsData = {
           "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Output - Sounds - REV",
+          "name": "Output - REV",
           "price": 20,
           "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Output - Sounds - REV X-Loops",
+          "name": "Output - REV X-Loops",
           "price": 20,
           "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Output - Sounds - REV X-Loops [02.2017]",
+          "name": "Output - REV X-Loops",
           "price": 20,
           "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -5317,7 +5317,7 @@ const windowsData = {
           "tags": "ProjectSAM,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "ProjectSAM - Swing More!  7]",
+          "name": "ProjectSAM - Swing More! 7",
           "price": 20,
           "tags": "ProjectSAM,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -5707,7 +5707,7 @@ const windowsData = {
           "tags": "Sample Modeling,Brass & Woodwinds,Kontakt,Kontakt Library"
         },
         {
-          "name": "Sample_Logic_CinemorphX_KONTAKT-",
+          "name": "Sample_Logic_CinemorphX_KONTAKT",
           "price": 20,
           "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -5717,7 +5717,7 @@ const windowsData = {
           "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Sample_Logic_Impakt_KONTAKT-",
+          "name": "Sample_Logic_Impakt_KONTAKT",
           "price": 20,
           "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -5732,7 +5732,7 @@ const windowsData = {
           "tags": "SampleHero,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "SampleHero_EERIE_1_KONTAKT-",
+          "name": "SampleHero_EERIE_1_KONTAKT",
           "price": 20,
           "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -6137,7 +6137,7 @@ const windowsData = {
           "tags": "Soniccouture,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "SONiVOX  Sonic Implants - Symphonic Harp Collection",
+          "name": "SONiVOX Sonic Implants - Symphonic Harp Collection",
           "price": 20,
           "tags": "SONiVOX  Sonic Implants,Strings & Orchestral,Kontakt,Kontakt Library"
         },
@@ -6347,12 +6347,12 @@ const windowsData = {
           "tags": "Sonokinetic,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Sonokinetic_Accordion_KONTAKT_-",
+          "name": "Sonokinetic_Accordion_KONTAKT_",
           "price": 20,
           "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Sonokinetic_Ostinato_Strings_KONTAKT-",
+          "name": "Sonokinetic_Ostinato_Strings_KONTAKT",
           "price": 20,
           "tags": "Other,Strings & Orchestral,Kontakt,Kontakt Library"
         },
@@ -7247,7 +7247,7 @@ const windowsData = {
           "tags": "Spitfire Audio,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Spitfire Audio - The Grange  [rutracker-5419775]",
+          "name": "Spitfire Audio - The Grange",
           "price": 20,
           "tags": "Spitfire Audio,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -7262,12 +7262,12 @@ const windowsData = {
           "tags": "Spitfire Audio,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Spitfire Audio - Union Chapel Organ  [rutracker-5416224]",
+          "name": "Spitfire Audio - Union Chapel Organ",
           "price": 20,
           "tags": "Spitfire Audio,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Spitfire_Audio_Albion_IV_Uist_KONTAKT-",
+          "name": "Spitfire_Audio_Albion_IV_Uist_KONTAKT",
           "price": 20,
           "tags": "Other,Strings & Orchestral,Kontakt,Kontakt Library"
         },
@@ -7277,7 +7277,7 @@ const windowsData = {
           "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Spitfire_Audio_HZ03_London_Soloists_KONTAKT-",
+          "name": "Spitfire_Audio_HZ03_London_Soloists_KONTAKT",
           "price": 20,
           "tags": "Other,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -7847,7 +7847,7 @@ const windowsData = {
           "tags": "WaveRunner Audio,Guitars & Bass,Kontakt,Kontakt Library"
         },
         {
-          "name": "Wavesfactory - 1850 Pipe Organ [Pro Version]",
+          "name": "Wavesfactory - 1850 Pipe Organ [Pro Version",
           "price": 20,
           "tags": "Wavesfactory,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
