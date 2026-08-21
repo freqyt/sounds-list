@@ -13,7 +13,7 @@ const macData = {
     "bogoGetQty": 1,
     "customPrice": 75,
     "customIncludes": "Omnisphere, Keyscape, Trilian + 200 Preset Banks",
-    "customNote": ""
+    "customNote": "Bundles not included"
   },
   "categories": {
     "instruments": {
