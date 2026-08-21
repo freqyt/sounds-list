@@ -668,7 +668,10 @@ const macData = {
           ],
           "tags": "Image-Line"
         },
-        "Logic Pro X"
+        {
+          "name": "Logic Pro X",
+          "tags": "Apple"
+        }
       ],
       "tier30": [],
       "tier20": []
@@ -685,14 +688,38 @@ const macData = {
       ],
       "tier40": [],
       "tier30": [
-        "After Effects",
-        "Audition",
-        "Davinci Resolve",
-        "Final Cut Pro",
-        "Illustrator",
-        "InDesign",
-        "Photoshop",
-        "Premiere Pro"
+        {
+          "name": "After Effects",
+          "tags": "Adobe"
+        },
+        {
+          "name": "Audition",
+          "tags": "Adobe"
+        },
+        {
+          "name": "Davinci Resolve",
+          "tags": "Blackmagic Design"
+        },
+        {
+          "name": "Final Cut Pro",
+          "tags": "Apple"
+        },
+        {
+          "name": "Illustrator",
+          "tags": "Adobe"
+        },
+        {
+          "name": "InDesign",
+          "tags": "Adobe"
+        },
+        {
+          "name": "Photoshop",
+          "tags": "Adobe"
+        },
+        {
+          "name": "Premiere Pro",
+          "tags": "Adobe"
+        }
       ],
       "tier20": []
     }
