@@ -260,9 +260,8 @@ function calculateCartTotals() {
   let discount = 0;
   let promoLabel = '';
   let upsellMsg = '';
-  const totalCount = state.cart.length;
 
-  // 1. Percentage Off (% Off Storewide)
+  // 1. Percentage Off (% Off Storewide on entire cart including bundles)
   if (deal.type === 'percent_off') {
     const pct = Number(deal.percentOff) || 0;
     if (pct > 0) {
@@ -274,17 +273,19 @@ function calculateCartTotals() {
     }
   }
 
-  // 2. Multi-Buy Deal (e.g. Any 3 for $100)
+  // 2. Multi-Buy Deal (Applies ONLY to single plugins, e.g. Any 3 for $100)
   else if (deal.type === 'bundle_x_for_y') {
     const qty = Math.max(1, Number(deal.bundleQty) || 3);
     const bundlePrice = Number(deal.bundlePrice) || 100;
-    const bundlesCount = Math.floor(totalCount / qty);
-    const remainder = totalCount % qty;
+    const singlePlugins = state.cart.filter(item => item.type === 'plugin');
+    const pluginCount = singlePlugins.length;
+    const bundlesCount = Math.floor(pluginCount / qty);
+    const remainder = pluginCount % qty;
     const needed = qty - remainder;
 
     if (bundlesCount > 0) {
-      // Sort items by price descending so highest value items get bundled into the promo groups
-      const sorted = [...state.cart].sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+      // Sort single plugins by price descending so highest value plugins get bundled into the promo groups
+      const sorted = [...singlePlugins].sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
       for (let b = 0; b < bundlesCount; b++) {
         const group = sorted.slice(b * qty, (b + 1) * qty);
         const groupOriginalSum = group.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
@@ -297,31 +298,37 @@ function calculateCartTotals() {
       }
     }
 
-    if (remainder === 0 && totalCount > 0) {
+    if (pluginCount === 0) {
+      upsellMsg = `💡 Add <strong>${qty} single plugins</strong> to unlock the <strong>${qty} for $${bundlePrice}</strong> bundle deal!`;
+    } else if (remainder === 0) {
       if (discount > 0) {
         upsellMsg = `🎉 <strong>${qty} for $${bundlePrice} Deal Unlocked!</strong> (You saved $${discount})`;
       } else {
-        upsellMsg = `🎉 <strong>${qty} items selected!</strong>`;
+        upsellMsg = `🎉 <strong>${qty} single plugins selected!</strong>`;
       }
     } else if (needed === 1) {
-      const addedCost = Math.max(0, bundlePrice - ((qty - 1) * (Number(state.cart[0]?.price) || 40)));
-      upsellMsg = `⚡ Add <strong>1 more item</strong> for only <strong>$${addedCost > 0 ? addedCost : 20} more</strong> to get the ${qty} for $${bundlePrice} deal!`;
+      const currentPluginsCost = singlePlugins.reduce((sum, i) => sum + (Number(i.price) || 0), 0) - discount;
+      const nextTargetCost = (bundlesCount + 1) * bundlePrice;
+      const addedCost = Math.max(1, nextTargetCost - currentPluginsCost);
+      upsellMsg = `⚡ Add <strong>1 more single plugin</strong> for only <strong>$${addedCost} more</strong> to get the ${qty} for $${bundlePrice} deal!`;
     } else if (needed > 1) {
-      upsellMsg = `💡 Add <strong>${needed} more item${needed === 1 ? '' : 's'}</strong> to unlock the <strong>${qty} for $${bundlePrice}</strong> bundle deal!`;
+      upsellMsg = `💡 Add <strong>${needed} more single plugin${needed === 1 ? '' : 's'}</strong> to unlock the <strong>${qty} for $${bundlePrice}</strong> bundle deal!`;
     }
   }
 
-  // 3. Buy X Get Y Free (BOGO)
+  // 3. Buy X Get Y Free (BOGO - Applies ONLY to single plugins)
   else if (deal.type === 'bogo') {
     const buyQty = Math.max(1, Number(deal.bogoBuyQty) || 2);
     const getQty = Math.max(1, Number(deal.bogoGetQty) || 1);
     const cycle = buyQty + getQty;
-    const freeCycles = Math.floor(totalCount / cycle);
-    const remainder = totalCount % cycle;
+    const singlePlugins = state.cart.filter(item => item.type === 'plugin');
+    const pluginCount = singlePlugins.length;
+    const freeCycles = Math.floor(pluginCount / cycle);
+    const remainder = pluginCount % cycle;
 
     if (freeCycles > 0) {
-      // Sort ascending to make the lowest priced item(s) in each cycle free
-      const sorted = [...state.cart].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      // Sort single plugins ascending to make the lowest priced item(s) in each cycle free
+      const sorted = [...singlePlugins].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
       const freeItems = sorted.slice(0, freeCycles * getQty);
       discount = freeItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
       if (discount > 0) {
@@ -329,12 +336,14 @@ function calculateCartTotals() {
       }
     }
 
-    if (remainder === buyQty) {
-      upsellMsg = `🎁 Add <strong>${getQty} more item${getQty === 1 ? '' : 's'}</strong> to get it <strong>100% FREE</strong>!`;
+    if (pluginCount === 0) {
+      upsellMsg = `🎁 Buy any <strong>${buyQty} single plugins</strong>, get <strong>${getQty} FREE</strong>!`;
+    } else if (remainder === buyQty) {
+      upsellMsg = `🎁 Add <strong>${getQty} more single plugin${getQty === 1 ? '' : 's'}</strong> to get it <strong>100% FREE</strong>!`;
     } else if (remainder > 0 && remainder < buyQty) {
       const moreNeeded = buyQty - remainder;
-      upsellMsg = `🎁 Add <strong>${moreNeeded} more item${moreNeeded === 1 ? '' : 's'}</strong> to qualify for <strong>FREE item${getQty === 1 ? '' : 's'}</strong>!`;
-    } else if (remainder === 0 && totalCount > 0) {
+      upsellMsg = `🎁 Add <strong>${moreNeeded} more single plugin${moreNeeded === 1 ? '' : 's'}</strong> to qualify for <strong>FREE plugin${getQty === 1 ? '' : 's'}</strong>!`;
+    } else if (remainder === 0 && pluginCount > 0) {
       upsellMsg = `🎉 <strong>Buy ${buyQty} Get ${getQty} Free Deal Applied!</strong> (You saved $${discount})`;
     }
   }
