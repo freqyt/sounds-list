@@ -58,7 +58,7 @@ const macData = {
         "KORG Bundle",
         {
           "name": "Nexus 5",
-          "note": "Starter Version, see above for Complete"
+          "note": "Starter Version, see bundles for Complete"
         },
         "Omnisphere",
         "Roland Cloud",
