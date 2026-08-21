@@ -337,7 +337,7 @@ function renderBundleCard(bundle, q) {
   const n = normalizeBundle(bundle);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, true);
-  const noteHtml = n.note ? `<div class="bundle-note">⚠ ${esc(n.note)}</div>` : '';
+  const noteHtml = n.note ? `<div class="bundle-note"><span class="info-icon">ℹ</span> ${esc(n.note)}</div>` : '';
 
   return `
     <article class="bundle-card">
@@ -360,7 +360,7 @@ function renderPluginCard(item, q) {
   const n = normalizeItem(item);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, false);
-  const noteHtml = n.note ? `<span class="plugin-note-tag">⚠ ${esc(n.note)}</span>` : '';
+  const noteHtml = n.note ? `<span class="plugin-note-tag"><span class="info-icon">ℹ</span> ${esc(n.note)}</span>` : '';
 
   return `
     <div class="plugin-card ${n.note ? 'has-note' : ''}">
