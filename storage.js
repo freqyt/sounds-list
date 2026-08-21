@@ -60,36 +60,53 @@ async function commitToGitHub(allData) {
     'Content-Type': 'application/json'
   };
 
-  // Helper to commit a single file
+  // Helper to commit a single file with fresh SHA and auto-retry
   async function updateFile(path, contentStr, commitMessage) {
     const fileUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
     
-    // 1. Get current file SHA
-    let sha = null;
-    try {
-      const getRes = await fetch(`${fileUrl}?ref=${branch}`, { headers });
-      if (getRes.ok) {
-        const fileData = await getRes.json();
-        sha = fileData.sha;
-      }
-    } catch(e) {}
+    // Always fetch latest SHA with cache: 'no-store' & cache-busting timestamp
+    async function getLatestSha() {
+      try {
+        const getRes = await fetch(`${fileUrl}?ref=${branch}&_nocache=${Date.now()}`, {
+          headers: {
+            ...headers,
+            'If-None-Match': ''
+          },
+          cache: 'no-store'
+        });
+        if (getRes.ok) {
+          const fileData = await getRes.json();
+          return fileData.sha;
+        }
+      } catch(e) {}
+      return null;
+    }
 
-    // 2. Base64 encode content (Unicode safe)
+    let sha = await getLatestSha();
     const base64Content = btoa(unescape(encodeURIComponent(contentStr)));
 
-    // 3. Put updated file
-    const body = {
-      message: commitMessage,
-      content: base64Content,
-      branch: branch
+    // Attempt PUT
+    const makePut = (fileSha) => {
+      const payload = {
+        message: commitMessage,
+        content: base64Content,
+        branch: branch
+      };
+      if (fileSha) payload.sha = fileSha;
+      return fetch(fileUrl, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(payload)
+      });
     };
-    if (sha) body.sha = sha;
 
-    const putRes = await fetch(fileUrl, {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify(body)
-    });
+    let putRes = await makePut(sha);
+
+    // If 409 Conflict (stale SHA), fetch fresh SHA and retry immediately
+    if (putRes.status === 409) {
+      sha = await getLatestSha();
+      putRes = await makePut(sha);
+    }
 
     if (!putRes.ok) {
       const errJson = await putRes.json();
