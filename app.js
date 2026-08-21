@@ -123,7 +123,6 @@ function renderTabs() {
 
 function switchCategory(key) {
   state.activeCategory = key;
-  saveBrowseState();
   renderTabs();
   renderCatalogue();
 }
