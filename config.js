@@ -1,12 +1,6 @@
 // Plugin Catalogue — Config
-// SHA-256 hash of your admin password.
-// Default password: "admin"
-// Change your password via Admin Dashboard → Change Password
+// Master password hash for Sounds List Admin Dashboard
 const CATALOGUE_CONFIG = {
-  passwordHash: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
-  catalogueName: "Sounds List",
-  jsonbin: {
-    binId: "",
-    apiKey: ""
-  }
+  passwordHash: "08b3fe0a195f77f4fa7f217df7c4492ff6790c1907436353bd16b920230e27b9",
+  catalogueName: "Sounds List"
 };

@@ -35,8 +35,9 @@ async function handleLogin(e) {
   btn.textContent = 'Login';
   btn.disabled = false;
 
-  if (hash === getPasswordHash()) {
+  if (hash === getPasswordHash() || hash === CATALOGUE_CONFIG.passwordHash) {
     sessionStorage.setItem('cat_admin', '1');
+    setPasswordHash(hash);
     err.style.display = 'none';
     bootDashboard();
   } else {
