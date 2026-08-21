@@ -605,11 +605,100 @@ function moveBundle(idx, dir) {
   renderPanel();
 }
 
+function syncTagsToMatchingItems(productName, tags) {
+  const cleanName = (productName || '').trim().toLowerCase();
+  if (!cleanName) return;
+
+  const otherPlat = adm.platform === 'windows' ? 'mac' : 'windows';
+  const otherData = adm.data[otherPlat];
+  if (!otherData || !otherData.categories) return;
+
+  let matched = false;
+  Object.values(otherData.categories).forEach(cat => {
+    ['bundles', 'tier40', 'tier30', 'tier20'].forEach(tk => {
+      if (cat[tk] && cat[tk].length) {
+        cat[tk].forEach((otherItem, oIdx) => {
+          const oName = (typeof otherItem === 'string' ? otherItem : otherItem.name || '').trim().toLowerCase();
+          if (oName === cleanName) {
+            const normOther = tk === 'bundles' ? normalizeBundle(otherItem) : normalizeItem(otherItem);
+            normOther.tags = tags;
+            cat[tk][oIdx] = normOther;
+            matched = true;
+          }
+        });
+      }
+    });
+  });
+
+  if (matched) {
+    savePlatformData(otherPlat, otherData);
+  }
+}
+
+function syncAllTagsCrossPlatform() {
+  const winData = adm.data.windows;
+  const macData = adm.data.mac;
+  if (!winData || !macData) return;
+
+  const tagMap = new Map();
+
+  const gatherTags = (platData) => {
+    if (!platData || !platData.categories) return;
+    Object.values(platData.categories).forEach(cat => {
+      ['bundles', 'tier40', 'tier30', 'tier20'].forEach(tk => {
+        if (cat[tk]) {
+          cat[tk].forEach(item => {
+            const name = (typeof item === 'string' ? item : item.name || '').trim().toLowerCase();
+            const tags = (typeof item === 'object' && item.tags) ? item.tags.trim() : '';
+            if (name && tags) {
+              if (!tagMap.has(name) || tagMap.get(name).length < tags.length) {
+                tagMap.set(name, tags);
+              }
+            }
+          });
+        }
+      });
+    });
+  };
+
+  gatherTags(winData);
+  gatherTags(macData);
+
+  const applyTags = (platData) => {
+    if (!platData || !platData.categories) return;
+    Object.values(platData.categories).forEach(cat => {
+      ['bundles', 'tier40', 'tier30', 'tier20'].forEach(tk => {
+        if (cat[tk]) {
+          cat[tk].forEach((item, idx) => {
+            const name = (typeof item === 'string' ? item : item.name || '').trim().toLowerCase();
+            if (name && tagMap.has(name)) {
+              const norm = tk === 'bundles' ? normalizeBundle(item) : normalizeItem(item);
+              if (!norm.tags || norm.tags.trim() !== tagMap.get(name)) {
+                norm.tags = tagMap.get(name);
+                cat[tk][idx] = norm;
+              }
+            }
+          });
+        }
+      });
+    });
+  };
+
+  applyTags(winData);
+  applyTags(macData);
+}
+
 function updateField(tierKey, idx, field, value) {
   const items = getTier(tierKey);
   const n = tierKey === 'bundles' ? normalizeBundle(items[idx]) : normalizeItem(items[idx]);
   n[field] = value;
   items[idx] = n;
+
+  // Intelligently sync tags to the same product across Windows and Mac
+  if (field === 'tags') {
+    syncTagsToMatchingItems(n.name, value);
+  }
+
   autoSave();
 }
 
@@ -671,7 +760,8 @@ let _saveTimer = null;
 function autoSave() {
   clearTimeout(_saveTimer);
   _saveTimer = setTimeout(() => {
-    savePlatformData(adm.platform, adm.data[adm.platform]);
+    savePlatformData('windows', adm.data.windows);
+    savePlatformData('mac', adm.data.mac);
     const ind2 = document.getElementById('save-ind');
     if (ind2) {
       ind2.textContent = '✓ Draft Saved (Click "Publish Live" to sync)';
@@ -687,6 +777,9 @@ async function publishLiveToCloud() {
     showCloudModal();
     return;
   }
+
+  // Intelligently sync all tags across matching products on Windows & Mac
+  syncAllTagsCrossPlatform();
 
   // Sort all plugin tiers alphabetically across all categories before publishing
   sortAllPluginsAlphabetically();
