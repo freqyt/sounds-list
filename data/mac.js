@@ -190,7 +190,7 @@ const macData = {
         {
           "name": "Kontakt 8",
           "note": "No banks included",
-          "tags": "Native Instruments,NI"
+          "tags": "Native Instruments,Kontakt 8"
         },
         {
           "name": "Kult",
@@ -774,7 +774,7 @@ const macData = {
       "icon": "",
       "bundles": [
         {
-          "name": "Native Instruments Kontakt 8 (VST / Engine)",
+          "name": "Kontakt 8",
           "price": 40,
           "includes": "",
           "note": "Required to run all Kontakt libraries (Must be cracked)",
