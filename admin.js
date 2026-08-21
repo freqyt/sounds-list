@@ -383,11 +383,6 @@ function renderDealsPanel() {
             ${buildDealPreviewHtml(deal)}
           </div>
         </div>
-
-        <div class="deals-actions-bar" style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.8rem; color: var(--text-muted);">ⓘ All changes auto-save instantly.</span>
-          <button class="hbtn hbtn-primary" onclick="publishLiveToCloud()" style="padding: 0.55rem 1.2rem; font-size: 0.88rem; font-weight: 700;">🚀 Publish Live</button>
-        </div>
       </div>
     </div>
   `;
