@@ -1239,6 +1239,29 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  width: 100%;
+}
+
+.cart-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-row-primary {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cart-actions-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
 }
 
 .cart-left {
@@ -1249,19 +1272,25 @@ html, body {
 }
 
 .cart-badge-icon {
-  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(59, 130, 246, 0.15);
   border-radius: 8px;
-  padding: 0.3rem;
+  padding: 0.35rem;
+  flex-shrink: 0;
+}
+
+.cart-icon-svg {
+  display: block;
+  color: var(--accent-bright);
 }
 
 .cart-summary {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
+  min-width: 0;
 }
 
 .cart-count-line {
@@ -1334,13 +1363,6 @@ html, body {
   padding: 0.12rem 0.45rem;
   border-radius: var(--radius-full);
   white-space: nowrap;
-}
-
-.cart-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  flex-shrink: 0;
 }
 
 .cart-btn {
@@ -1429,7 +1451,7 @@ html, body {
   }
 
   .catalogue-main {
-    padding: 1rem 0.75rem 6rem;
+    padding: 1rem 0.75rem 9.5rem;
   }
 
   .sticky-controls {
@@ -1448,22 +1470,52 @@ html, body {
   }
 
   .order-cart-bar {
-    width: calc(100% - 1rem);
-    bottom: 0.5rem;
-    padding: 0.5rem 0.75rem;
+    width: calc(100% - 1.25rem);
+    bottom: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .cart-upsell-banner {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.55rem;
+    margin-bottom: 0.45rem;
   }
 
   .cart-bar-inner {
-    gap: 0.4rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
   }
 
-  .cart-btn {
-    padding: 0.4rem 0.65rem;
-    font-size: 0.75rem;
+  .cart-row-top {
+    width: 100%;
+  }
+
+  .cart-row-primary {
+    width: 100%;
+  }
+
+  .cart-btn-order {
+    width: 100%;
+    justify-content: center;
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-md);
+  }
+
+  .cart-btn-clear {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  .cart-btn-copy {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.76rem;
   }
 
   .floating-actions {
-    bottom: 6.5rem;
+    bottom: 9.5rem;
     right: 0.85rem;
   }
 }
