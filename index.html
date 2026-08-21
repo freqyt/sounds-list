@@ -19,67 +19,58 @@
       <div class="logo-wrap">
         <img src="logo.jpg" alt="Sounds List Logo" class="logo-img" />
         <h1 class="logo-title">Sounds List</h1>
-        <p class="logo-sub">Premium VSTs, Instruments, DAWs & FX Catalogue</p>
+        <p class="logo-sub">Select your operating system to view available audio software & plugins.</p>
       </div>
-
-      <p class="platform-prompt">Choose your operating system to get started:</p>
 
       <div class="platform-cards">
         <button class="platform-card" onclick="selectPlatform('windows')">
           <div class="platform-card-icon">🪟</div>
           <div class="platform-card-label">Windows</div>
           <div class="platform-card-sub">PC / Windows 10 & 11</div>
-          <div class="platform-card-cta">Explore Windows List →</div>
+          <div class="platform-card-cta">Browse Windows →</div>
         </button>
         <button class="platform-card" onclick="selectPlatform('mac')">
           <div class="platform-card-icon">🍎</div>
           <div class="platform-card-label">Mac</div>
           <div class="platform-card-sub">macOS / Apple Silicon & Intel</div>
-          <div class="platform-card-cta">Explore Mac List →</div>
+          <div class="platform-card-cta">Browse Mac →</div>
         </button>
       </div>
-
 
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════ -->
-  <!--  CATALOGUE SCREEN                                   -->
+  <!--  CATALOGUE SCREEN (CLEAN & MINIMAL)                 -->
   <!-- ═══════════════════════════════════════════════════ -->
   <div id="catalogue-screen" class="screen">
 
-    <!-- TOP NAV -->
+    <!-- COMPACT STICKY HEADER -->
     <header class="topnav">
-      <div class="nav-left">
-        <button class="back-btn" onclick="goBack()" title="Change platform">
-          <span class="back-arrow">←</span> <span class="back-text">Platforms</span>
-        </button>
-      </div>
+      <button class="back-btn" onclick="goBack()" title="Change platform">
+        ← <span id="platform-badge" class="platform-text"></span>
+      </button>
 
       <div class="nav-center">
-        <a href="javascript:void(0)" onclick="goBack()" class="nav-logo">
-          <img src="logo.jpg" alt="" class="nav-logo-img" />
-          <span class="nav-logo-text">Sounds List</span>
-        </a>
-        <span id="platform-badge" class="platform-badge"></span>
+        <span class="nav-brand">Sounds List</span>
       </div>
 
       <div class="nav-right">
-        <!-- Quick indicator on mobile -->
-        <span id="mobile-stat-badge" class="stat-pill"></span>
+        <span id="quick-count" class="quick-count-pill"></span>
       </div>
     </header>
 
-    <!-- PROMINENT CENTERED SEARCH SECTION -->
-    <div class="hero-search-container">
-      <div class="hero-search-inner">
+    <!-- SLIM UNIFIED CONTROLS BAR (SEARCH + TABS) -->
+    <div class="sticky-controls">
+      <!-- Search Input -->
+      <div class="search-bar-wrap">
         <div class="search-box">
           <span class="search-lens">🔍</span>
           <input
             type="text"
             id="search-input"
-            class="main-search-input"
-            placeholder="Search instruments, plugins, FX, DAWs, bundles..."
+            class="clean-search-input"
+            placeholder="Search plugins, bundles, DAWs..."
             oninput="handleSearch(this.value)"
             autocomplete="off"
             spellcheck="false"
@@ -91,56 +82,23 @@
             title="Clear search"
           >×</button>
         </div>
-        <div class="search-meta">
-          <span id="search-feedback" class="search-feedback">Browse by category or search anything</span>
-          <span id="result-count" class="result-count"></span>
-        </div>
       </div>
-    </div>
 
-    <!-- STICKY CATEGORY TABS -->
-    <div class="category-tabs-wrap">
+      <!-- Clean Category Tabs -->
       <div class="category-tabs" id="category-tabs"></div>
     </div>
 
-    <!-- FILTER BAR WITH PRICING & BADGES -->
-    <div class="filter-bar-wrap">
-      <div class="filter-bar">
-        <div class="filter-group">
-          <span class="filter-label">Filter:</span>
-          <div class="filter-chips" id="filter-chips">
-            <button class="chip active" data-filter="all" onclick="setFilter('all', this)">All Items</button>
-            <button class="chip chip-bundle" data-filter="bundle" onclick="setFilter('bundle', this)">📦 Bundles</button>
-            <button class="chip chip-price" data-filter="40" onclick="setFilter('40', this)">$40 Tier</button>
-            <button class="chip chip-price" data-filter="30" onclick="setFilter('30', this)">$30 Tier</button>
-            <button class="chip chip-price" data-filter="20" onclick="setFilter('20', this)">$20 Tier</button>
-            <button class="chip chip-new" data-filter="new" onclick="setFilter('new', this)">🔥 New</button>
-            <button class="chip chip-hot" data-filter="hot" onclick="setFilter('hot', this)">🔴 Hot</button>
-            <button class="chip chip-sale" data-filter="sale" onclick="setFilter('sale', this)">🏷️ Sale</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MAIN CONTENT -->
+    <!-- MAIN PRODUCT LIST -->
     <main class="catalogue-main" id="catalogue-main"></main>
 
-    <!-- FLOATING SCROLL-TO-TOP BUTTON -->
+    <!-- FLOATING SCROLL TO TOP -->
     <button id="scroll-top-btn" class="scroll-top-btn" onclick="scrollToTop()" title="Back to top">↑</button>
-
-    <!-- FOOTER -->
-    <footer class="catalogue-footer">
-      <div class="footer-content">
-        <img src="logo.jpg" alt="" class="footer-logo" />
-        <p class="footer-text"><strong>Sounds List</strong> • Clean, curated audio catalogue</p>
-      </div>
-    </footer>
 
   </div>
 
 </div><!-- /#app -->
 
-<!-- Scripts: Config, Data, Shared Storage Layer, and App Logic -->
+<!-- Scripts -->
 <script src="config.js"></script>
 <script src="data/windows.js"></script>
 <script src="data/mac.js"></script>
