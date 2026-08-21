@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
    SOUNDS LIST — MINIMAL & FAST app.js
-   Clean, distraction-free catalogue engine
+   Features: Zero clutter, state persistence on refresh,
+   instant live search, dynamic badge support & animations.
 ═══════════════════════════════════════════════════════════ */
 
 let state = {
@@ -30,6 +31,63 @@ function getData() {
   return state.platform === 'windows' ? windowsData : macData;
 }
 
+// ── State Persistence & URL Hash ─────────────────────────
+
+function saveBrowseState() {
+  if (state.platform) {
+    sessionStorage.setItem('sounds_platform', state.platform);
+    if (state.activeCategory) {
+      sessionStorage.setItem('sounds_category', state.activeCategory);
+      history.replaceState(null, '', `#${state.platform}/${state.activeCategory}`);
+    } else {
+      history.replaceState(null, '', `#${state.platform}`);
+    }
+  }
+}
+
+function clearBrowseState() {
+  sessionStorage.removeItem('sounds_platform');
+  sessionStorage.removeItem('sounds_category');
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+}
+
+function restoreBrowseState() {
+  let platform = null;
+  let category = null;
+
+  // 1. Check URL hash first (e.g. #windows/fx)
+  const hash = window.location.hash.replace('#', '').trim();
+  if (hash) {
+    const parts = hash.split('/');
+    if (parts[0] === 'windows' || parts[0] === 'mac') {
+      platform = parts[0];
+      if (parts[1]) category = parts[1];
+    }
+  }
+
+  // 2. Check sessionStorage if no hash
+  if (!platform) {
+    const savedPlat = sessionStorage.getItem('sounds_platform');
+    if (savedPlat === 'windows' || savedPlat === 'mac') {
+      platform = savedPlat;
+      category = sessionStorage.getItem('sounds_category');
+    }
+  }
+
+  if (platform) {
+    state.platform = platform;
+    const data = getData();
+    state.activeCategory = (category && data.categories[category]) ? category : Object.keys(data.categories)[0];
+    
+    // Directly show catalogue screen without landing animation
+    document.getElementById('platform-screen').classList.remove('active');
+    document.getElementById('catalogue-screen').classList.add('active');
+    
+    setupCatalogue();
+    saveBrowseState();
+  }
+}
+
 // ── Screen Transitions ───────────────────────────────────
 
 const TRANSITION_DURATION = 350;
@@ -39,6 +97,8 @@ function selectPlatform(platform) {
   const data = getData();
   state.activeCategory = Object.keys(data.categories)[0];
   state.searchQuery = '';
+
+  saveBrowseState();
 
   const platformScreen = document.getElementById('platform-screen');
   const catalogueScreen = document.getElementById('catalogue-screen');
@@ -62,6 +122,7 @@ function goBack() {
   const platformScreen = document.getElementById('platform-screen');
   const catalogueScreen = document.getElementById('catalogue-screen');
 
+  clearBrowseState();
   catalogueScreen.classList.add('exit-right');
 
   setTimeout(() => {
@@ -116,6 +177,7 @@ function renderTabs() {
 
 function switchCategory(key) {
   state.activeCategory = key;
+  saveBrowseState();
   renderTabs();
   renderCatalogue();
 }
@@ -183,7 +245,7 @@ function renderCatalogue() {
     const filtered = cat.bundles.filter(b => matchesBundleSearch(b, q));
     if (filtered.length > 0) {
       totalVisible += filtered.length;
-      html += renderSection('Bundles', filtered.map(b => renderBundleCard(b, q)).join(''), 'bundles-grid', filtered.length);
+      html += renderSection('Bundles', filtered.map(b => renderBundleCard(b, q)).join(''), 'bundles-grid');
     }
   }
 
@@ -192,7 +254,7 @@ function renderCatalogue() {
     const filtered = cat.tier40.filter(item => matchesSearch(item, q));
     if (filtered.length > 0) {
       totalVisible += filtered.length;
-      html += renderSection('$40 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid', filtered.length);
+      html += renderSection('$40 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
     }
   }
 
@@ -201,7 +263,7 @@ function renderCatalogue() {
     const filtered = cat.tier30.filter(item => matchesSearch(item, q));
     if (filtered.length > 0) {
       totalVisible += filtered.length;
-      html += renderSection('$30 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid', filtered.length);
+      html += renderSection('$30 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
     }
   }
 
@@ -210,7 +272,7 @@ function renderCatalogue() {
     const filtered = cat.tier20.filter(item => matchesSearch(item, q));
     if (filtered.length > 0) {
       totalVisible += filtered.length;
-      html += renderSection('$20 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid', filtered.length);
+      html += renderSection('$20 Each', filtered.map(item => renderPluginCard(item, q)).join(''), 'plugins-grid');
     }
   }
 
@@ -230,12 +292,11 @@ function renderCatalogue() {
 
 // ── HTML Builders ────────────────────────────────────────
 
-function renderSection(title, innerHtml, gridClass, count) {
+function renderSection(title, innerHtml, gridClass) {
   return `
     <section class="section">
       <div class="section-header">
         <h3 class="section-title">${esc(title)}</h3>
-        <span class="section-count">${count}</span>
       </div>
       <div class="${gridClass}">
         ${innerHtml}
@@ -297,4 +358,10 @@ window.addEventListener('scroll', () => {
   if (btn) {
     btn.classList.toggle('visible', window.scrollY > 300);
   }
+});
+
+// ── Initialize on Page Load ──────────────────────────────
+
+window.addEventListener('DOMContentLoaded', () => {
+  restoreBrowseState();
 });
