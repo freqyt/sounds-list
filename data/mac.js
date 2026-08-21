@@ -82,7 +82,7 @@ const macData = {
           "badges": [
             "NEW"
           ],
-          "tags": "u-He"
+          "tags": "u-he"
         }
       ],
       "tier40": [
@@ -138,6 +138,10 @@ const macData = {
           "tags": "Native Instruments,NI"
         },
         {
+          "name": "ACE",
+          "tags": "u-he"
+        },
+        {
           "name": "Addictive Drums",
           "tags": "XLN Audio"
         },
@@ -160,6 +164,10 @@ const macData = {
           "tags": "Slate Digital"
         },
         {
+          "name": "Diva",
+          "tags": "u-he"
+        },
+        {
           "name": "DUNE 3",
           "tags": "Synapse Audio"
         },
@@ -171,7 +179,14 @@ const macData = {
           "name": "Heat Up 3",
           "tags": "Initial Audio"
         },
-        "Hybrid",
+        {
+          "name": "Hive 2",
+          "tags": "u-he"
+        },
+        {
+          "name": "Hybrid 3",
+          "tags": "AIR Music Technology"
+        },
         {
           "name": "Kontakt 8",
           "note": "No banks included",
@@ -192,6 +207,10 @@ const macData = {
         {
           "name": "Reaktor 6",
           "tags": "Native Instruments,NI"
+        },
+        {
+          "name": "Repro-1 + 5",
+          "tags": "u-he"
         },
         {
           "name": "Rippler",
@@ -219,21 +238,19 @@ const macData = {
           "name": "The Prince",
           "tags": "Cradle"
         },
-        "u-he ACE",
-        "u-he Diva",
-        "u-he Hive 2",
-        "u-he Repro-1 + 5",
-        {
-          "name": "u-he Zebra 3",
-          "badges": [
-            "NEW"
-          ]
-        },
         {
           "name": "Vanguard",
           "badges": [
             "NEW"
-          ]
+          ],
+          "tags": "reFX"
+        },
+        {
+          "name": "Zebra 3",
+          "badges": [
+            "NEW"
+          ],
+          "tags": "u-he"
         }
       ],
       "tier20": [
@@ -241,7 +258,10 @@ const macData = {
           "name": "Albino 3",
           "tags": "Rob Papen"
         },
-        "BioTek 2",
+        {
+          "name": "BioTek 2",
+          "tags": "Tracktion"
+        },
         {
           "name": "Blue II",
           "tags": "Rob Papen"
@@ -295,7 +315,10 @@ const macData = {
           "name": "OP-X PRO-II",
           "tags": "SonicProjects"
         },
-        "Padshop 2",
+        {
+          "name": "Padshop 2",
+          "tags": "Steinberg"
+        },
         {
           "name": "Palindrome",
           "tags": "Glitchmachines"
