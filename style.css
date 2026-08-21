@@ -935,6 +935,36 @@ html, body {
   gap: 0.35rem;
 }
 
+/* Kontakt Card Labels */
+.kontakt-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.kontakt-company-label {
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: var(--accent-bright);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.kontakt-lib-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.plugin-card:hover .kontakt-lib-name {
+  color: #fff;
+}
+
+.kontakt-soundtype-section {
+  margin-bottom: 2.2rem;
+}
+
 /* ═══════════════════════════════════════════════════════════
    BADGES (NEW, HOT, SALE)
 ═══════════════════════════════════════════════════════════ */

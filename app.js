@@ -692,8 +692,70 @@ function renderCatalogue() {
       totalVisible += remainingBundles.length;
       html = renderSection('Mega Bundles & Vaults', remainingBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid') + html;
     }
+  } else if (state.activeCategory === 'kontakt') {
+    // ── KONTAKT LIBRARIES: GROUPED BY SOUND TYPE ──
+    const allItems = [
+      ...(cat.tier40 || []),
+      ...(cat.tier30 || []),
+      ...(cat.tier20 || [])
+    ];
+
+    // Bundles at top
+    if (cat.bundles && cat.bundles.length > 0) {
+      totalVisible += cat.bundles.length;
+      html += renderSection('Featured Bundles', cat.bundles.map(b => renderBundleCard(b, '', 'kontakt')).join(''), 'bundles-grid');
+    }
+
+    const SOUND_TYPE_ORDER = [
+      { key: 'Strings & Orchestral', icon: '🎻' },
+      { key: 'Pianos & Keys', icon: '🎹' },
+      { key: 'Guitars & Bass', icon: '🎸' },
+      { key: 'Brass & Woodwinds', icon: '🎺' },
+      { key: 'Vocals & Choirs', icon: '🎤' },
+      { key: 'Drums & Percussion', icon: '🥁' },
+      { key: 'Ethnic & World', icon: '🌍' },
+      { key: 'Synths & Vintage Keys', icon: '🎛️' },
+      { key: 'Cinematic & Hybrid Textures', icon: '🔮' }
+    ];
+
+    const typeGroups = {};
+    SOUND_TYPE_ORDER.forEach(st => { typeGroups[st.key] = []; });
+    typeGroups['Other Kontakt Instruments'] = [];
+
+    allItems.forEach(item => {
+      const n = normalizeItem(item);
+      const tags = (n.tags || '').toLowerCase();
+      let matched = false;
+      for (const st of SOUND_TYPE_ORDER) {
+        if (tags.includes(st.key.toLowerCase())) {
+          typeGroups[st.key].push(item);
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) {
+        typeGroups['Other Kontakt Instruments'].push(item);
+      }
+    });
+
+    SOUND_TYPE_ORDER.concat([{ key: 'Other Kontakt Instruments', icon: '📦' }]).forEach(st => {
+      const items = typeGroups[st.key];
+      if (items && items.length > 0) {
+        const sorted = sortItemsAZ(items);
+        totalVisible += sorted.length;
+        html += `
+          <section class="section kontakt-soundtype-section">
+            <div class="section-header">
+              <h3 class="section-title"><span>${st.icon}</span> ${esc(st.key)}</h3>
+              <span class="section-count">${sorted.length}</span>
+            </div>
+            <div class="plugins-grid">${sorted.map(item => renderPluginCard(item, '', '$40', 'kontakt')).join('')}</div>
+          </section>
+        `;
+      }
+    });
   } else {
-    // ── STANDARD CATEGORIES (Instruments, FX, DAWs, Software, Kontakt) ──
+    // ── STANDARD CATEGORIES (Instruments, FX, DAWs, Software) ──
     // 1. Bundles (custom manual ordering preserved)
     if (cat.bundles && cat.bundles.length > 0) {
       totalVisible += cat.bundles.length;
@@ -903,6 +965,14 @@ function renderPluginCard(item, q, tier = '$40', catKey = '', vstContext = '') {
     }
   }
 
+  let nameHtml = highlight(displayName, q);
+  if ((catKey === 'kontakt' || state.activeCategory === 'kontakt') && n.name.includes(' - ') && !q) {
+    const parts = n.name.split(' - ');
+    const comp = parts[0].trim();
+    const lib = parts.slice(1).join(' - ').trim();
+    nameHtml = `<div class="kontakt-card-meta"><span class="kontakt-company-label">${esc(comp)}</span><span class="kontakt-lib-name">${esc(lib)}</span></div>`;
+  }
+
   return `
     <div
       class="plugin-card ${n.note ? 'has-note' : ''} ${inCart ? 'in-cart' : ''}"
@@ -912,7 +982,7 @@ function renderPluginCard(item, q, tier = '$40', catKey = '', vstContext = '') {
       <div class="plugin-card-left">
         ${thumbHtml}
         <div class="plugin-info-wrap">
-          <span class="plugin-name">${highlight(displayName, q)}</span>
+          <span class="plugin-name">${nameHtml}</span>
           ${noteHtml}
         </div>
       </div>
