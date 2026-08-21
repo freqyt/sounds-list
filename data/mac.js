@@ -81,7 +81,7 @@ const macData = {
         "Keyscape",
         "KORG Bundle",
         {
-          "name": "Nexus 5",
+          "name": "Nexus 5 Starter",
           "note": "Starter version with 1000+ presets"
         },
         "Omnisphere",
