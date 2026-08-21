@@ -1,19 +1,18 @@
 /* ═══════════════════════════════════════════════════════════
-   storage.js — Shared Data & Optimized Real-Time Cloud Layer
-   Features: Smart 15-minute visitor TTL caching to conserve
-   free-tier API quota, plus 1-click single-request cloud publishing.
+   storage.js — 100% Free Zero-Visitor-Quota Architecture
+   Visitors load static files with 0 API requests.
+   Admin commits directly to GitHub via official GitHub REST API.
 ═══════════════════════════════════════════════════════════ */
 
 const STORAGE_KEYS = {
-  windows:        'plcat_windows_v1',
-  mac:            'plcat_mac_v1',
-  passwordHash:   'plcat_pw_hash',
-  jsonbinKey:     'plcat_jsonbin_key',
-  jsonbinBinId:   'plcat_jsonbin_bin_id',
-  lastCloudFetch: 'plcat_last_cloud_fetch'
+  windows:      'plcat_windows_v1',
+  mac:          'plcat_mac_v1',
+  passwordHash: 'plcat_pw_hash',
+  githubToken:  'plcat_github_token',
+  githubRepo:   'plcat_github_repo'
 };
 
-const CACHE_TTL_MS = 15 * 60 * 1000; // 15 Minutes Cache Window for Public Visitors
+const DEFAULT_REPO = 'freqyt/sounds-list';
 
 /* ── Password ──────────────────────────────────────────── */
 
@@ -25,123 +24,94 @@ function setPasswordHash(hash) {
   localStorage.setItem(STORAGE_KEYS.passwordHash, hash);
 }
 
-/* ── SHA-256 (browser built-in) ────────────────────────── */
+/* ── SHA-256 ───────────────────────────────────────────── */
 
 async function sha256(message) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(message));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-/* ── Cloud Configuration ───────────────────────────────── */
+/* ── GitHub Direct Cloud Publishing ───────────────────── */
 
-function getJsonBinConfig() {
-  const key = localStorage.getItem(STORAGE_KEYS.jsonbinKey) || CATALOGUE_CONFIG.jsonbin?.apiKey || '';
-  const binId = localStorage.getItem(STORAGE_KEYS.jsonbinBinId) || CATALOGUE_CONFIG.jsonbin?.binId || '';
-  return { key, binId };
+function getGitHubConfig() {
+  const token = localStorage.getItem(STORAGE_KEYS.githubToken) || '';
+  const repo = localStorage.getItem(STORAGE_KEYS.githubRepo) || DEFAULT_REPO;
+  return { token, repo };
 }
 
-function setJsonBinConfig(key, binId) {
-  if (key) localStorage.setItem(STORAGE_KEYS.jsonbinKey, key.trim());
-  if (binId) localStorage.setItem(STORAGE_KEYS.jsonbinBinId, binId.trim());
+function setGitHubConfig(token, repo) {
+  if (token) localStorage.setItem(STORAGE_KEYS.githubToken, token.trim());
+  if (repo) localStorage.setItem(STORAGE_KEYS.githubRepo, repo.trim());
 }
 
-/* ── Smart Quota-Optimized Cloud Fetch ─────────────────── */
+/**
+ * Commits updated windows.js and mac.js directly to GitHub master branch.
+ * Vercel automatically redeploys in seconds.
+ * 0 Third-Party API Limits. 100% Free Forever.
+ */
+async function commitToGitHub(allData) {
+  const { token, repo } = getGitHubConfig();
+  if (!token || !repo) throw new Error('GitHub Token not configured.');
 
-let _cloudCache = null;
+  const branch = 'master';
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json'
+  };
 
-async function fetchLiveCloudData(forceRefresh = false) {
-  const { key, binId } = getJsonBinConfig();
-  if (!binId) return null;
-
-  const now = Date.now();
-  const lastFetch = Number(localStorage.getItem(STORAGE_KEYS.lastCloudFetch) || 0);
-
-  // 1. If within 15-minute cache TTL and not forcing, read directly from cache (0 API Requests!)
-  if (!forceRefresh && (now - lastFetch < CACHE_TTL_MS)) {
+  // Helper to commit a single file
+  async function updateFile(path, contentStr, commitMessage) {
+    const fileUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
+    
+    // 1. Get current file SHA
+    let sha = null;
     try {
-      const win = localStorage.getItem(STORAGE_KEYS.windows);
-      const mac = localStorage.getItem(STORAGE_KEYS.mac);
-      if (win && mac) {
-        _cloudCache = { windows: JSON.parse(win), mac: JSON.parse(mac) };
-        return _cloudCache;
+      const getRes = await fetch(`${fileUrl}?ref=${branch}`, { headers });
+      if (getRes.ok) {
+        const fileData = await getRes.json();
+        sha = fileData.sha;
       }
     } catch(e) {}
-  }
 
-  // 2. Fetch fresh copy from JSONBin
-  try {
-    const headers = {};
-    if (key) headers['X-Master-Key'] = key;
+    // 2. Base64 encode content (Unicode safe)
+    const base64Content = btoa(unescape(encodeURIComponent(contentStr)));
 
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, { headers });
-    if (!res.ok) return null;
-    const json = await res.json();
-    const record = json.record;
+    // 3. Put updated file
+    const body = {
+      message: commitMessage,
+      content: base64Content,
+      branch: branch
+    };
+    if (sha) body.sha = sha;
 
-    if (record && record.windows && record.mac) {
-      _cloudCache = record;
-      localStorage.setItem(STORAGE_KEYS.windows, JSON.stringify(record.windows));
-      localStorage.setItem(STORAGE_KEYS.mac, JSON.stringify(record.mac));
-      localStorage.setItem(STORAGE_KEYS.lastCloudFetch, String(now));
-      return record;
-    }
-  } catch (err) {
-    console.warn('Using local fallback:', err);
-  }
-  return null;
-}
-
-async function saveLiveCloudData(allData) {
-  const { key, binId } = getJsonBinConfig();
-  if (!key || !binId) return false;
-
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+    const putRes = await fetch(fileUrl, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': key
-      },
-      body: JSON.stringify(allData)
+      headers,
+      body: JSON.stringify(body)
     });
-    
-    if (res.ok) {
-      localStorage.setItem(STORAGE_KEYS.lastCloudFetch, String(Date.now()));
+
+    if (!putRes.ok) {
+      const errJson = await putRes.json();
+      throw new Error(errJson.message || `GitHub Error ${putRes.status}`);
     }
-    return res.ok;
-  } catch (err) {
-    console.error('Cloud save failed:', err);
-    return false;
+    return true;
   }
+
+  // Generate serialized JS files
+  const winJs = serializePlatformData('windows', allData.windows);
+  const macJs = serializePlatformData('mac', allData.mac);
+
+  // Commit both files
+  await updateFile('data/windows.js', winJs, 'Update Windows catalogue via Admin Dashboard');
+  await updateFile('data/mac.js', macJs, 'Update Mac catalogue via Admin Dashboard');
+
+  return true;
 }
 
-async function createNewJsonBin(apiKey, initialData) {
-  try {
-    const res = await fetch('https://api.jsonbin.io/v3/b', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': apiKey,
-        'X-Bin-Name': 'Sounds List Catalogue',
-        'X-Bin-Private': 'false'
-      },
-      body: JSON.stringify(initialData)
-    });
-    if (!res.ok) throw new Error(`Error: ${res.status}`);
-    const json = await res.json();
-    return json.metadata?.id || null;
-  } catch (err) {
-    console.error('Create bin failed:', err);
-    throw err;
-  }
-}
-
-/* ── Platform data ─────────────────────────────────────── */
+/* ── Platform Data Layer ───────────────────────────────── */
 
 function getPlatformData(platform) {
-  if (_cloudCache && _cloudCache[platform]) {
-    return _cloudCache[platform];
-  }
   try {
     const stored = localStorage.getItem(STORAGE_KEYS[platform]);
     if (stored) return JSON.parse(stored);
@@ -157,7 +127,7 @@ function resetPlatformToDefault(platform) {
   localStorage.removeItem(STORAGE_KEYS[platform]);
 }
 
-/* ── Normalise helpers ─────────────────────────────────── */
+/* ── Normalise Helpers ─────────────────────────────────── */
 
 function normalizeItem(item) {
   if (typeof item === 'string') return { name: item, badges: [], note: '' };

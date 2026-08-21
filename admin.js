@@ -294,10 +294,10 @@ function autoSave() {
   }, 300);
 }
 
-// ── Publish Live to Cloud (Single 1-Request Sync) ──────────
+// ── Publish Live to GitHub (0 Third-Party API Limits) ─────
 async function publishLiveToCloud() {
-  const { key, binId } = getJsonBinConfig();
-  if (!key || !binId) {
+  const { token, repo } = getGitHubConfig();
+  if (!token) {
     showCloudModal();
     return;
   }
@@ -305,36 +305,34 @@ async function publishLiveToCloud() {
   const btn = document.getElementById('publish-cloud-btn');
   const ind = document.getElementById('save-ind');
   btn.disabled = true;
-  btn.textContent = '⏳ Publishing...';
+  btn.textContent = '⏳ Publishing to GitHub...';
 
   try {
-    const success = await saveLiveCloudData({
+    const success = await commitToGitHub({
       windows: adm.data.windows,
       mac: adm.data.mac
     });
 
     if (success) {
       if (ind) {
-        ind.textContent = '🚀 Live Worldwide!';
-        setTimeout(() => { if (ind) ind.textContent = ''; }, 3000);
+        ind.textContent = '🚀 Live on GitHub & Vercel!';
+        setTimeout(() => { if (ind) ind.textContent = ''; }, 4000);
       }
-      alert('🎉 Published Live!\n\nAll your latest changes are now live across all phones and devices worldwide.');
-    } else {
-      throw new Error('Failed to publish to JSONBin.');
+      alert('🎉 Published to GitHub & Vercel!\n\nAll your latest changes have been committed directly to your repository.\nVercel will finish redeploying worldwide in ~10 seconds.');
     }
   } catch (err) {
-    alert('Could not publish to cloud. Please check your Master Key in Cloud Settings.');
+    alert(`Could not publish: ${err.message}\n\nPlease check your GitHub Token in Cloud Settings.`);
   } finally {
     btn.disabled = false;
     btn.textContent = '🚀 Publish Live';
   }
 }
 
-// ── Cloud Sync Modal ───────────────────────────────────────
+// ── GitHub Token Modal ─────────────────────────────────────
 function showCloudModal() {
-  const { key, binId } = getJsonBinConfig();
-  document.getElementById('jsonbin-key').value = key || '';
-  document.getElementById('jsonbin-binid').value = binId || '';
+  const { token, repo } = getGitHubConfig();
+  document.getElementById('github-token').value = token || '';
+  document.getElementById('github-repo').value = repo || 'freqyt/sounds-list';
   const statusEl = document.getElementById('cloud-status');
   statusEl.style.display = 'none';
   document.getElementById('cloud-modal').style.display = 'flex';
@@ -345,53 +343,44 @@ function closeCloudModal(e) {
   document.getElementById('cloud-modal').style.display = 'none';
 }
 
-async function saveCloudConfig() {
-  const keyInput = document.getElementById('jsonbin-key').value.trim();
-  let binIdInput = document.getElementById('jsonbin-binid').value.trim();
+async function saveGitHubConfig() {
+  const tokenInput = document.getElementById('github-token').value.trim();
+  const repoInput = document.getElementById('github-repo').value.trim() || 'freqyt/sounds-list';
   const btn = document.getElementById('connect-cloud-btn');
   const statusEl = document.getElementById('cloud-status');
 
-  if (!keyInput) {
-    statusEl.textContent = 'Please enter your JSONBin Master Key.';
+  if (!tokenInput) {
+    statusEl.textContent = 'Please enter your GitHub Personal Access Token.';
     statusEl.style.display = 'block';
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = 'Connecting...';
+  btn.textContent = 'Verifying Token...';
   statusEl.style.display = 'none';
 
   try {
-    // If no Bin ID provided, auto-create one with current data
-    if (!binIdInput) {
-      const initialData = {
-        windows: adm.data.windows || windowsData,
-        mac: adm.data.mac || macData
-      };
-      binIdInput = await createNewJsonBin(keyInput, initialData);
-      document.getElementById('jsonbin-binid').value = binIdInput;
-    }
-
-    setJsonBinConfig(keyInput, binIdInput);
-
-    // Test cloud save
-    const success = await saveLiveCloudData({
-      windows: adm.data.windows || windowsData,
-      mac: adm.data.mac || macData
+    // Verify token by making a lightweight API call to the repo
+    const res = await fetch(`https://api.github.com/repos/${repoInput}`, {
+      headers: {
+        'Authorization': `Bearer ${tokenInput}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
     });
 
-    if (success) {
-      alert(`🎉 Cloud Sync Connected Successfully!\n\nBin ID: ${binIdInput}\n\nAll your edits now update live across all phones and devices instantly!`);
-      document.getElementById('cloud-modal').style.display = 'none';
-    } else {
-      throw new Error('Could not write to JSONBin. Check your Master Key.');
+    if (!res.ok) {
+      throw new Error(`Invalid token or repository (HTTP ${res.status}). Ensure permission 'Contents: Read and write' is enabled.`);
     }
+
+    setGitHubConfig(tokenInput, repoInput);
+    alert('🎉 GitHub Token Verified & Saved!\n\nYou can now click "🚀 Publish Live" anytime to update your live website worldwide!');
+    document.getElementById('cloud-modal').style.display = 'none';
   } catch (err) {
-    statusEl.textContent = err.message || 'Connection failed. Please check your Master Key.';
+    statusEl.textContent = err.message || 'Verification failed. Check your token.';
     statusEl.style.display = 'block';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Save & Connect Cloud';
+    btn.textContent = 'Save & Connect GitHub';
   }
 }
 

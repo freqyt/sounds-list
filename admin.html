@@ -85,26 +85,26 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════════ -->
-<!-- CLOUD SYNC MODAL                                        -->
+<!-- GITHUB PUBLISHING MODAL                                -->
 <!-- ═══════════════════════════════════════════════════════ -->
 <div id="cloud-modal" class="modal-backdrop" style="display:none" onclick="closeCloudModal(event)">
   <div class="modal-box">
-    <h2 class="modal-title">☁️ JSONBin.io Cloud Sync</h2>
+    <h2 class="modal-title">🚀 GitHub Live Publishing</h2>
     <p style="font-size:0.8rem; color:var(--text-2); margin-bottom:1rem; line-height:1.4;">
-      Connect JSONBin so all your edits update <strong>live for all clients instantly</strong> without manual exports or commits.
+      Connect your GitHub Personal Access Token once so you can publish live edits worldwide in 1 click with <strong>zero visitor limits & 0 quotas</strong>.
     </p>
 
-    <label style="font-size:0.75rem; font-weight:700; color:var(--accent); display:block; margin-bottom:0.25rem;">JSONBIN MASTER KEY ($X-Master-Key)</label>
-    <input type="text" id="jsonbin-key" class="login-input" placeholder="e.g. $2a$10$..." />
+    <label style="font-size:0.75rem; font-weight:700; color:var(--accent); display:block; margin-bottom:0.25rem;">GITHUB PERSONAL ACCESS TOKEN</label>
+    <input type="password" id="github-token" class="login-input" placeholder="github_pat_... or ghp_..." />
 
-    <label style="font-size:0.75rem; font-weight:700; color:var(--accent); display:block; margin-top:0.75rem; margin-bottom:0.25rem;">BIN ID (Optional - Auto-created if empty)</label>
-    <input type="text" id="jsonbin-binid" class="login-input" placeholder="e.g. 660f..." />
+    <label style="font-size:0.75rem; font-weight:700; color:var(--accent); display:block; margin-top:0.75rem; margin-bottom:0.25rem;">REPOSITORY</label>
+    <input type="text" id="github-repo" class="login-input" value="freqyt/sounds-list" />
 
     <p id="cloud-status" class="login-error" style="display:none"></p>
 
     <div class="modal-actions" style="margin-top:1.25rem;">
       <button class="hbtn" onclick="closeCloudModal()">Close</button>
-      <button class="hbtn hbtn-primary" id="connect-cloud-btn" onclick="saveCloudConfig()">Save & Connect Cloud</button>
+      <button class="hbtn hbtn-primary" id="connect-cloud-btn" onclick="saveGitHubConfig()">Save & Connect GitHub</button>
     </div>
   </div>
 </div>
