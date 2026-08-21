@@ -8,7 +8,10 @@ const windowsData = {
         {
           "name": "Arturia Bundle",
           "price": 100,
-          "includes": "Arturia V Collection, Analog Lab & Pigments"
+          "includes": "Arturia V Collection, Analog Lab & Pigments",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "Spectrasonics Bundle",
@@ -21,14 +24,17 @@ const windowsData = {
         {
           "name": "ElectraX Bundle",
           "price": 60,
-          "includes": "ElectraX + 200 Custom Banks"
+          "includes": "ElectraX + 200 Custom Banks",
+          "badges": [
+            "BEST SELLER"
+          ]
         },
         {
           "name": "Serum Bundle",
           "price": 60,
           "includes": "Serum 2 + 150 Custom Banks",
           "badges": [
-            "NEW"
+            "BEST SELLER"
           ]
         },
         {
@@ -204,8 +210,8 @@ const windowsData = {
         "Goodhertz Bundle",
         "Guitar Rig 7",
         "Ozone 12",
-        "Soothe2",
         "SoundToys Bundle",
+        "Soothe2",
         "Valhalla Bundle",
         {
           "name": "Vocalign Pro 6",
@@ -220,12 +226,15 @@ const windowsData = {
         "AmpliTube 4",
         "Analog Pro",
         "Effectrix 2",
+        "The God Particle",
         "Gullfoss",
-        "Looperator",
-        "Melodyne",
         "Murda Melodies",
         "Nectar",
         "Neoverb",
+        "Neutron",
+        "RX 10",
+        "Looperator",
+        "Melodyne",
         {
           "name": "Neural DSP",
           "badges": [
@@ -233,16 +242,14 @@ const windowsData = {
           ],
           "note": "Abasi, Cory Wong X, Darkglass Ultra, Fortin: Cali Suite, Nameless Suite, NTS Suite, Gojira, John Mayer X, Mantra, Mateus Asato, Misha Mansoor X, Nolly X, OMEGA Ampworks Granophyre, Parallax, Plini, Soldano SLO-100 X, Tim Henson X"
         },
-        "Neutron",
         "Portal",
         "Raum",
         "RC-20 Retro Color",
-        "Real Guitar 5",
         "Reels",
-        "Regroover",
         "Reverse",
+        "Real Guitar 5",
+        "Regroover",
         "Rift",
-        "RX 10",
         "Scaler 2",
         "Serato Sample 2",
         "Seventh Heaven Professional",
@@ -252,12 +259,11 @@ const windowsData = {
         "SSL Native Plugins",
         "Strum GS-2",
         "Super VHS",
+        "Thermal",
         "T-Racks",
         "TAL-Dub-X",
-        "Tantra",
-        "The God Particle",
-        "Thermal",
         "Transient Master",
+        "Tantra",
         "Uhbik Bundle",
         "Vinyl Strip",
         "Warmverb",
@@ -276,17 +282,17 @@ const windowsData = {
         "Eventide Ensemble Bundle",
         "Eventide Newfangled Elevate Bundle",
         "Glitch 2",
+        "Trash 2",
+        "VocalSynth 2",
         "Klevgrand Complete Bundle",
         "Kyle Beats Drip Plugin",
         "Lurssen Mastering Console",
         "Melda MComplete",
         "Mixbox",
-        "OTT",
         "Overloud TH3",
+        "OTT",
         "Pitchwheel",
-        "Thenathan Underwater",
-        "Trash 2",
-        "VocalSynth 2"
+        "Thenathan Underwater"
       ]
     },
     "daws": {
@@ -302,8 +308,8 @@ const windowsData = {
             "NEW"
           ]
         },
-        "Pro Tools 12",
-        "Studio One"
+        "Studio One",
+        "Pro Tools 12"
       ],
       "tier30": [],
       "tier20": []
@@ -322,8 +328,8 @@ const windowsData = {
       "tier30": [
         "After Effects",
         "Audition",
-        "Illustrator",
         "InDesign",
+        "Illustrator",
         "Lightroom",
         "Photoshop",
         "Premiere Pro",
