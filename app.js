@@ -33,61 +33,6 @@ function getData() {
 
 // ── State Persistence & URL Hash ─────────────────────────
 
-function saveBrowseState() {
-  if (state.platform) {
-    sessionStorage.setItem('sounds_platform', state.platform);
-    if (state.activeCategory) {
-      sessionStorage.setItem('sounds_category', state.activeCategory);
-      history.replaceState(null, '', `#${state.platform}/${state.activeCategory}`);
-    } else {
-      history.replaceState(null, '', `#${state.platform}`);
-    }
-  }
-}
-
-function clearBrowseState() {
-  sessionStorage.removeItem('sounds_platform');
-  sessionStorage.removeItem('sounds_category');
-  history.replaceState(null, '', window.location.pathname + window.location.search);
-}
-
-function restoreBrowseState() {
-  let platform = null;
-  let category = null;
-
-  // 1. Check URL hash first (e.g. #windows/fx)
-  const hash = window.location.hash.replace('#', '').trim();
-  if (hash) {
-    const parts = hash.split('/');
-    if (parts[0] === 'windows' || parts[0] === 'mac') {
-      platform = parts[0];
-      if (parts[1]) category = parts[1];
-    }
-  }
-
-  // 2. Check sessionStorage if no hash
-  if (!platform) {
-    const savedPlat = sessionStorage.getItem('sounds_platform');
-    if (savedPlat === 'windows' || savedPlat === 'mac') {
-      platform = savedPlat;
-      category = sessionStorage.getItem('sounds_category');
-    }
-  }
-
-  if (platform) {
-    state.platform = platform;
-    const data = getData();
-    state.activeCategory = (category && data.categories[category]) ? category : Object.keys(data.categories)[0];
-    
-    // Directly show catalogue screen without landing animation
-    document.getElementById('platform-screen').classList.remove('active');
-    document.getElementById('catalogue-screen').classList.add('active');
-    
-    setupCatalogue();
-    saveBrowseState();
-  }
-}
-
 // ── Screen Transitions ───────────────────────────────────
 
 const TRANSITION_DURATION = 350;
@@ -98,8 +43,6 @@ function selectPlatform(platform) {
   state.activeCategory = Object.keys(data.categories)[0];
   state.searchQuery = '';
 
-  saveBrowseState();
-
   const platformScreen = document.getElementById('platform-screen');
   const catalogueScreen = document.getElementById('catalogue-screen');
 
@@ -108,7 +51,6 @@ function selectPlatform(platform) {
   platformScreen.classList.add('exit-left');
 
   setTimeout(() => {
-    document.documentElement.classList.add('has-active-session');
     platformScreen.classList.remove('active');
     catalogueScreen.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -123,11 +65,10 @@ function goBack() {
   const platformScreen = document.getElementById('platform-screen');
   const catalogueScreen = document.getElementById('catalogue-screen');
 
-  // Immediately scroll to top so there's zero jump when landing screen appears
   window.scrollTo(0, 0);
+  state.platform = null;
+  state.searchQuery = '';
 
-  clearBrowseState();
-  document.documentElement.classList.remove('has-active-session');
   catalogueScreen.classList.add('exit-right');
 
   setTimeout(() => {
@@ -404,15 +345,6 @@ window.addEventListener('scroll', () => {
 
 // ── Initialize on Page Load ──────────────────────────────
 
-window.addEventListener('DOMContentLoaded', async () => {
-  restoreBrowseState();
-
-  // Seamlessly check and fetch fresh cloud data in background
-  if (typeof fetchLiveCloudData === 'function') {
-    const cloud = await fetchLiveCloudData();
-    if (cloud && state.platform) {
-      renderTabs();
-      renderCatalogue();
-    }
-  }
+window.addEventListener('DOMContentLoaded', () => {
+  window.scrollTo(0, 0);
 });
