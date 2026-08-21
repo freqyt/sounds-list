@@ -648,6 +648,7 @@ function renderCatalogue() {
     });
 
     const usedBundleNames = new Set();
+    let vstCardsHtml = '';
 
     // Render each VST group in alphabetical order
     Object.keys(vstGroups).sort().forEach(vstName => {
@@ -666,19 +667,24 @@ function renderCatalogue() {
 
       let sectionInner = '';
       if (matchingBundles.length > 0) {
-        sectionInner += `<div class="bundles-grid" style="margin-bottom: 0.85rem;">${matchingBundles.map(b => renderBundleCard(b, '', 'banks', vstName)).join('')}</div>`;
+        sectionInner += `<div class="bundles-grid vst-card-bundles">${matchingBundles.map(b => renderBundleCard(b, '', 'banks', vstName)).join('')}</div>`;
       }
-      sectionInner += `<div class="plugins-grid">${items.map(item => renderPluginCard(item, '', '$30', 'banks', vstName)).join('')}</div>`;
+      sectionInner += `<div class="plugins-grid vst-card-plugins">${items.map(item => renderPluginCard(item, '', '$30', 'banks', vstName)).join('')}</div>`;
 
-      html += `
-        <section class="section vst-bank-section">
-          <div class="section-header">
-            <h3 class="section-title">${getCategorySvg('banks')} ${esc(vstName)} Banks</h3>
+      vstCardsHtml += `
+        <div class="vst-bank-card">
+          <div class="vst-bank-card-header">
+            ${getCategorySvg('banks')}
+            <h4 class="vst-bank-card-title">${esc(vstName)} Banks</h4>
           </div>
-          ${sectionInner}
-        </section>
+          <div class="vst-bank-card-body">
+            ${sectionInner}
+          </div>
+        </div>
       `;
     });
+
+    html += `<div class="vst-bank-grid">${vstCardsHtml}</div>`;
 
     // Render any remaining global bundles that were not tied to a single VST
     const remainingBundles = (cat.bundles || []).filter(b => !usedBundleNames.has(b.name));
