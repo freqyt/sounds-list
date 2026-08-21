@@ -11,6 +11,7 @@
 let state = {
   platform: null,
   activeCategory: null,
+  subFilter: 'all',
   searchQuery: '',
   cart: []
 };
@@ -167,12 +168,124 @@ function renderTabs() {
 
 function switchCategory(key) {
   state.activeCategory = key;
+  state.subFilter = 'all';
   if (state.searchQuery) {
     clearSearch();
   } else {
     renderTabs();
+    renderSubFilterPills();
     renderCatalogue();
   }
+}
+
+function setSubFilter(filterKey) {
+  state.subFilter = filterKey;
+  renderSubFilterPills();
+  renderCatalogue();
+}
+
+function renderSubFilterPills() {
+  const bar = document.getElementById('sub-filter-bar');
+  if (!bar) return;
+
+  const data = getData();
+  const cat = (data.categories || {})[state.activeCategory];
+  if (!cat || state.searchQuery) {
+    bar.style.display = 'none';
+    return;
+  }
+
+  const allItems = [
+    ...(cat.tier40 || []),
+    ...(cat.tier30 || []),
+    ...(cat.tier20 || [])
+  ];
+
+  let pills = [];
+
+  if (state.activeCategory === 'kontakt') {
+    const SOUND_TYPES = [
+      { key: 'all', label: 'All Instruments', icon: '✨', count: allItems.length },
+      { key: 'Strings & Orchestral', label: 'Strings', icon: '🎻' },
+      { key: 'Pianos & Keys', label: 'Pianos & Keys', icon: '🎹' },
+      { key: 'Guitars & Bass', label: 'Guitars & Bass', icon: '🎸' },
+      { key: 'Brass & Woodwinds', label: 'Brass & Winds', icon: '🎺' },
+      { key: 'Vocals & Choirs', label: 'Vocals & Choirs', icon: '🎤' },
+      { key: 'Drums & Percussion', label: 'Drums & Perc', icon: '🥁' },
+      { key: 'Ethnic & World', label: 'Ethnic & World', icon: '🌍' },
+      { key: 'Synths & Vintage Keys', label: 'Synths & Keys', icon: '🎛️' },
+      { key: 'Cinematic & Hybrid Textures', label: 'Cinematic Textures', icon: '🔮' }
+    ];
+
+    // Calculate actual counts
+    SOUND_TYPES.forEach(st => {
+      if (st.key === 'all') return;
+      const count = allItems.filter(item => {
+        const tags = (normalizeItem(item).tags || '').toLowerCase();
+        return tags.includes(st.key.toLowerCase());
+      }).length;
+      st.count = count;
+    });
+
+    pills = SOUND_TYPES.filter(st => st.count > 0);
+  } else if (state.activeCategory === 'banks') {
+    const vstCounts = {};
+    allItems.forEach(item => {
+      const n = normalizeItem(item);
+      let vstName = 'Other Soundbanks';
+      if (n.name.includes(' - ')) {
+        vstName = n.name.split(' - ')[0].trim();
+      } else if (n.tags) {
+        const firstTag = n.tags.split(',')[0].trim();
+        if (firstTag && !firstTag.toLowerCase().includes('bank')) vstName = firstTag;
+      }
+      vstCounts[vstName] = (vstCounts[vstName] || 0) + 1;
+    });
+
+    pills = [
+      { key: 'all', label: 'All Synths', icon: '✨', count: allItems.length },
+      ...Object.keys(vstCounts).sort().map(vn => ({
+        key: vn,
+        label: vn,
+        icon: '🎹',
+        count: vstCounts[vn]
+      }))
+    ];
+  } else {
+    // Standard categories: Quick tier filters
+    const tierCounts = [];
+    if (cat.bundles && cat.bundles.length) tierCounts.push({ key: 'bundles', label: 'Bundles', icon: '📦', count: cat.bundles.length });
+    if (cat.tier40 && cat.tier40.length) tierCounts.push({ key: 'tier40', label: '$40 Tier', icon: '💎', count: cat.tier40.length });
+    if (cat.tier30 && cat.tier30.length) tierCounts.push({ key: 'tier30', label: '$30 Tier', icon: '🏷️', count: cat.tier30.length });
+    if (cat.tier20 && cat.tier20.length) tierCounts.push({ key: 'tier20', label: '$20 Tier', icon: '⚡', count: cat.tier20.length });
+
+    if (tierCounts.length > 1) {
+      pills = [
+        { key: 'all', label: 'All', icon: '✨', count: allItems.length + (cat.bundles ? cat.bundles.length : 0) },
+        ...tierCounts
+      ];
+    }
+  }
+
+  if (pills.length <= 1) {
+    bar.style.display = 'none';
+    return;
+  }
+
+  bar.style.display = 'flex';
+  bar.innerHTML = pills.map(p => {
+    const isActive = (state.subFilter === p.key);
+    return `
+      <button
+        class="sub-filter-pill ${isActive ? 'active' : ''}"
+        onclick="setSubFilter('${ea(p.key)}')"
+      >
+        <span class="sub-filter-icon">${p.icon}</span>
+        <span class="sub-filter-label">${esc(p.label)}</span>
+        <span class="sub-filter-count">${p.count}</span>
+      </button>
+    `;
+  }).join('');
 }
 
 let _searchRaf = null;
@@ -652,6 +765,8 @@ function renderCatalogue() {
 
     // Render each VST group in alphabetical order
     Object.keys(vstGroups).sort().forEach(vstName => {
+      if (state.subFilter !== 'all' && state.subFilter !== vstName) return;
+
       const items = sortItemsAZ(vstGroups[vstName]);
       totalVisible += items.length;
 
@@ -687,10 +802,12 @@ function renderCatalogue() {
     html += `<div class="vst-bank-grid">${vstCardsHtml}</div>`;
 
     // Render any remaining global bundles that were not tied to a single VST
-    const remainingBundles = (cat.bundles || []).filter(b => !usedBundleNames.has(b.name));
-    if (remainingBundles.length > 0) {
-      totalVisible += remainingBundles.length;
-      html = renderSection('Mega Bundles & Vaults', remainingBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid') + html;
+    if (state.subFilter === 'all') {
+      const remainingBundles = (cat.bundles || []).filter(b => !usedBundleNames.has(b.name));
+      if (remainingBundles.length > 0) {
+        totalVisible += remainingBundles.length;
+        html = renderSection('Mega Bundles & Vaults', remainingBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid') + html;
+      }
     }
   } else if (state.activeCategory === 'kontakt') {
     // ── KONTAKT LIBRARIES: GROUPED BY SOUND TYPE ──
@@ -701,7 +818,7 @@ function renderCatalogue() {
     ];
 
     // Bundles at top
-    if (cat.bundles && cat.bundles.length > 0) {
+    if (state.subFilter === 'all' && cat.bundles && cat.bundles.length > 0) {
       totalVisible += cat.bundles.length;
       html += renderSection('Featured Bundles', cat.bundles.map(b => renderBundleCard(b, '', 'kontakt')).join(''), 'bundles-grid');
     }
@@ -739,6 +856,8 @@ function renderCatalogue() {
     });
 
     SOUND_TYPE_ORDER.concat([{ key: 'Other Kontakt Instruments', icon: '📦' }]).forEach(st => {
+      if (state.subFilter !== 'all' && state.subFilter !== st.key) return;
+
       const items = typeGroups[st.key];
       if (items && items.length > 0) {
         const sorted = sortItemsAZ(items);
@@ -756,28 +875,28 @@ function renderCatalogue() {
     });
   } else {
     // ── STANDARD CATEGORIES (Instruments, FX, DAWs, Software) ──
-    // 1. Bundles (custom manual ordering preserved)
-    if (cat.bundles && cat.bundles.length > 0) {
+    // 1. Bundles
+    if ((state.subFilter === 'all' || state.subFilter === 'bundles') && cat.bundles && cat.bundles.length > 0) {
       totalVisible += cat.bundles.length;
       html += renderSection('Bundles', cat.bundles.map(b => renderBundleCard(b, '', state.activeCategory)).join(''), 'bundles-grid');
     }
 
-    // 2. $40 Tier (Always Alphabetical)
-    if (cat.tier40 && cat.tier40.length > 0) {
+    // 2. $40 Tier
+    if ((state.subFilter === 'all' || state.subFilter === 'tier40') && cat.tier40 && cat.tier40.length > 0) {
       const sorted = sortItemsAZ(cat.tier40);
       totalVisible += sorted.length;
       html += renderSection('$40 Each', sorted.map(item => renderPluginCard(item, '', '$40', state.activeCategory)).join(''), 'plugins-grid');
     }
 
-    // 3. $30 Tier (Always Alphabetical)
-    if (cat.tier30 && cat.tier30.length > 0) {
+    // 3. $30 Tier
+    if ((state.subFilter === 'all' || state.subFilter === 'tier30') && cat.tier30 && cat.tier30.length > 0) {
       const sorted = sortItemsAZ(cat.tier30);
       totalVisible += sorted.length;
       html += renderSection('$30 Each', sorted.map(item => renderPluginCard(item, '', '$30', state.activeCategory)).join(''), 'plugins-grid');
     }
 
-    // 4. $20 Tier (Always Alphabetical)
-    if (cat.tier20 && cat.tier20.length > 0) {
+    // 4. $20 Tier
+    if ((state.subFilter === 'all' || state.subFilter === 'tier20') && cat.tier20 && cat.tier20.length > 0) {
       const sorted = sortItemsAZ(cat.tier20);
       totalVisible += sorted.length;
       html += renderSection('$20 Each', sorted.map(item => renderPluginCard(item, '', '$20', state.activeCategory)).join(''), 'plugins-grid');
