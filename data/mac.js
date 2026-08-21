@@ -39,7 +39,7 @@ const macData = {
           "name": "Sonic Extensions Bundle",
           "price": 50,
           "includes": "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
-          "note": "Cracked Omni 2.8 Required"
+          "note": "Omnisphere 2.8+ Required"
         }
       ],
       "tier40": [
@@ -60,11 +60,11 @@ const macData = {
         "Addictive Keys",
         {
           "name": "Ample Bass",
-          "note": " (Many available, ask about it)"
+          "note": " Many available, ask about it"
         },
         {
           "name": "Ample Guitar",
-          "note": " (Many available, ask about it)"
+          "note": " Many available, ask about it"
         },
         "ANA2",
         "DUNE 3",
@@ -73,7 +73,7 @@ const macData = {
         "Hybrid",
         {
           "name": "Kontakt 8",
-          "note": " (No banks included)"
+          "note": " No banks included, see bundle above or ask about more banks"
         },
         "Kult",
         {
@@ -300,11 +300,11 @@ const macData = {
       "tier30": [
         "After Effects",
         "Audition",
-        "InDesign",
+        "Final Cut Pro",
         "Illustrator",
+        "InDesign",
         "Photoshop",
-        "Premiere Pro",
-        "Final Cut Pro"
+        "Premiere Pro"
       ],
       "tier20": []
     }
