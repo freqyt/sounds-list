@@ -390,7 +390,7 @@ html, body {
 .clean-search-input:focus {
   border-color: var(--accent-bright);
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25), 0 0 20px rgba(59, 130, 246, 0.2);
 }
 
 .search-clear-btn {
@@ -408,11 +408,44 @@ html, body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  animation: clearBtnIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--trans);
 }
 
 .search-clear-btn:hover {
   background: rgba(239, 68, 68, 0.3);
   color: #fff;
+  transform: scale(1.1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS & MICRO-INTERACTIONS
+═══════════════════════════════════════════════════════════ */
+@keyframes sectionFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tabPop {
+  0% { transform: scale(0.94); }
+  60% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes clearBtnIn {
+  from { opacity: 0; transform: scale(0.6) rotate(-90deg); }
+  to { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 12px rgba(59, 130, 246, 0.35); }
+  50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
 }
 
 /* Category Tabs (All 4 in a single row - zero horizontal scrolling) */
@@ -437,30 +470,42 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 0.15rem;
-  transition: all var(--trans);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: center;
   width: 100%;
+  user-select: none;
 }
 
 .cat-tab span:first-child {
   font-size: 0.95rem;
   line-height: 1;
+  transition: transform 0.2s ease;
 }
 
 .cat-tab:hover {
   color: #fff;
   background: var(--surface-2);
+  transform: translateY(-1px);
+}
+
+.cat-tab:hover span:first-child {
+  transform: scale(1.1);
+}
+
+.cat-tab:active {
+  transform: scale(0.95);
 }
 
 .cat-tab.active {
   background: var(--accent);
   border-color: var(--accent-bright);
   color: #fff;
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  animation: tabPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 14px rgba(59, 130, 246, 0.5);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MAIN LIST LAYOUT
+   MAIN LIST LAYOUT & ANIMATIONS
 ═══════════════════════════════════════════════════════════ */
 .catalogue-main {
   padding: 1.25rem 1rem 3.5rem;
@@ -470,9 +515,10 @@ html, body {
   flex: 1;
 }
 
-/* Section Header */
+/* Section Header & Entry */
 .section {
   margin-bottom: 2rem;
+  animation: sectionFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 .section-header {
@@ -498,10 +544,14 @@ html, body {
 .section-count {
   font-size: 0.72rem;
   color: var(--text-muted);
+  background: var(--surface-1);
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BUNDLE CARDS (CLEAN & SLEEK)
+   BUNDLE CARDS (ANIMATED HOVER & TOUCH)
 ═══════════════════════════════════════════════════════════ */
 .bundles-grid {
   display: grid;
@@ -518,13 +568,18 @@ html, body {
   flex-direction: column;
   justify-content: space-between;
   gap: 0.5rem;
-  transition: all var(--trans);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .bundle-card:hover {
   border-color: var(--border-focus);
   background: var(--surface-2);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+.bundle-card:active {
+  transform: scale(0.98);
 }
 
 .bundle-card-top {
@@ -551,6 +606,7 @@ html, body {
   border-radius: var(--radius-sm);
   white-space: nowrap;
   flex-shrink: 0;
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
 }
 
 .bundle-includes {
@@ -569,7 +625,7 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PLUGIN ITEMS (1 OR 2 COLUMNS, NO VISUAL CLUTTER)
+   PLUGIN ITEMS (SUBTLE HOVER ELEVATION)
 ═══════════════════════════════════════════════════════════ */
 .plugins-grid {
   display: grid;
@@ -586,12 +642,18 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: 0.4rem;
-  transition: all var(--trans);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .plugin-card:hover {
-  border-color: rgba(96, 165, 250, 0.35);
+  border-color: rgba(96, 165, 250, 0.45);
   background: var(--surface-2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 0 15px rgba(59, 130, 246, 0.15);
+}
+
+.plugin-card:active {
+  transform: scale(0.98);
 }
 
 .plugin-name {
@@ -599,6 +661,7 @@ html, body {
   color: var(--text-2);
   font-weight: 500;
   word-break: break-word;
+  transition: color 0.15s ease;
 }
 
 .plugin-card:hover .plugin-name {
