@@ -40,6 +40,12 @@ const macData = {
           price: 50,
           includes: "Nylon Sky, Undercurrent, Unclean Machine & Seismic Shock",
           note: "Cracked Omni 2.8 Required"
+        },
+        {
+          name: "u-he Bundle",
+          price: 50,
+          includes: "ACE, Bazille, Diva, Repro-1 & 5, Zebra3",
+          badges: ["NEW"]
         }
       ],
       tier40: [
