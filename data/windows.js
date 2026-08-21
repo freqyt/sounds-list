@@ -127,18 +127,32 @@ const windowsData = {
         }
       ],
       "tier30": [
-        "Absynth 5",
-        "Addictive Drums",
-        "Addictive Keys",
+        {
+          "name": "Absynth 5",
+          "tags": "Native Instruments"
+        },
+        {
+          "name": "Addictive Drums",
+          "tags": "XLN Audio"
+        },
+        {
+          "name": "Addictive Keys",
+          "tags": "XLN Audio"
+        },
         {
           "name": "Ample Bass",
-          "note": "Many available, ask about it"
+          "note": "Many available, ask about it",
+          "tags": "Ample Sounds"
         },
         {
           "name": "Ample Guitar",
-          "note": "Many available, ask about it"
+          "note": "Many available, ask about it",
+          "tags": "Ample Sounds"
         },
-        "ANA2",
+        {
+          "name": "ANA2",
+          "tags": "Slate Digital"
+        },
         "Doobie Powell's Peculiar Sounds",
         "DUNE 3",
         "ElectraX",
