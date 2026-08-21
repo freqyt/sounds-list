@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FREQ Sounds List — Admin</title>
+  <link rel="stylesheet" href="/admin.css?v=4.0" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- LOGIN OVERLAY                                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="login-overlay" class="login-overlay">
+  <div class="login-box">
+    <img src="/logo.jpg" alt="FREQ Sounds List" class="login-logo" />
+    <h1 class="login-title">FREQ Sounds List</h1>
+    <p class="login-sub">Admin Dashboard</p>
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <input
+        type="password"
+        id="password-input"
+        class="login-input"
+        placeholder="Enter password"
+        autocomplete="current-password"
+        autofocus
+      />
+      <label class="remember-wrap">
+        <input type="checkbox" id="remember-me" checked />
+        <span>Remember me</span>
+      </label>
+      <p id="login-error" class="login-error" style="display:none">Incorrect password. Try again.</p>
+      <button type="submit" class="login-btn" id="login-btn">Login</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- DASHBOARD                                              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="dashboard" class="dashboard" style="display:none">
+
+  <!-- TOP BAR -->
+  <header class="admin-header">
+    <div class="admin-header-left">
+      <img src="logo.jpg" alt="" class="admin-nav-logo" />
+      <span class="admin-nav-title">FREQ Sounds List <span class="admin-tag">Admin</span></span>
+    </div>
+    <div class="admin-header-right">
+      <button class="hbtn hbtn-primary" onclick="publishLiveToCloud()" id="publish-cloud-btn" title="Publish all changes to the cloud with 1 request">🚀 Publish Live</button>
+      <button class="hbtn" onclick="showCloudModal()" id="cloud-sync-btn">☁️ Cloud Settings</button>
+      <button class="hbtn" onclick="exportData('windows')" title="Download updated windows.js">⬇ Export Windows</button>
+      <button class="hbtn" onclick="exportData('mac')" title="Download updated mac.js">⬇ Export Mac</button>
+      <button class="hbtn" onclick="showChangePw()">🔑 Password</button>
+      <button class="hbtn hbtn-danger" onclick="handleLogout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- BODY LAYOUT -->
+  <div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+
+      <div class="sb-group">
+        <div class="sb-label">Platform</div>
+        <button class="sb-item active" id="plat-btn-windows" onclick="switchPlatform('windows')">🪟 Windows</button>
+        <button class="sb-item" id="plat-btn-mac" onclick="switchPlatform('mac')">🍎 Mac</button>
+      </div>
+
+      <div class="sb-group">
+        <div class="sb-label">Featured Deals</div>
+        <button class="sb-item" id="sb-deals-btn" onclick="openDealsView()">⚡ Deals & Promotions</button>
+      </div>
+
+      <div class="sb-group">
+        <div class="sb-label">Category</div>
+        <div id="sb-categories"></div>
+      </div>
+
+      <div class="sb-group sb-group-bottom">
+        <div class="sb-label">Danger</div>
+        <button class="sb-item sb-danger" onclick="resetPlatform()">↺ Reset to Defaults</button>
+      </div>
+
+    </aside>
+
+    <!-- MAIN PANEL -->
+    <main class="admin-main" id="admin-main">
+      <!-- Rendered by JS -->
+    </main>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- GITHUB PUBLISHING MODAL                                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="cloud-modal" class="modal-backdrop" style="display:none" onclick="closeCloudModal(event)">
+  <div class="modal-box">
+    <h2 class="modal-title">🚀 GitHub Live Publishing</h2>
+    <p style="font-size:0.8rem; color:var(--text-2); margin-bottom:1rem; line-height:1.4;">
+      Connect your GitHub Personal Access Token once so you can publish live edits worldwide in 1 click with <strong>zero visitor limits & 0 quotas</strong>.
+    </p>
+
+    <label style="font-size:0.75rem; font-weight:700; color:var(--accent); display:block; margin-bottom:0.25rem;">GITHUB PERSONAL ACCESS TOKEN</label>
+    <input type="password" id="github-token" class="login-input" placeholder="github_pat_... or ghp_..." />
+
+    <label style="font-size:0.75rem; font-weight:700; color:var(--accent); display:block; margin-top:0.75rem; margin-bottom:0.25rem;">REPOSITORY</label>
+    <input type="text" id="github-repo" class="login-input" value="freqyt/sounds-list" />
+
+    <p id="cloud-status" class="login-error" style="display:none"></p>
+
+    <div class="modal-actions" style="margin-top:1.25rem;">
+      <button class="hbtn" onclick="closeCloudModal()">Close</button>
+      <button class="hbtn hbtn-primary" id="connect-cloud-btn" onclick="saveGitHubConfig()">Save & Connect GitHub</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CHANGE PASSWORD MODAL                                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="pw-modal" class="modal-backdrop" style="display:none" onclick="closePwModal(event)">
+  <div class="modal-box">
+    <h2 class="modal-title">Change Password</h2>
+    <input type="password" id="pw-new" class="login-input" placeholder="New password (min. 4 chars)" />
+    <input type="password" id="pw-confirm" class="login-input" placeholder="Confirm new password" style="margin-top:0.5rem" />
+    <p id="pw-error" class="login-error" style="display:none"></p>
+    <div class="modal-actions">
+      <button class="hbtn" onclick="closePwModal()">Cancel</button>
+      <button class="hbtn hbtn-primary" onclick="changePassword()">Save Password</button>
+    </div>
+  </div>
+</div>
+
+<script src="/config.js?v=4.0"></script>
+<script src="/data/windows.js?v=4.0"></script>
+<script src="/data/mac.js?v=4.0"></script>
+<script src="/storage.js?v=4.0"></script>
+<script src="/admin.js?v=4.0"></script>
+</body>
+</html>
