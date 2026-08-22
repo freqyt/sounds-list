@@ -767,40 +767,36 @@ const windowsData = {
       "icon": "",
       "bundles": [
         {
-          "name": "All-Synths Ultimate Mega Vault",
+          "name": "The Vault Bundle",
           "price": 95,
-          "includes": "All 14 Volumes across Omnisphere, Analog Lab, ElectraX, Serum, Cthulhu, Portal, Gross Beat, Zenology & Effectrix � 3,000+ Banks Total",
+          "includes": "All 14 Volumes across Omnisphere, Analog Lab, ElectraX, Serum, Cthulhu, Portal, Gross Beat, Zenology & Effectrix - 3,000+ Banks Total",
           "badges": [
             "BEST SELLER"
           ],
           "tags": "Mega Vault,All Synths,Ultimate Vault,Preset Banks,Soundbanks"
         },
         {
-          "name": "Omnisphere Complete Vault (Vol 1, 2 & 3)",
+          "name": "Omnisphere Complete Suite (Vol 1, 2 & 3)",
           "price": 50,
-          "includes": "Omnisphere Vol 1 (200 Banks), Vol 2 (105 Banks) & Vol 3 (132 Banks) � 437+ Banks Total",
-          "badges": [],
+          "includes": "Omnisphere Vol 1 (200 Banks), Vol 2 (105 Banks) & Vol 3 (132 Banks) - 437+ Banks Total",
           "tags": "Omnisphere,Spectrasonics,Preset Banks,Soundbanks"
         },
         {
-          "name": "Analog Lab Bank Suite (Vol 1 & 2)",
+          "name": "Analog Lab Complete Suite (Vol 1 & 2)",
           "price": 30,
-          "includes": "Analog Lab Vol 1 (40 Banks) & Vol 2 (45 Banks) � 85+ Banks Total",
-          "badges": [],
+          "includes": "Analog Lab Vol 1 (40 Banks) & Vol 2 (45 Banks) - 85+ Banks Total",
           "tags": "Analog Lab,Arturia,Preset Banks,Soundbanks"
         },
         {
-          "name": "ElectraX Bank Vault (Vol 1 & 2)",
+          "name": "ElectraX Complete Suite (Vol 1 & 2)",
           "price": 35,
-          "includes": "ElectraX Vol 1 (200 Banks) & Vol 2 (175 Banks) � 375+ Banks Total",
-          "badges": [],
+          "includes": "ElectraX Vol 1 (200 Banks) & Vol 2 (175 Banks) - 375+ Banks Total",
           "tags": "ElectraX,Tone2,Preset Banks,Soundbanks"
         },
         {
-          "name": "Portal FX Presets Suite (Vol 1 & 2)",
+          "name": "Portal Complete Suite (Vol 1 & 2)",
           "price": 30,
           "includes": "Portal Vol 1 (15 Banks) & Vol 2 (16 Banks) � 31+ Banks Total",
-          "badges": [],
           "tags": "Portal,Output,FX,Preset Banks,Soundbanks"
         }
       ],
@@ -809,88 +805,74 @@ const windowsData = {
         {
           "name": "Cthulhu - Volume 1 (2,000 Preset Banks)",
           "price": 30,
-          "tags": "Cthulhu,Xfer Records,Preset Banks,Chords,Soundbanks",
-          "badges": []
-        },
-        {
-          "name": "Omnisphere - Volume 1 (200 Preset Banks)",
-          "price": 25,
-          "tags": "Omnisphere,Spectrasonics,Preset Banks,Soundbanks",
-          "badges": []
-        },
-        {
-          "name": "Omnisphere - Volume 2 (105 Preset Banks)",
-          "price": 25,
-          "tags": "Omnisphere,Spectrasonics,Preset Banks,Soundbanks",
-          "badges": []
-        },
-        {
-          "name": "Omnisphere - Volume 3 (132 Preset Banks)",
-          "price": 25,
-          "tags": "Omnisphere,Spectrasonics,Preset Banks,Soundbanks",
-          "badges": []
+          "tags": "Cthulhu,Xfer Records,Preset Banks,Chords,Soundbanks"
         },
         {
           "name": "ElectraX - Volume 1 (200 Preset Banks)",
           "price": 25,
-          "tags": "ElectraX,Tone2,Preset Banks,Soundbanks",
-          "badges": []
+          "tags": "ElectraX,Tone2,Preset Banks,Soundbanks"
         },
         {
           "name": "ElectraX - Volume 2 (175 Preset Banks)",
           "price": 25,
-          "tags": "ElectraX,Tone2,Preset Banks,Soundbanks",
-          "badges": []
+          "tags": "ElectraX,Tone2,Preset Banks,Soundbanks"
+        },
+        {
+          "name": "Omnisphere - Volume 1 (200 Preset Banks)",
+          "price": 25,
+          "tags": "Omnisphere,Spectrasonics,Preset Banks,Soundbanks"
+        },
+        {
+          "name": "Omnisphere - Volume 2 (105 Preset Banks)",
+          "price": 25,
+          "tags": "Omnisphere,Spectrasonics,Preset Banks,Soundbanks"
+        },
+        {
+          "name": "Omnisphere - Volume 3 (132 Preset Banks)",
+          "price": 25,
+          "tags": "Omnisphere,Spectrasonics,Preset Banks,Soundbanks"
         },
         {
           "name": "Serum - Volume 1 (139 Preset Banks)",
           "price": 25,
-          "tags": "Serum,Xfer,Preset Banks,Soundbanks",
-          "badges": []
+          "tags": "Serum,Xfer,Preset Banks,Soundbanks"
         }
       ],
       "tier20": [
         {
           "name": "Analog Lab - Volume 1 (40 Preset Banks)",
           "price": 20,
-          "tags": "Analog Lab,Arturia,Preset Banks,Soundbanks",
-          "badges": []
+          "tags": "Analog Lab,Arturia,Preset Banks,Soundbanks"
         },
         {
           "name": "Analog Lab - Volume 2 (45 Preset Banks)",
           "price": 20,
-          "tags": "Analog Lab,Arturia,Preset Banks,Soundbanks",
-          "badges": []
-        },
-        {
-          "name": "Portal - Volume 1 (15 Preset Banks)",
-          "price": 20,
-          "tags": "Portal,Output,Preset Banks,Soundbanks",
-          "badges": []
-        },
-        {
-          "name": "Portal - Volume 2 (16 Preset Banks)",
-          "price": 20,
-          "tags": "Portal,Output,Preset Banks,Soundbanks",
-          "badges": []
-        },
-        {
-          "name": "Gross Beat - Volume 1 (58 Preset Banks)",
-          "price": 20,
-          "tags": "Gross Beat,Image Line,Preset Banks,Soundbanks",
-          "badges": []
-        },
-        {
-          "name": "Zenology - Volume 1 (22 Preset Banks)",
-          "price": 20,
-          "tags": "Zenology,Roland,Preset Banks,Soundbanks",
-          "badges": []
+          "tags": "Analog Lab,Arturia,Preset Banks,Soundbanks"
         },
         {
           "name": "Effectrix - Volume 1 (16 Preset Banks)",
           "price": 20,
-          "tags": "Effectrix,Sugar Bytes,Preset Banks,Soundbanks",
-          "badges": []
+          "tags": "Effectrix,Sugar Bytes,Preset Banks,Soundbanks"
+        },
+        {
+          "name": "Gross Beat - Volume 1 (58 Preset Banks)",
+          "price": 20,
+          "tags": "Gross Beat,Image Line,Preset Banks,Soundbanks"
+        },
+        {
+          "name": "Portal - Volume 1 (15 Preset Banks)",
+          "price": 20,
+          "tags": "Portal,Output,Preset Banks,Soundbanks"
+        },
+        {
+          "name": "Portal - Volume 2 (16 Preset Banks)",
+          "price": 20,
+          "tags": "Portal,Output,Preset Banks,Soundbanks"
+        },
+        {
+          "name": "Zenology - Volume 1 (22 Preset Banks)",
+          "price": 20,
+          "tags": "Zenology,Roland,Preset Banks,Soundbanks"
         }
       ]
     },
@@ -5125,11 +5107,6 @@ const windowsData = {
           "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "Output - Signal",
-          "price": 20,
-          "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
-        },
-        {
           "name": "Output - REV",
           "price": 20,
           "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
@@ -5141,6 +5118,11 @@ const windowsData = {
         },
         {
           "name": "Output - REV X-Loops",
+          "price": 20,
+          "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
+        },
+        {
+          "name": "Output - Signal",
           "price": 20,
           "tags": "Output,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
@@ -6155,14 +6137,14 @@ const windowsData = {
           "tags": "Soniccouture,Cinematic & Hybrid Textures,Kontakt,Kontakt Library"
         },
         {
-          "name": "SONiVOX Sonic Implants - Symphonic Harp Collection",
-          "price": 20,
-          "tags": "SONiVOX  Sonic Implants,Strings & Orchestral,Kontakt,Kontakt Library"
-        },
-        {
           "name": "SONiVOX - Silk Road Middle Eastern Instruments (Kontakt",
           "price": 20,
           "tags": "SONiVOX,Guitars & Bass,Kontakt,Kontakt Library"
+        },
+        {
+          "name": "SONiVOX Sonic Implants - Symphonic Harp Collection",
+          "price": 20,
+          "tags": "SONiVOX  Sonic Implants,Strings & Orchestral,Kontakt,Kontakt Library"
         },
         {
           "name": "SONiVOX Sonic Implants - Symphonic Strings Collection.",
