@@ -1238,13 +1238,48 @@ function renderThumbnailHtml(imageStr, isBundle = false) {
 
 const INFO_SVG = `<svg class="info-svg" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.8"></circle><line x1="8" y1="7.2" x2="8" y2="11.5"></line><circle cx="8" cy="4.5" r="0.75" fill="currentColor"></circle></svg>`;
 
+function toggleNoteReveal(event, el) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  const collapsed = el.querySelector('.note-collapsed-label');
+  const expanded = el.querySelector('.note-expanded-label');
+  if (!collapsed || !expanded) return;
+  const isExpanded = expanded.style.display !== 'none';
+  if (isExpanded) {
+    expanded.style.display = 'none';
+    collapsed.style.display = 'inline';
+    el.classList.remove('is-open');
+  } else {
+    collapsed.style.display = 'none';
+    expanded.style.display = 'inline';
+    el.classList.add('is-open');
+  }
+}
+
 function renderBundleCard(bundle, q, catKey = '', vstContext = '') {
   const n = normalizeBundle(bundle);
   const cartKey = getCartItemKey('bundle', n.name, 'Bundle');
   const inCart = state.cart.some(item => item.id === cartKey);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, true);
-  const noteHtml = n.note ? `<span class="bundle-note-inline">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
+  
+  let noteHtml = '';
+  if (n.note) {
+    const isLongNote = n.note.length > 35 || n.note.includes(',') || n.note.includes('\n');
+    if (isLongNote) {
+      noteHtml = `
+        <span class="bundle-note-inline note-expandable" title="Click to view full note" onclick="toggleNoteReveal(event, this)">
+          ${INFO_SVG}
+          <span class="note-collapsed-label">Tap to reveal</span>
+          <span class="note-expanded-label" style="display:none;">${esc(n.note)}</span>
+        </span>
+      `;
+    } else {
+      noteHtml = `<span class="bundle-note-inline">${INFO_SVG}<span>${esc(n.note)}</span></span>`;
+    }
+  }
 
   // Clean title for display inside VST section (e.g. "Analog Lab Bank Suite" -> "Bank Suite")
   let displayName = n.name;
@@ -1301,7 +1336,23 @@ function renderPluginCard(item, q, tier = '$40', catKey = '', vstContext = '') {
   const inCart = state.cart.some(item => item.id === cartKey);
   const badgesHtml = renderBadgesHtml(n.badges);
   const thumbHtml = renderThumbnailHtml(n.image, false);
-  const noteHtml = n.note ? `<span class="plugin-note-tag">${INFO_SVG}<span>${esc(n.note)}</span></span>` : '';
+  
+  let noteHtml = '';
+  if (n.note) {
+    const isLongNote = n.note.length > 35 || n.note.includes(',') || n.note.includes('\n');
+    if (isLongNote) {
+      noteHtml = `
+        <span class="plugin-note-tag note-expandable" title="Click to view full note" onclick="toggleNoteReveal(event, this)">
+          ${INFO_SVG}
+          <span class="note-collapsed-label">Tap to reveal</span>
+          <span class="note-expanded-label" style="display:none;">${esc(n.note)}</span>
+        </span>
+      `;
+    } else {
+      noteHtml = `<span class="plugin-note-tag">${INFO_SVG}<span>${esc(n.note)}</span></span>`;
+    }
+  }
+
   const isPricePill = catKey === 'banks' || state.activeCategory === 'banks' || catKey === 'kontakt' || state.activeCategory === 'kontakt' || n.price !== undefined;
   const priceTagHtml = isPricePill ? `<span class="plugin-price-tag">$${numPrice}</span>` : '';
 

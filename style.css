@@ -960,6 +960,69 @@ html, body {
   vertical-align: baseline;
 }
 
+.plugin-note-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.plugin-note-tag.note-expandable,
+.bundle-note-inline.note-expandable {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  padding: 0.12rem 0.4rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.18s ease;
+  user-select: none;
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+.plugin-note-tag.note-expandable:hover,
+.bundle-note-inline.note-expandable:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(96, 165, 250, 0.4);
+  color: #93c5fd;
+}
+
+.plugin-note-tag.note-expandable.is-open,
+.bundle-note-inline.note-expandable.is-open {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: var(--text-1);
+  white-space: normal;
+  display: inline-block;
+  margin-top: 0.3rem;
+  padding: 0.3rem 0.55rem;
+  line-height: 1.45;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.note-collapsed-label {
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+}
+
+.note-expandable:hover .note-collapsed-label {
+  color: #93c5fd;
+}
+
+.note-expanded-label {
+  font-size: 0.74rem;
+  color: var(--text-2);
+}
+
 /* ═══════════════════════════════════════════════════════════
    PLUGIN ITEMS (SUBTLE HOVER ELEVATION)
 ═══════════════════════════════════════════════════════════ */
