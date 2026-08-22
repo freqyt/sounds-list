@@ -420,24 +420,36 @@ const windowsData = {
           "name": "Starter Bundle",
           "price": 100,
           "includes": "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle",
+          "badges": [
+            "BEST SELLER"
+          ],
           "tags": "Fabfilter,Waves,Valhalla"
         },
         {
           "name": "Vocal Bundle",
           "price": 70,
           "includes": "Waves 16 Complete, Auto Tune 11 Pro",
+          "badges": [
+            "BEST SELLER"
+          ],
           "tags": "Waves,Antares"
         },
         {
           "name": "Hihat Sauce",
           "price": 60,
           "includes": "Effectrix 2, Looperator & Shaperbox 3",
+          "badges": [
+            "HOT"
+          ],
           "tags": "Sugar Bytes,Cableguys"
         },
         {
           "name": "Sample Sauce",
           "price": 60,
           "includes": "Portal, Soothe2 & RC-20",
+          "badges": [
+            "HOT"
+          ],
           "tags": "Output,oeksound,XLN Audio"
         },
         {
@@ -445,6 +457,9 @@ const windowsData = {
           "price": 80,
           "includes": "Total of 18 Plugins",
           "note": "Auto-Key 2, Auto-Tune EFX+, Auto-Tune Pro X, Auto-Tune Slice, Auto-Tune SoundSoap, Auto-Tune Vocal EQ, Auto-Tune Vocodist, Mic Mod, Vocal Reverb, AVOX: ARTICULATOR, ASPIRE, CHOIR, DUO, MUTATOR, PUNCH, SYBIL, THROAT, WARM",
+          "badges": [
+            "BEST SELLER"
+          ],
           "tags": "Antares"
         },
         {
@@ -459,7 +474,7 @@ const windowsData = {
       ],
       "tier40": [
         {
-          "name": "Antares Auto-Tune Pro X",
+          "name": "Antares Auto-Tune Pro 11",
           "tags": "Antares"
         },
         {
