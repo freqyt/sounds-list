@@ -365,8 +365,10 @@ function toggleCartItem(type, name, price, tier, badges = [], note = '', catKey 
   if (idx >= 0) {
     state.cart.splice(idx, 1);
   } else {
-    const isKontaktBank = (catKey === 'kontakt' || tier === '$20' || tier === 'Kontakt') && type === 'plugin' && !name.toLowerCase().includes('kontakt 8');
-    const isPresetBank = (catKey === 'banks' || state.activeCategory === 'banks' || (tier && tier.includes('Preset Banks'))) && type === 'plugin';
+    const resolvedCat = catKey || state.activeCategory || '';
+    const isKontaktBank = (resolvedCat === 'kontakt') && type === 'plugin' && !name.toLowerCase().includes('kontakt 8');
+    const isPresetBank = (resolvedCat === 'banks' || name.toLowerCase().includes('preset bank')) && type === 'plugin' && !isKontaktBank;
+
     state.cart.push({
       id: key,
       type,
@@ -375,7 +377,7 @@ function toggleCartItem(type, name, price, tier, badges = [], note = '', catKey 
       tier: tier || '',
       badges: Array.isArray(badges) ? badges : [],
       note: note || '',
-      catKey: catKey || '',
+      catKey: resolvedCat,
       isKontaktBank,
       isPresetBank
     });
@@ -397,16 +399,19 @@ function calculateCartTotals() {
     if (item.type === 'bundle') return false;
     const n = (item.name || '').toLowerCase();
     if (n.includes('kontakt 8') || n.includes('kontakt engine')) return false;
-    return Boolean(item.isKontaktBank || item.catKey === 'kontakt');
+    return Boolean(item.catKey === 'kontakt' || item.isKontaktBank || (item.tags && item.tags.toLowerCase().includes('kontakt library')));
   };
 
   const isPresetBankItem = (item) => {
     if (item.type === 'bundle') return false;
-    return Boolean(item.isPresetBank || item.catKey === 'banks' || (item.tags && item.tags.toLowerCase().includes('preset banks')));
+    if (isKontaktBankItem(item)) return false;
+    const n = (item.name || '').toLowerCase();
+    const t = (item.tags || '').toLowerCase();
+    return Boolean(item.catKey === 'banks' || item.isPresetBank || t.includes('preset banks') || t.includes('soundbank') || n.includes('preset bank'));
   };
 
   const kontaktBanks = state.cart.filter(isKontaktBankItem);
-  const presetBanks = state.cart.filter(item => !isKontaktBankItem(item) && isPresetBankItem(item));
+  const presetBanks = state.cart.filter(isPresetBankItem);
   const regularItems = state.cart.filter(item => !isKontaktBankItem(item) && !isPresetBankItem(item));
 
   // ── 1. Dedicated Kontakt Volume Tier Pricing ($20 each / 5 for $50 / 10 for $75 / 20 for $120) ──
@@ -607,7 +612,14 @@ function calculateCartTotals() {
   if (kPromoLabel) promoLabels.push(kPromoLabel);
   if (bPromoLabel) promoLabels.push(bPromoLabel);
 
-  const upsellMsg = kUpsellMsg || bUpsellMsg || regularUpsellMsg || '';
+  let upsellMsg = '';
+  if (state.activeCategory === 'banks' && bUpsellMsg) {
+    upsellMsg = bUpsellMsg;
+  } else if (state.activeCategory === 'kontakt' && kUpsellMsg) {
+    upsellMsg = kUpsellMsg;
+  } else {
+    upsellMsg = bUpsellMsg || kUpsellMsg || regularUpsellMsg || '';
+  }
 
   return {
     originalTotal,
