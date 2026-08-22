@@ -1271,9 +1271,9 @@ function renderBundleCard(bundle, q, catKey = '', vstContext = '') {
     const isLongNote = n.note.length > 60 || n.note.includes('\n') || commaCount >= 3;
     if (isLongNote) {
       noteHtml = `
-        <span class="bundle-note-inline note-expandable" title="Click to view full note" onclick="toggleNoteReveal(event, this)">
+        <span class="bundle-note-inline note-expandable" title="Click to view what's included" onclick="toggleNoteReveal(event, this)">
           ${INFO_SVG}
-          <span class="note-collapsed-label">Tap to reveal</span>
+          <span class="note-collapsed-label">Tap to see what's included</span>
           <span class="note-expanded-label" style="display:none;">${esc(n.note)}</span>
         </span>
       `;
@@ -1344,9 +1344,9 @@ function renderPluginCard(item, q, tier = '$40', catKey = '', vstContext = '') {
     const isLongNote = n.note.length > 60 || n.note.includes('\n') || commaCount >= 3;
     if (isLongNote) {
       noteHtml = `
-        <span class="plugin-note-tag note-expandable" title="Click to view full note" onclick="toggleNoteReveal(event, this)">
+        <span class="plugin-note-tag note-expandable" title="Click to view what's included" onclick="toggleNoteReveal(event, this)">
           ${INFO_SVG}
-          <span class="note-collapsed-label">Tap to reveal</span>
+          <span class="note-collapsed-label">Tap to see what's included</span>
           <span class="note-expanded-label" style="display:none;">${esc(n.note)}</span>
         </span>
       `;
