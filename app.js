@@ -105,10 +105,18 @@ const WIN_LOGO_SVG = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none
 
 const MAC_LOGO_SVG = `<svg viewBox="0 0 170 170" width="16" height="16" fill="currentColor"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.6-7.7-11.71-13.98-5.74-8.7-10.37-18.72-13.88-30.06-3.5-11.33-5.26-22.18-5.26-32.55 0-14.07 3.5-25.75 10.49-35.03 6.99-9.28 15.89-14.07 26.68-14.36 4.79 0 10.34 1.25 16.66 3.75 6.32 2.5 10.15 3.8 11.49 3.8 1.13 0 5.17-1.35 12.13-4.04 6.96-2.7 12.67-3.9 17.13-3.62 12.82.72 23.08 5.62 30.77 14.69-11.13 6.74-16.61 15.89-16.43 27.46.19 9.07 3.65 16.68 10.38 22.84 6.73 6.16 14.73 9.77 24 10.83-2.12 6.31-4.75 12.38-7.89 18.23zm-38.42-120.32c0 6.64-2.52 13.06-7.55 18.27-5.46 5.63-12.01 9.08-19.64 8.35-.11-.97-.16-1.93-.16-2.88 0-6.42 2.65-13.05 7.94-18.39 2.65-2.69 5.86-4.84 9.64-6.45 3.78-1.61 7.42-2.48 10.92-2.6.21 1.25.32 2.5.32 3.7z" fill="#ffffff"/></svg>`;
 
+function getPlatformPillHtml(plat) {
+  const isWin = plat === 'windows';
+  return `
+    <span class="pill-os-icon">${isWin ? WIN_LOGO_SVG : MAC_LOGO_SVG}</span>
+    <span class="pill-os-name">${isWin ? 'Windows' : 'Mac'}</span>
+  `;
+}
+
 function setupCatalogue() {
   const pill = document.getElementById('current-platform-pill');
   if (pill) {
-    pill.innerHTML = state.platform === 'windows' ? WIN_LOGO_SVG : MAC_LOGO_SVG;
+    pill.innerHTML = getPlatformPillHtml(state.platform);
     pill.title = state.platform === 'windows' ? 'Windows — Tap to switch to Mac' : 'Mac — Tap to switch to Windows';
   }
 
@@ -127,7 +135,7 @@ function togglePlatform() {
 
   const pill = document.getElementById('current-platform-pill');
   if (pill) {
-    pill.innerHTML = state.platform === 'windows' ? WIN_LOGO_SVG : MAC_LOGO_SVG;
+    pill.innerHTML = getPlatformPillHtml(state.platform);
     pill.title = state.platform === 'windows' ? 'Windows — Tap to switch to Mac' : 'Mac — Tap to switch to Windows';
     pill.classList.add('platform-switch-pulse');
     setTimeout(() => pill.classList.remove('platform-switch-pulse'), 400);

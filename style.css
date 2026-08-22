@@ -332,39 +332,51 @@ html, body {
   color: #fff;
 }
 
-.nav-right {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .platform-indicator-pill {
-  width: 34px;
-  height: 34px;
+  height: 32px;
+  padding: 0 0.65rem;
   background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  display: flex;
+  border-radius: var(--radius-full);
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.45rem;
   color: var(--accent-bright);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   outline: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  user-select: none;
 }
 
 .platform-indicator-pill:hover {
-  background: rgba(59, 130, 246, 0.18);
-  border-color: rgba(96, 165, 250, 0.45);
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(96, 165, 250, 0.5);
+  color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 0 14px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.35);
 }
 
 .platform-indicator-pill:active {
-  transform: scale(0.92);
+  transform: scale(0.94);
 }
 
-.platform-indicator-pill svg {
+.platform-indicator-pill .pill-os-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.platform-indicator-pill .pill-os-icon svg {
   display: block;
+}
+
+.platform-indicator-pill .pill-os-name {
+  color: var(--text-1);
+  font-size: 0.76rem;
+  font-weight: 700;
 }
 
 @keyframes platformPulse {
