@@ -1267,7 +1267,8 @@ function renderBundleCard(bundle, q, catKey = '', vstContext = '') {
   
   let noteHtml = '';
   if (n.note) {
-    const isLongNote = n.note.length > 35 || n.note.includes(',') || n.note.includes('\n');
+    const commaCount = (n.note.match(/,/g) || []).length;
+    const isLongNote = n.note.length > 60 || n.note.includes('\n') || commaCount >= 3;
     if (isLongNote) {
       noteHtml = `
         <span class="bundle-note-inline note-expandable" title="Click to view full note" onclick="toggleNoteReveal(event, this)">
@@ -1339,7 +1340,8 @@ function renderPluginCard(item, q, tier = '$40', catKey = '', vstContext = '') {
   
   let noteHtml = '';
   if (n.note) {
-    const isLongNote = n.note.length > 35 || n.note.includes(',') || n.note.includes('\n');
+    const commaCount = (n.note.match(/,/g) || []).length;
+    const isLongNote = n.note.length > 60 || n.note.includes('\n') || commaCount >= 3;
     if (isLongNote) {
       noteHtml = `
         <span class="plugin-note-tag note-expandable" title="Click to view full note" onclick="toggleNoteReveal(event, this)">
