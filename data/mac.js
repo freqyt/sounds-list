@@ -66,6 +66,7 @@ const macData = {
           "name": "Kontakt 8 Starter Bundle",
           "price": 75,
           "includes": "Kontakt + 10 of the best selling banks",
+          "note": "Analog Dreams, Cuba, EXHALE, Hybrid Keys, Mallet Flux, Morpheus, Playbox, The Maverick, Una Corda, West Africa",
           "tags": "Native Instruments,NI"
         },
         {
@@ -804,7 +805,8 @@ const macData = {
         {
           "name": "Kontakt Starter Bundle",
           "price": 75,
-          "includes": "Kontakt 8 +  Analog Dreams, Cuba, EXHALE, Hybrid Keys, Mallet Flux, Morpheus, Playbox, The Maverick, Una Corda, West Africa"
+          "includes": "Kontakt + 10 of the best selling banks",
+          "note": "Analog Dreams, Cuba, EXHALE, Hybrid Keys, Mallet Flux, Morpheus, Playbox, The Maverick, Una Corda, West Africa"
         }
       ],
       "tier40": [],
