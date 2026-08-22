@@ -435,7 +435,7 @@ const windowsData = {
           "tags": "Waves,Antares"
         },
         {
-          "name": "Hihat Sauce",
+          "name": "Hihat Sauce Bundle",
           "price": 60,
           "includes": "Effectrix 2, Looperator & Shaperbox 3",
           "badges": [
@@ -444,7 +444,7 @@ const windowsData = {
           "tags": "Sugar Bytes,Cableguys"
         },
         {
-          "name": "Sample Sauce",
+          "name": "Sample Sauce Bundle",
           "price": 60,
           "includes": "Portal, Soothe2 & RC-20",
           "badges": [
