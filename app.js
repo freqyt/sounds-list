@@ -879,21 +879,6 @@ function renderCatalogue() {
       ...(cat.tier20 || [])
     ];
 
-    // Global bundles (like All-Synths Mega Vault)
-    const isGlobalBundle = (b) => {
-      const n = (b.name || '').toLowerCase();
-      return n.includes('all-synth') || n.includes('mega vault') || n.includes('master vault');
-    };
-
-    const globalBundles = (cat.bundles || []).filter(isGlobalBundle);
-    const synthSpecificBundles = (cat.bundles || []).filter(b => !isGlobalBundle(b));
-
-    // Render standalone Global Mega Vaults at the top
-    if (state.subFilter === 'all' && globalBundles.length > 0) {
-      totalVisible += globalBundles.length;
-      html += renderSection('Featured Soundbank Mega Vaults', globalBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid');
-    }
-
     // Group items by VST Synth name (e.g. "Omnisphere", "Analog Lab", "ElectraX", "Serum", "Portal", etc.)
     const vstGroups = {};
     allItems.forEach(item => {
@@ -908,6 +893,28 @@ function renderCatalogue() {
       if (!vstGroups[vstName]) vstGroups[vstName] = [];
       vstGroups[vstName].push(item);
     });
+
+    const activeSynthNames = Object.keys(vstGroups);
+
+    // Global bundles are bundles that span across all synths (e.g. "The Vault Bundle", "All-Synths Ultimate Mega Vault", etc.)
+    const isSynthSpecific = (b) => {
+      const bn = (b.name || '').toLowerCase();
+      const bt = (b.tags || '').toLowerCase();
+      if (bn.includes('vault bundle') || bn.includes('mega vault') || bn.includes('all-synth') || bn.includes('all synth')) return false;
+      return activeSynthNames.some(vn => {
+        const vnl = vn.toLowerCase();
+        return bn.includes(vnl) || (bt.includes(vnl) && !bt.includes('all synth') && !bt.includes('mega vault'));
+      });
+    };
+
+    const globalBundles = (cat.bundles || []).filter(b => !isSynthSpecific(b));
+    const synthSpecificBundles = (cat.bundles || []).filter(isSynthSpecific);
+
+    // Render standalone Global Mega Vaults at the top
+    if (state.subFilter === 'all' && globalBundles.length > 0) {
+      totalVisible += globalBundles.length;
+      html += renderSection('Featured Soundbank Mega Vaults', globalBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid');
+    }
 
     let vstCardsHtml = '';
 

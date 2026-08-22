@@ -458,6 +458,65 @@ function renderPanel() {
   const main = document.getElementById('admin-main');
   if (!cat || !main) return;
 
+  // ── DEDICATED PRESET BANKS ADMIN LAYOUT (GROUPED BY SYNTH) ──
+  if (adm.category === 'banks') {
+    const allBankItems = [];
+    ['tier20', 'tier30', 'tier40'].forEach(tk => {
+      (cat[tk] || []).forEach((item, idx) => {
+        allBankItems.push({ item, idx, tierKey: tk });
+      });
+    });
+
+    const synthGroups = {};
+    allBankItems.forEach(entry => {
+      const n = normalizeItem(entry.item);
+      let sName = 'Other Soundbanks';
+      if (n.name.includes(' - ')) {
+        sName = n.name.split(' - ')[0].trim();
+      } else if (n.tags) {
+        const firstTag = n.tags.split(',')[0].trim();
+        if (firstTag && !firstTag.toLowerCase().includes('bank')) sName = firstTag;
+      }
+      if (!synthGroups[sName]) synthGroups[sName] = [];
+      synthGroups[sName].push(entry);
+    });
+
+    let synthSectionsHtml = '';
+    Object.keys(synthGroups).sort().forEach(sName => {
+      const entries = synthGroups[sName];
+      const rows = entries.map(entry => itemRow(normalizeItem(entry.item), entry.idx, entry.tierKey)).join('');
+      synthSectionsHtml += `
+        <div class="admin-section">
+          <div class="admin-section-header">
+            <span class="admin-section-title">🎹 ${esc(sName)} Banks</span>
+            <span class="admin-section-count">${entries.length}</span>
+          </div>
+          <div class="admin-synth-list">
+            ${rows || '<div class="empty-list">No banks yet.</div>'}
+          </div>
+          <button class="add-item-btn" onclick="addBankToSynth('${ea(sName)}')">
+            + Add to ${esc(sName)} Banks
+          </button>
+        </div>
+      `;
+    });
+
+    main.innerHTML = `
+      <div class="panel-header">
+        <h2 class="panel-title">${getCategorySvg(adm.category, cat.icon)} ${esc(cat.label)}</h2>
+        <span class="save-indicator" id="save-ind"></span>
+      </div>
+      ${buildSection('Bundles & Mega Vaults', 'bundles', cat.bundles || [], 'bundle')}
+      ${synthSectionsHtml}
+      <div style="margin-top: 1.5rem; text-align: center;">
+        <button class="add-item-btn" style="max-width: 340px; margin: 0 auto; background: var(--surface-2); border: 1px dashed var(--border-light);" onclick="addNewSynthGroup()">
+          + Add New Synth Section
+        </button>
+      </div>
+    `;
+    return;
+  }
+
   main.innerHTML = `
     <div class="panel-header">
       <h2 class="panel-title">${getCategorySvg(adm.category, cat.icon)} ${esc(cat.label)}</h2>
@@ -468,6 +527,36 @@ function renderPanel() {
     ${buildSection('$30 Each',  'tier30',  cat.tier30   || [], 'item')}
     ${buildSection('$20 Each',  'tier20',  cat.tier20   || [], 'item')}
   `;
+}
+
+function addBankToSynth(synthName) {
+  const cat = adm.data[adm.platform].categories['banks'];
+  if (!cat) return;
+  if (!cat.tier20) cat.tier20 = [];
+
+  const existingInSynth = (cat.tier20 || []).filter(i => {
+    const n = (typeof i === 'string' ? i : i.name || '').toLowerCase();
+    return n.startsWith(synthName.toLowerCase() + ' -');
+  });
+
+  const nextVol = existingInSynth.length + 1;
+  const newItem = {
+    name: `${synthName} - Volume ${nextVol} (Preset Banks)`,
+    price: 25,
+    tags: `${synthName},Preset Banks,Soundbanks`,
+    badges: [],
+    note: ''
+  };
+
+  cat.tier20.push(newItem);
+  autoSave();
+  renderPanel();
+}
+
+function addNewSynthGroup() {
+  const name = prompt('Enter new Synth name (e.g. Sylenth1, Spire, Nexus, Pigments):');
+  if (!name || !name.trim()) return;
+  addBankToSynth(name.trim());
 }
 
 // ── Section builder ───────────────────────────────────────
