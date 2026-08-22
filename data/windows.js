@@ -483,7 +483,7 @@ const windowsData = {
           "tags": "Arturia"
         },
         {
-          "name": "Fabfilter Collection",
+          "name": "FabFilter Collection",
           "note": "Micro 1, One 3, Pro-C 3, Pro-DS 1, Pro-G 1, Pro-L 2, Pro-MB 1, Pro-Q 4, Pro-R 2, Saturn 2, Simplon 1, Timeless 3, Twin 3, Volcano 3",
           "tags": "Fabfilter"
         },
