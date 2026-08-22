@@ -401,8 +401,8 @@ const macData = {
         {
           "name": "Antares Bundle",
           "price": 80,
-          "includes": "Mic Mod, Harmony, Auto Tune Artist, AVOX: Warm, Throat, Sybil, Punch, Mutator, Duo, Choir, Aspire & Articulator",
-          "note": "Total of 12 Plugins",
+          "includes": "Total of 13 plugins",
+          "note": "Auto-Tune Artist, Auto-Tune Pro 11, Harmony, Mic Mod, AVOX: Articulator, Aspire, Choir, Duo, Mutator, Punch, Sybil, Throat, Warm",
           "badges": [
             "BEST SELLER"
           ],
