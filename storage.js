@@ -5,8 +5,8 @@
 ═══════════════════════════════════════════════════════════ */
 
 const STORAGE_KEYS = {
-  windows:      'plcat_windows_v2',
-  mac:          'plcat_mac_v2',
+  windows:      'plcat_windows_v3',
+  mac:          'plcat_mac_v3',
   passwordHash: 'plcat_pw_hash',
   githubToken:  'plcat_github_token',
   githubRepo:   'plcat_github_repo'
@@ -242,10 +242,14 @@ async function fetchLiveRepoData(platform) {
 }
 
 function getPlatformData(platform) {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEYS[platform]);
-    if (stored) return JSON.parse(stored);
-  } catch (e) { /* fall through */ }
+  // If in admin dashboard, check for local drafts
+  const isAdmin = typeof window !== 'undefined' && window.location.pathname.includes('admin');
+  if (isAdmin) {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS[platform]);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+  }
   return platform === 'windows' ? windowsData : macData;
 }
 
