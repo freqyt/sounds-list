@@ -104,6 +104,7 @@ const windowsData = {
         },
         {
           "name": "KORG Bundle",
+          "note": "ARP 2600, ARP Odyssey, ELECTRIBE-R, EP-1, KAOSS PAD, LegacyCell, M1, MDE-X, microKORG, miniKORG, MonoPoly, MS-20, Polysix, Prophecy, PS-3300, SGX-2, TRINITY, TRITON, TRITON Extreme, VOX Super Continental, WAVESTATION",
           "tags": "KORG"
         },
         {
