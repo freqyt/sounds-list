@@ -365,7 +365,8 @@ function toggleCartItem(type, name, price, tier, badges = [], note = '', catKey 
   if (idx >= 0) {
     state.cart.splice(idx, 1);
   } else {
-    const isKontaktBank = (catKey === 'kontakt' || tier === '$20' || tier === 'Kontakt' || price === 20) && type === 'plugin' && !name.toLowerCase().includes('kontakt 8');
+    const isKontaktBank = (catKey === 'kontakt' || tier === '$20' || tier === 'Kontakt') && type === 'plugin' && !name.toLowerCase().includes('kontakt 8');
+    const isPresetBank = (catKey === 'banks' || state.activeCategory === 'banks' || (tier && tier.includes('Preset Banks'))) && type === 'plugin';
     state.cart.push({
       id: key,
       type,
@@ -375,7 +376,8 @@ function toggleCartItem(type, name, price, tier, badges = [], note = '', catKey 
       badges: Array.isArray(badges) ? badges : [],
       note: note || '',
       catKey: catKey || '',
-      isKontaktBank
+      isKontaktBank,
+      isPresetBank
     });
   }
   updateCartUI();
@@ -395,11 +397,17 @@ function calculateCartTotals() {
     if (item.type === 'bundle') return false;
     const n = (item.name || '').toLowerCase();
     if (n.includes('kontakt 8') || n.includes('kontakt engine')) return false;
-    return Boolean(item.isKontaktBank || item.catKey === 'kontakt' || item.price === 20 || (item.tier && item.tier.includes('20')));
+    return Boolean(item.isKontaktBank || item.catKey === 'kontakt');
+  };
+
+  const isPresetBankItem = (item) => {
+    if (item.type === 'bundle') return false;
+    return Boolean(item.isPresetBank || item.catKey === 'banks' || (item.tags && item.tags.toLowerCase().includes('preset banks')));
   };
 
   const kontaktBanks = state.cart.filter(isKontaktBankItem);
-  const regularItems = state.cart.filter(item => !isKontaktBankItem(item));
+  const presetBanks = state.cart.filter(item => !isKontaktBankItem(item) && isPresetBankItem(item));
+  const regularItems = state.cart.filter(item => !isKontaktBankItem(item) && !isPresetBankItem(item));
 
   // ── 1. Dedicated Kontakt Volume Tier Pricing ($20 each / 5 for $50 / 10 for $75 / 20 for $120) ──
   let kDiscount = 0;
@@ -412,24 +420,19 @@ function calculateCartTotals() {
     let remaining = kCount;
     let kCost = 0;
 
-    // 20 for $120
     const p20 = Math.floor(remaining / 20);
     kCost += p20 * 120;
     remaining %= 20;
 
-    // 10 for $75
     const p10 = Math.floor(remaining / 10);
     kCost += p10 * 75;
     remaining %= 10;
 
-    // 5 for $50
     const p5 = Math.floor(remaining / 5);
     kCost += p5 * 50;
     remaining %= 5;
 
-    // Remaining singles ($20)
     kCost += remaining * 20;
-
     kDiscount = Math.max(0, rawKTotal - kCost);
 
     if (kDiscount > 0) {
@@ -440,7 +443,6 @@ function calculateCartTotals() {
       kPromoLabel = `Kontakt Tier Deal: ${labels.join(' + ')} (-$${kDiscount})`;
     }
 
-    // Upsell notifications for Kontakt libraries
     if (kCount < 5) {
       const needed = 5 - kCount;
       kUpsellMsg = `🎻 Add <strong>${needed} more Kontakt bank${needed === 1 ? '' : 's'}</strong> to get <strong>5 for $50</strong> (Save $50)!`;
@@ -455,7 +457,66 @@ function calculateCartTotals() {
     }
   }
 
-  // ── 2. Standard Storewide / Plugin Promo Deal (Applies ONLY to Non-Kontakt Bank items) ──
+  // ── 2. Dedicated Preset Banks Tier Pricing (2 for $40 / 3 for $50 / 5 for $75) ──
+  let bDiscount = 0;
+  let bPromoLabel = '';
+  let bUpsellMsg = '';
+  const bCount = presetBanks.length;
+
+  if (bCount > 0) {
+    const sorted = [...presetBanks].sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+    const rawBTotal = sorted.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+    let bCost = 0;
+    let remaining = [...sorted];
+
+    // 5 for $75
+    const packs5 = Math.floor(remaining.length / 5);
+    for (let i = 0; i < packs5; i++) {
+      bCost += 75;
+    }
+    remaining = remaining.slice(packs5 * 5);
+
+    // 3 for $50
+    const packs3 = Math.floor(remaining.length / 3);
+    for (let i = 0; i < packs3; i++) {
+      bCost += 50;
+    }
+    remaining = remaining.slice(packs3 * 3);
+
+    // 2 for $40
+    const packs2 = Math.floor(remaining.length / 2);
+    for (let i = 0; i < packs2; i++) {
+      bCost += 40;
+    }
+    remaining = remaining.slice(packs2 * 2);
+
+    // Remaining singles at face price
+    remaining.forEach(item => {
+      bCost += (Number(item.price) || 0);
+    });
+
+    bDiscount = Math.max(0, rawBTotal - bCost);
+
+    if (bDiscount > 0) {
+      const labels = [];
+      if (packs5 > 0) labels.push(`${packs5 * 5} for $${packs5 * 75}`);
+      if (packs3 > 0) labels.push(`${packs3 * 3} for $${packs3 * 50}`);
+      if (packs2 > 0) labels.push(`${packs2 * 2} for $${packs2 * 40}`);
+      bPromoLabel = `Preset Banks Tier Deal: ${labels.join(' + ')} (-$${bDiscount})`;
+    }
+
+    if (bCount === 1) {
+      bUpsellMsg = `🎹 Add <strong>1 more volume pack</strong> to get <strong>2 for $40</strong>!`;
+    } else if (bCount === 2) {
+      bUpsellMsg = `🎉 <strong>2 Volumes for $40 Deal Applied!</strong> (Add 1 more to get <strong>3 for $50</strong>)`;
+    } else if (bCount === 4) {
+      bUpsellMsg = `🎹 Add <strong>1 more volume pack</strong> to get <strong>5 for $75</strong> (Save up to $50)!`;
+    } else if (bDiscount > 0) {
+      bUpsellMsg = `🎉 <strong>Synth Soundbank Volume Tier Deal Applied!</strong> You saved $${bDiscount}`;
+    }
+  }
+
+  // ── 3. Standard Storewide / Plugin Promo Deal (Applies ONLY to Non-Bank items) ──
   let regularDiscount = 0;
   let regularPromoLabel = '';
   let regularUpsellMsg = '';
@@ -538,20 +599,22 @@ function calculateCartTotals() {
     }
   }
 
-  const totalDiscount = kDiscount + regularDiscount;
+  const totalDiscount = kDiscount + bDiscount + regularDiscount;
   const finalTotal = Math.max(0, originalTotal - totalDiscount);
 
   const promoLabels = [];
   if (regularPromoLabel) promoLabels.push(regularPromoLabel);
   if (kPromoLabel) promoLabels.push(kPromoLabel);
+  if (bPromoLabel) promoLabels.push(bPromoLabel);
 
-  const upsellMsg = kUpsellMsg || regularUpsellMsg || '';
+  const upsellMsg = kUpsellMsg || bUpsellMsg || regularUpsellMsg || '';
 
   return {
     originalTotal,
     finalTotal,
     discount: totalDiscount,
     kDiscount,
+    bDiscount,
     regularDiscount,
     promoLabel: promoLabels.join(' | '),
     upsellMsg,
@@ -1013,6 +1076,34 @@ function renderSpotlightBanner() {
               <div class="kontakt-tier-chip highlight"><span class="kt-label">5 Banks</span><span class="kt-price">$50</span></div>
               <div class="kontakt-tier-chip highlight"><span class="kt-label">10 Banks</span><span class="kt-price">$75</span></div>
               <div class="kontakt-tier-chip highlight"><span class="kt-label">20 Banks</span><span class="kt-price">$120</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // If customer is on the Preset Banks tab, always display the dedicated Preset Banks Volume Tier Pricing
+  if (state.activeCategory === 'banks') {
+    return `
+      <div class="spotlight-wrap">
+        <div class="spotlight-card spotlight-promo-card preset-pricing-banner">
+          <div class="spotlight-top-tag">
+            <span class="spotlight-badge-pill" style="background: linear-gradient(135deg, #10b981, #3b82f6);">VOLUME SAVINGS</span>
+          </div>
+          <div class="spotlight-body">
+            <div class="spotlight-left">
+              <div class="spotlight-deal-icon">🎹</div>
+              <div class="spotlight-info">
+                <h4 class="spotlight-title">Synth Soundbank Volume Deals</h4>
+                <p class="spotlight-desc">Massive multi-bank preset vaults across Omnisphere, Analog Lab, Serum &amp; more — volume deals auto-apply in cart!</p>
+                <div class="spotlight-note">${INFO_SVG}<span>Discounted complete synth vaults &amp; mega bundles available below</span></div>
+              </div>
+            </div>
+            <div class="spotlight-right kontakt-tier-pills-wrap">
+              <div class="kontakt-tier-chip highlight"><span class="kt-label">2 Volumes</span><span class="kt-price">$40</span></div>
+              <div class="kontakt-tier-chip highlight"><span class="kt-label">3 Volumes</span><span class="kt-price">$50</span></div>
+              <div class="kontakt-tier-chip highlight"><span class="kt-label">5 Volumes</span><span class="kt-price">$75</span></div>
             </div>
           </div>
         </div>
