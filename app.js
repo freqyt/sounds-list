@@ -109,13 +109,37 @@ function setupCatalogue() {
   const pill = document.getElementById('current-platform-pill');
   if (pill) {
     pill.innerHTML = state.platform === 'windows' ? WIN_LOGO_SVG : MAC_LOGO_SVG;
-    pill.title = state.platform === 'windows' ? 'Windows' : 'Mac';
+    pill.title = state.platform === 'windows' ? 'Windows — Tap to switch to Mac' : 'Mac — Tap to switch to Windows';
   }
 
   const searchInput = document.getElementById('search-input');
   if (searchInput) searchInput.value = '';
   updateSearchClearBtn('');
 
+  renderTabs();
+  renderCatalogue();
+  updateCartUI();
+}
+
+function togglePlatform() {
+  const nextPlatform = state.platform === 'windows' ? 'mac' : 'windows';
+  state.platform = nextPlatform;
+
+  const pill = document.getElementById('current-platform-pill');
+  if (pill) {
+    pill.innerHTML = state.platform === 'windows' ? WIN_LOGO_SVG : MAC_LOGO_SVG;
+    pill.title = state.platform === 'windows' ? 'Windows — Tap to switch to Mac' : 'Mac — Tap to switch to Windows';
+    pill.classList.add('platform-switch-pulse');
+    setTimeout(() => pill.classList.remove('platform-switch-pulse'), 400);
+  }
+
+  // Ensure active category exists on the new platform
+  const data = getData();
+  if (!data.categories || !data.categories[state.activeCategory]) {
+    state.activeCategory = Object.keys(data.categories || {})[0] || 'instruments';
+  }
+
+  // Re-render keeping current active category tab
   renderTabs();
   renderCatalogue();
   updateCartUI();
@@ -382,11 +406,37 @@ function toggleCartItem(type, name, price, tier, badges = [], note = '', catKey 
       isPresetBank
     });
   }
+  saveCartToStorage();
   updateCartUI();
+}
+
+const CART_STORAGE_KEY = 'plcat_customer_cart_v1';
+
+function saveCartToStorage() {
+  try {
+    if (state.cart && state.cart.length > 0) {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state.cart));
+    } else {
+      localStorage.removeItem(CART_STORAGE_KEY);
+    }
+  } catch (e) {}
+}
+
+function loadCartFromStorage() {
+  try {
+    const saved = localStorage.getItem(CART_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        state.cart = parsed;
+      }
+    }
+  } catch (e) {}
 }
 
 function clearCart() {
   state.cart = [];
+  saveCartToStorage();
   updateCartUI();
 }
 
@@ -1426,4 +1476,5 @@ window.addEventListener('scroll', () => {
 
 window.addEventListener('DOMContentLoaded', () => {
   window.scrollTo(0, 0);
+  loadCartFromStorage();
 });
