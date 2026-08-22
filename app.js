@@ -879,6 +879,21 @@ function renderCatalogue() {
       ...(cat.tier20 || [])
     ];
 
+    // Global bundles (like All-Synths Mega Vault)
+    const isGlobalBundle = (b) => {
+      const n = (b.name || '').toLowerCase();
+      return n.includes('all-synth') || n.includes('mega vault') || n.includes('master vault');
+    };
+
+    const globalBundles = (cat.bundles || []).filter(isGlobalBundle);
+    const synthSpecificBundles = (cat.bundles || []).filter(b => !isGlobalBundle(b));
+
+    // Render standalone Global Mega Vaults at the top
+    if (state.subFilter === 'all' && globalBundles.length > 0) {
+      totalVisible += globalBundles.length;
+      html += renderSection('Featured Soundbank Mega Vaults', globalBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid');
+    }
+
     // Group items by VST Synth name (e.g. "Omnisphere", "Analog Lab", "ElectraX", "Serum", "Portal", etc.)
     const vstGroups = {};
     allItems.forEach(item => {
@@ -894,7 +909,6 @@ function renderCatalogue() {
       vstGroups[vstName].push(item);
     });
 
-    const usedBundleNames = new Set();
     let vstCardsHtml = '';
 
     // Render each VST group in alphabetical order
@@ -904,21 +918,19 @@ function renderCatalogue() {
       const items = sortItemsAZ(vstGroups[vstName]);
       totalVisible += items.length;
 
-      // Find matching bundle(s) for this VST
-      const matchingBundles = (cat.bundles || []).filter(b => {
+      // Find matching bundle(s) strictly for this specific VST
+      const matchingBundles = synthSpecificBundles.filter(b => {
         const bn = (b.name || '').toLowerCase();
         const bt = (b.tags || '').toLowerCase();
         const vn = vstName.toLowerCase();
-        return bn.includes(vn) || bt.includes(vn);
+        return bn.startsWith(vn) || bn.includes(vn + ' ') || bt.includes(vn);
       });
-
-      matchingBundles.forEach(b => usedBundleNames.add(b.name));
 
       let sectionInner = '';
       if (matchingBundles.length > 0) {
         sectionInner += `<div class="bundles-grid vst-card-bundles">${matchingBundles.map(b => renderBundleCard(b, '', 'banks', vstName)).join('')}</div>`;
       }
-      sectionInner += `<div class="plugins-grid vst-card-plugins">${items.map(item => renderPluginCard(item, '', '$30', 'banks', vstName)).join('')}</div>`;
+      sectionInner += `<div class="plugins-grid vst-card-plugins">${items.map(item => renderPluginCard(item, '', '$25', 'banks', vstName)).join('')}</div>`;
 
       vstCardsHtml += `
         <div class="vst-bank-card">
@@ -934,15 +946,6 @@ function renderCatalogue() {
     });
 
     html += `<div class="vst-bank-grid">${vstCardsHtml}</div>`;
-
-    // Render any remaining global bundles that were not tied to a single VST
-    if (state.subFilter === 'all') {
-      const remainingBundles = (cat.bundles || []).filter(b => !usedBundleNames.has(b.name));
-      if (remainingBundles.length > 0) {
-        totalVisible += remainingBundles.length;
-        html = renderSection('Mega Bundles & Vaults', remainingBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid') + html;
-      }
-    }
   } else if (state.activeCategory === 'kontakt') {
     // ── KONTAKT LIBRARIES: GROUPED BY SOUND TYPE ──
     const allItems = [

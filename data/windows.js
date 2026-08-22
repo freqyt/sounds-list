@@ -773,7 +773,7 @@ const windowsData = {
           "badges": [
             "BEST SELLER"
           ],
-          "tags": "Omnisphere,Analog Lab,ElectraX,Serum,Cthulhu,Portal,Gross Beat,Zenology,Effectrix,Mega Vault,Preset Banks,Soundbanks"
+          "tags": "Mega Vault,All Synths,Ultimate Vault,Preset Banks,Soundbanks"
         },
         {
           "name": "Omnisphere Complete Vault (Vol 1, 2 & 3)",
