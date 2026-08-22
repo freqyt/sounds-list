@@ -103,7 +103,8 @@ const macData = {
           "tags": "Spectrasonics"
         },
         {
-          "name": "KORG Bundle",
+          "name": "KORG Collection",
+          "note": "ARP Odyssey, M1, MDE-X, miniKORG, MonoPoly, MS-20, Polysix, Prophecy, TRINITY, TRITON Extreme, TRITON, WAVESTATION",
           "tags": "KORG"
         },
         {
