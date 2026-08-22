@@ -925,7 +925,7 @@ function renderCatalogue() {
     // Render standalone Global Mega Vaults at the top
     if (state.subFilter === 'all' && globalBundles.length > 0) {
       totalVisible += globalBundles.length;
-      html += renderSection('Featured Soundbank Mega Vaults', globalBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid');
+      html += renderSection('Featured', globalBundles.map(b => renderBundleCard(b, '', 'banks')).join(''), 'bundles-grid');
     }
 
     let vstCardsHtml = '';
@@ -1254,6 +1254,21 @@ function renderBundleCard(bundle, q, catKey = '', vstContext = '') {
     }
   }
 
+  // Calculate separate savings
+  let savingsHtml = '';
+  const bn = (n.name || '').toLowerCase();
+  if (bn.includes('vault bundle') || bn.includes('mega vault') || bn.includes('all-synth')) {
+    savingsHtml = `<span class="bundle-orig-strike">$320</span><span class="bundle-savings-badge">Save $221</span>`;
+  } else if (bn.includes('omnisphere complete')) {
+    savingsHtml = `<span class="bundle-orig-strike">$75</span><span class="bundle-savings-badge">Save $25</span>`;
+  } else if (bn.includes('electrax complete') || bn.includes('electrax bank vault')) {
+    savingsHtml = `<span class="bundle-orig-strike">$50</span><span class="bundle-savings-badge">Save $15</span>`;
+  } else if (bn.includes('analog lab') && (bn.includes('suite') || bn.includes('complete') || bn.includes('vault'))) {
+    savingsHtml = `<span class="bundle-orig-strike">$40</span><span class="bundle-savings-badge">Save $10</span>`;
+  } else if (bn.includes('portal') && (bn.includes('suite') || bn.includes('complete') || bn.includes('vault'))) {
+    savingsHtml = `<span class="bundle-orig-strike">$40</span><span class="bundle-savings-badge">Save $10</span>`;
+  }
+
   return `
     <article
       class="bundle-card ${inCart ? 'in-cart' : ''}"
@@ -1266,7 +1281,10 @@ function renderBundleCard(bundle, q, catKey = '', vstContext = '') {
           <div class="bundle-name">${highlight(displayName, q)} ${badgesHtml}</div>
         </div>
         <div class="bundle-card-top-right">
-          <div class="bundle-price">$${n.price}</div>
+          <div class="bundle-price-wrap">
+            ${savingsHtml}
+            <div class="bundle-price">$${n.price}</div>
+          </div>
           <span class="cart-check-indicator ${inCart ? 'in-cart' : ''}" title="Add to Order">${inCart ? '✓' : '+'}</span>
         </div>
       </div>

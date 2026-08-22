@@ -899,6 +899,37 @@ html, body {
   gap: 0.35rem;
 }
 
+.bundle-price-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.bundle-orig-strike {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.bundle-savings-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  padding: 0.1rem 0.42rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
 .bundle-price {
   font-size: 0.95rem;
   font-weight: 800;

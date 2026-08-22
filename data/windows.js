@@ -768,7 +768,7 @@ const windowsData = {
       "bundles": [
         {
           "name": "The Vault Bundle",
-          "price": 95,
+          "price": 99,
           "includes": "All 14 Volumes across Omnisphere, Analog Lab, ElectraX, Serum, Cthulhu, Portal, Gross Beat, Zenology & Effectrix - 3,000+ Banks Total",
           "badges": [
             "BEST SELLER"
