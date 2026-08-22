@@ -365,24 +365,36 @@ const macData = {
           "name": "Starter Bundle",
           "price": 100,
           "includes": "FabFilter Bundle, Waves 16 Complete, Valhalla Bundle",
+          "badges": [
+            "BEST SELLER"
+          ],
           "tags": "Fabfilter,Waves,Valhalla"
         },
         {
           "name": "Vocal Bundle",
           "price": 70,
           "includes": "Waves 16 Complete, Auto Tune 11 Pro",
+          "badges": [
+            "BEST SELLER"
+          ],
           "tags": "Waves,Antares"
         },
         {
           "name": "Hihat Sauce",
           "price": 60,
           "includes": "Effectrix 2, Looperator & Shaperbox 3",
+          "badges": [
+            "HOT"
+          ],
           "tags": "Sugar Bytes,Cableguys"
         },
         {
           "name": "Sample Sauce",
           "price": 60,
           "includes": "Portal, Soothe2 & RC-20",
+          "badges": [
+            "HOT"
+          ],
           "tags": "Output,oeksound,XLN Audio"
         },
         {
@@ -390,6 +402,9 @@ const macData = {
           "price": 80,
           "includes": "Mic Mod, Harmony, Auto Tune Artist, AVOX: Warm, Throat, Sybil, Punch, Mutator, Duo, Choir, Aspire & Articulator",
           "note": "Total of 12 Plugins",
+          "badges": [
+            "BEST SELLER"
+          ],
           "tags": "Antares"
         },
         {
@@ -404,19 +419,22 @@ const macData = {
       ],
       "tier40": [
         {
-          "name": "Antares Auto-Tune 11 Pro",
+          "name": "Antares Auto-Tune Pro 11",
           "tags": "Antares"
         },
         {
           "name": "Arturia FX Collection",
+          "note": "Bus EXCITER-104, Bus FORCE, Bus PEAK, Chorus DIMENSION-D, Chorus JUN-6, Comp DIODE-609, Comp FET-76, Comp TUBE-STA, Comp VCA-65, Delay BRIGADE, Delay ETERNITY, Delay TAPE-201, Dist COLDFIRE, Dist OPAMP-21, Dist TUBE-CULTURE, Efx FRAGMENTS, Efx MOTIONS, Efx REFRACT, EQ SITRAL-295, Filter M12, Filter MINI, Filter MS-20, Filter SEM, Flanger BL-20, Phaser BI-TRON, Pre 1973, Pre TRIDA, Pre V76, Rev INTENSITY, Rev LX-24, Rev PLATE-140, Rev SPRING-636, Rotary CLS-222, Tape MELLO-FI",
           "tags": "Arturia"
         },
         {
           "name": "FabFilter Bundle",
+          "note": "Micro 1, One 3, Pro-C 3, Pro-DS 1, Pro-G 1, Pro-L 2, Pro-MB 1, Pro-Q 4, Pro-R 2, Saturn 2, Simplon 1, Timeless 3, Twin 3, Volcano 3",
           "tags": "Fabfilter"
         },
         {
-          "name": "Goodhertz Bundle",
+          "name": "Goodhertz Collection",
+          "note": "CanOpener Studio, DC19, Faraday Limiter, Good Dither, Lohi, Lossy, Loudness, Megaverb, Midside, Midside Matrix, Panpot, Tiltshift, Tone Control, Trem Control, Tupe, VCME, VCME Soft Clip, Vulf Compressor, Wow Control",
           "tags": "Goodhertz,Ghz"
         },
         {
@@ -435,7 +453,8 @@ const macData = {
           "tags": "oeksound"
         },
         {
-          "name": "Valhalla Bundle",
+          "name": "Valhalla Collection",
+          "note": "Delay, FreqEcho, FutureVerb, Plate,Room, Shimmer, SpaceModulator, Supermassive, UberMod, VintageVerb",
           "tags": "Valhalla"
         },
         {
@@ -447,6 +466,7 @@ const macData = {
         },
         {
           "name": "Waves 16 Complete",
+          "note": "All 1000+ Waves plugins included",
           "tags": "Waves"
         },
         {
@@ -488,7 +508,7 @@ const macData = {
           "badges": [
             "NEW"
           ],
-          "note": "Cory Wong X, John Mayer X, Mantra, Misha Mansoor X, Nolly X, Tim Henson X"
+          "note": "$30 each for: Cory Wong X, John Mayer X, Mantra, Misha Mansoor X, Nolly X, Tim Henson X"
         },
         {
           "name": "Neutron",
