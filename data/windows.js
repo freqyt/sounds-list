@@ -443,8 +443,8 @@ const windowsData = {
         {
           "name": "Antares Bundle",
           "price": 80,
-          "includes": "Auto-Key 2, Auto-Tune EFX+, Auto-Tune Pro X, Auto-Tune Slice, Auto-Tune SoundSoap, Auto-Tune Vocal EQ, Auto-Tune Vocodist, Mic Mod, Vocal Reverb, AVOX: ARTICULATOR, ASPIRE, CHOIR, DUO, MUTATOR, PUNCH, SYBIL, THROAT, WARM",
-          "note": "Total of 18 Plugins",
+          "includes": "Total of 18 Plugins",
+          "note": "Auto-Key 2, Auto-Tune EFX+, Auto-Tune Pro X, Auto-Tune Slice, Auto-Tune SoundSoap, Auto-Tune Vocal EQ, Auto-Tune Vocodist, Mic Mod, Vocal Reverb, AVOX: ARTICULATOR, ASPIRE, CHOIR, DUO, MUTATOR, PUNCH, SYBIL, THROAT, WARM",
           "tags": "Antares"
         },
         {
@@ -464,14 +464,17 @@ const windowsData = {
         },
         {
           "name": "Arturia FX Collection",
+          "note": "Bus EXCITER-104, Bus FORCE, Bus PEAK, Chorus DIMENSION-D, Chorus JUN-6, Comp DIODE-609, Comp FET-76, Comp TUBE-STA, Comp VCA-65, Delay BRIGADE, Delay ETERNITY, Delay TAPE-201, Dist COLDFIRE, Dist OPAMP-21, Dist TUBE-CULTURE, Efx FRAGMENTS, Efx MOTIONS, Efx REFRACT, EQ SITRAL-295, Filter M12, Filter MINI, Filter MS-20, Filter SEM, Flanger BL-20, Phaser BI-TRON, Pre 1973, Pre TRIDA, Pre V76, Rev INTENSITY, Rev LX-24, Rev PLATE-140, Rev SPRING-636, Rotary CLS-222, Tape MELLO-FI",
           "tags": "Arturia"
         },
         {
-          "name": "Fabfilter Bundle",
+          "name": "Fabfilter Collection",
+          "note": "Micro 1, One 3, Pro-C 3, Pro-DS 1, Pro-G 1, Pro-L 2, Pro-MB 1, Pro-Q 4, Pro-R 2, Saturn 2, Simplon 1, Timeless 3, Twin 3, Volcano 3",
           "tags": "Fabfilter"
         },
         {
-          "name": "Goodhertz Bundle",
+          "name": "Goodhertz Collection",
+          "note": "CanOpener Studio, DC19, Faraday Limiter, Good Dither, Lohi, Lossy, Loudness, Megaverb, Midside, Midside Matrix, Panpot, Tiltshift, Tone Control, Trem Control, Tupe, VCME, VCME Soft Clip, Vulf Compressor, Wow Control",
           "tags": "Goodhertz,Ghz"
         },
         {
@@ -487,11 +490,13 @@ const windowsData = {
           "tags": "oeksound"
         },
         {
-          "name": "SoundToys Bundle",
+          "name": "SoundToys Collection",
+          "note": "Crystallizer, Decapitator, DevilLoc, DevilLoc Deluxe, EchoBoy, EffectRack, FilterFreak1, FilterFreak2, LittleAlterBoy, LittleMicroShift, LittlePrimalTap, LittleRadiator, MicroShift, PanMan, PhaseMistress, PrimalTap, Radiator, Tremolator",
           "tags": "SoundToys"
         },
         {
-          "name": "Valhalla Bundle",
+          "name": "Valhalla Collection",
+          "note": "Delay, FreqEcho, FutureVerb, Plate,Room, Shimmer, SpaceModulator, Supermassive, UberMod, VintageVerb",
           "tags": "Valhalla"
         },
         {
@@ -503,6 +508,7 @@ const windowsData = {
         },
         {
           "name": "Waves 16 Complete",
+          "note": "All 1000+ Waves plugins included",
           "tags": "Waves"
         },
         {
@@ -552,7 +558,7 @@ const windowsData = {
           "badges": [
             "NEW"
           ],
-          "note": "Abasi, Cory Wong X, Darkglass Ultra, Fortin: Cali Suite, Nameless Suite, NTS Suite, Gojira, John Mayer X, Mantra, Mateus Asato, Misha Mansoor X, Nolly X, OMEGA Ampworks Granophyre, Parallax, Plini, Soldano SLO-100 X, Tim Henson X"
+          "note": "$30 each for: Abasi, Cory Wong X, Darkglass Ultra, Fortin: Cali Suite, Nameless Suite, NTS Suite, Gojira, John Mayer X, Mantra, Mateus Asato, Misha Mansoor X, Nolly X, OMEGA Ampworks Granophyre, Parallax, Plini, Soldano SLO-100 X, Tim Henson X"
         },
         {
           "name": "Neutron",
